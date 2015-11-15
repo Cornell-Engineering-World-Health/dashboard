@@ -2,6 +2,73 @@ queue()
     .defer(d3.json, "/api/data")
     .await(makeGraphs);
 
+
+var Subjects = require('./models/SubjectViews');
+var mongoose       = require('mongoose');
+
+module.exports = function(app) {
+
+	// server routes ===========================================================
+	// handle things like api calls
+	// authentication routes	
+	// sample api route
+mongoose.connect('localhost', 'gettingstarted');
+var schema = new mongoose.Schema({school_state : 'string',
+                                  resource_type : 'string',
+                                  poverty_level : 'string',
+                                  grade_level : 'string',
+                                  total_donations : 'string',
+                                  funding_status: 'string',
+                                  date_posted: 'string'});
+var Profile = mongoose.model('Profile', schema);
+
+app.get('/api/data', function(req, res) {
+
+  var today = new Date();
+  var date = "" + (today.getMonth() + 1) + "/" + today.getDate() + "/" + today.getFullYear();
+  console.log(date);
+
+  Profile.create({
+    school_state:"NY",
+    resource_type:"Swag",
+    poverty_level:"low poverty",
+    grade_level:"Grades 9-12",
+    total_donations: 353,
+    funding_status:"completed",
+    date_posted: date
+  });
+  /*
+  Subjects.remove({date_posted: null}, function(err) {
+    if(err)
+      handleError(err);
+  });
+  */
+  // use mongoose to get all nerds in the database
+  Profile.find({}, 
+  	{'_id': 0, 
+  	'school_state': 1, 
+  	'resource_type': 1, 
+  	'poverty_level': 1, 
+  	'date_posted': 1, 
+  	'total_donations': 1, 
+  	'funding_status': 1, 
+  	'grade_level': 1}, function(err, subjectDetails) {
+   // if there is an error retrieving, send the error. 
+   // nothing after res.send(err) will execute
+   if (err) 
+   res.send(err);
+    res.json(subjectDetails); // return all nerds in JSON format
+  });
+});
+
+
+
+ // frontend routes =========================================================
+ app.get('*', function(req, res) {
+  res.sendfile('./public/login.html');
+ });
+}
+
 function makeGraphs(error, apiData) {
 	
 //Start Transformations
