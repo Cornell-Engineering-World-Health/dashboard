@@ -1,4 +1,5 @@
-var Subjects = require('./models/SubjectViews');
+var Reading        = require('./models/Readings.js');
+var mongoose       = require('mongoose');
 
 module.exports = function(app) {
 
@@ -6,18 +7,62 @@ module.exports = function(app) {
 	// handle things like api calls
 	// authentication routes	
 	// sample api route
- app.get('/api/data', function(req, res) {
+  /*
+mongoose.connect('localhost', 'Linked to Dashboard');
+*/
+/*
+var schema = new mongoose.Schema({temperature : Number,
+                                  turbidity : Number,
+                                  conductivity : Number,
+                                  pH : Number,
+                                  timestamp: String});
+
+var Reading = mongoose.model('Reading', schema);
+*/
+var new_load = new Array();
+
+function push_new() {
+  var today = new Date();
+  var date = "" + (today.getMonth() + 1) + "/" + today.getDate() + "/" + today.getFullYear();
+
+  new_load.push({
+    temperature: Math.floor((Math.random() * 100) + 1),
+    turbidity: Math.floor((Math.random() * 7) + 1),
+    conductivity: Math.floor((Math.random() * 10) + 1),
+    pH: Math.floor((Math.random() * 6) + 4,
+    timestamp: date 
+  });
+}
+setInterval(push_new, 1000);
+
+app.get('/api/data', function(req, res) {
+  
+  for(i = 0; i < new_load.length; i++) {
+    Reading.create({
+      temperature: new_load[i].temperature,
+      turbidity: new_load[i].turbidity,
+      conductivity: new_load[i].conductivity,
+      pH: new_load[i].pH,
+      timestamp: new_load[i].timestamp,
+    });
+  }
+  
+  /*
+  Reading.remove(function(err) {
+    if(err)
+      handleError(err);
+  });
+  */
+
   // use mongoose to get all nerds in the database
-  Subjects.find({}, {'_id': 0, 'school_state': 1, 'resource_type': 1, 'poverty_level': 1, 'date_posted': 1, 'total_donations': 1, 'funding_status': 1, 'grade_level': 1}, function(err, subjectDetails) {
+  Reading.find(function(err, readingDetails) {
    // if there is an error retrieving, send the error. 
-       // nothing after res.send(err) will execute
+   // nothing after res.send(err) will execute
    if (err) 
    res.send(err);
-    res.json(subjectDetails); // return all nerds in JSON format
+    res.json(readingDetails); // return all nerds in JSON format
   });
- });
-
- 
+});
 
 
 

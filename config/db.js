@@ -1,4 +1,6 @@
+//defines the url in which our database resides, for exporting/importing purposes
+
 module.exports = {
-	urlSubjectViews: 'mongodb://localhost:27017/donorschoose',
+	readingsURL: 'mongodb://localhost:27017/ewh',
 
 }

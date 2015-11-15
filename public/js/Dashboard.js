@@ -1,17 +1,27 @@
-queue()
+//MAIN UPDATE LOOP
+//MAKES SERVER REQUEST, WHICH RETURNS THE DATA TO BE USED TO CREATE THE GRAPHS
+function update() {
+  queue()
     .defer(d3.json, "/api/data")
     .await(makeGraphs);
+}
+update();
+//SET TO UPDATE EVERY 10 SECONDS
+//IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
+setInterval(update, 10000);
+
 
 function makeGraphs(error, apiData) {
-	
+	/* CODE TO MAKE THE GRAPHS FOR THE READINGS
 //Start Transformations
 	var dataSet = apiData;
 	var dateFormat = d3.time.format("%m/%d/%Y");
 	dataSet.forEach(function(d) {
+    console.log(d);
 		d.date_posted = dateFormat.parse(d.date_posted);
 				d.date_posted.setDate(1);
 		d.total_donations = +d.total_donations;
-	});
+  });
 
 	//Create a Crossfilter instance
 	var ndx = crossfilter(dataSet);
@@ -157,10 +167,6 @@ console.log(maxDate);
         .yAxis().tickFormat(d3.format("s"));
 
 
-
-
-
-
     dc.renderAll();
-
+    */
 };
