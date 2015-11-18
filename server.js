@@ -2,6 +2,7 @@
 var express        = require('express');
 var app            = express();
 var mongoose       = require('mongoose');
+var Schema         = mongoose.Schema;
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 
@@ -11,9 +12,9 @@ var methodOverride = require('method-override');
 var port = process.env.PORT || 8080; // set our port
 var db = require('./config/db');
 
-// connect to our mongoDB database (commented out after you enter in your own credentials)
-connectionsubject = mongoose.createConnection(db.urlSubjectViews);
 
+//connect to our ewh database in mongodb, defined by the url defined in db.js
+connection = mongoose.createConnection(db.readingsURL);
 
 
 // get all data/stuff of the body (POST) parameters
@@ -29,5 +30,5 @@ require('./app/routes')(app); // pass our application into our routes
 
 // start app ===============================================
 app.listen(port);	
-console.log('Magic happens on port ' + port); 			// shoutout to the user
+console.log('Cornell Engineering World Health presents Dashboard on port ' + port); 			// shoutout to the user
 exports = module.exports = app; 						// expose app
