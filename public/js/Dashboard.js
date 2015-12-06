@@ -96,11 +96,8 @@ function makeGraphs(error, apiData) {
 	}
 
 	var dateFormat = d3.time.format("%m/%d/%Y"); //pos uneccessary
-	console.log('outside foreach')
 	data.forEach(function(d) {
-		console.log('in dataset for begin')
 		d.timestamp = dateFormat.parse(d.timestamp); //slow down
-		console.log('in dataset for end')
 	});
 
 	//Create Crossfilter instance
@@ -110,6 +107,8 @@ function makeGraphs(error, apiData) {
 	var trial = crossfilter(data);
 	var tempDim = trial.dimension(function (d) { return d.temperature; });
 	var turbidity = tempDim.group().reduceSum(function (d) { return d.turbidity; }); 
+	var conductivity = tempDim.group().reduceSum(function (d) { return d.conductivity; }); 
+	var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
 
 
 	var dateDim = trial.dimension(function (d) { return d.timestamp; });
@@ -135,14 +134,14 @@ function makeGraphs(error, apiData) {
 	// var conductivity = timestamp.group().reduceSum(function(d) { return scaleCond(d.conductivity); }); 
 	// var pH = timestamp.group().reduceSum(function(d) { return scalepH(d.pH); }); 
 	
-
+//RESEARCH X VS Y; date dimension; interaction
 	var overalllineChart = dc.lineChart("#dc-line-chart");
-	//var compositeChart1 = dc.compositeChart('#chart-container1');
+	var compositeChart1 = dc.compositeChart('#chart-container1');
 
 	overalllineChart
     .width(768)
     .height(480)
-    .x(d3.scale.linear().domain([0,20]))
+    .x(d3.scale.linear().domain([0,100]))
     .interpolate('step-before')
     .renderArea(true)
     .brushOn(false)
@@ -150,16 +149,18 @@ function makeGraphs(error, apiData) {
     .clipPadding(10)
     .yAxisLabel("This is the Y Axis")
     .dimension(tempDim)
-    .group(turbidity);
-        // .stack(turbidity, 'Turbidity', function (d) {
-        //     return d.value;
-        // })
-        // .stack(conductivity, 'Conductivity', function (d) {
-        //     return d.value;
-        // })
-        // .stack(pH, 'pH', function (d) {
-        //     return d.value;
-        // })
+    .group(turbidity)
+    .brushOn(true)
+    .legend(dc.legend().x(50).y(10).itemHeight(15).gap(5))
+    .stack(turbidity, 'Turbidity', function (d) {
+            return d.value;
+        })
+        .stack(conductivity, 'Conductivity', function (d) {
+            return d.value;
+        })
+        .stack(pH, 'pH', function (d) {
+            return d.value;
+        });
 
 //Must call within composite chart object
         // .compose([
@@ -171,12 +172,12 @@ function makeGraphs(error, apiData) {
 
 	// compositeChart1
 	// 	.compose([
-	// 		dc.lineChart(overalllineChart).group(temperature),
+	// 		//dc.lineChart(overalllineChart).group(temperature),
 	// 		dc.lineChart(overalllineChart).group(turbidity),
 	// 		dc.lineChart(overalllineChart).group(conductivity),
 	// 		dc.lineChart(overalllineChart).group(pH)
 	// 	])		
-   //;
+ //   ;
 
  //   var experiments = [
  //    { Run: 1, Age_19_Under: 26.9, Age_19_64: 62.3, Age_65_84: 9.8, Age_85_and_Over: 0.9 },
