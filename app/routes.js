@@ -26,7 +26,7 @@ function push_new() {
     timestamp: date 
   });
 }
-setInterval(push_new, 1000);
+setInterval(push_new, 1000000);
 
 app.get('/api/data', function(req, res) {
   
