@@ -12,6 +12,15 @@ update();
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
+getRecent = function(n) {
+  $.post("/api/data", {data: n}, function(data) {
+    console.log(data);
+    return data;
+  });
+}
+
+getRecent(2);
+
 function makeGraphs(error, apiData) {
 	var badtemp = 90;
 	var okaytemp = 70;
