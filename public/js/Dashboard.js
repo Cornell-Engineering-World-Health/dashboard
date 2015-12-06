@@ -134,7 +134,7 @@ function makeGraphs(error, apiData) {
 	// var conductivity = timestamp.group().reduceSum(function(d) { return scaleCond(d.conductivity); }); 
 	// var pH = timestamp.group().reduceSum(function(d) { return scalepH(d.pH); }); 
 	
-//RESEARCH X VS Y
+//RESEARCH X VS Y; date dimension; interaction
 	var overalllineChart = dc.lineChart("#dc-line-chart");
 	var compositeChart1 = dc.compositeChart('#chart-container1');
 
@@ -151,6 +151,7 @@ function makeGraphs(error, apiData) {
     .dimension(tempDim)
     .group(turbidity)
     .brushOn(true)
+    .legend(dc.legend().x(50).y(10).itemHeight(15).gap(5))
     .stack(turbidity, 'Turbidity', function (d) {
             return d.value;
         })

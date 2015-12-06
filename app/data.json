@@ -1,0 +1,37 @@
+[
+    {
+      "temperature": 78,
+      "turbidity": 4,
+      "conductivity": 7,
+      "pH": 8,
+      "timestamp": "11/12/15"
+    }, 
+    {
+      "temperature": 54,
+      "turbidity": 9,
+      "conductivity": 4,
+      "pH": 6,
+      "timestamp": "11/12/15"
+    }, 
+    {
+      "temperature": 85,
+      "turbidity": 7,
+      "conductivity": 5,
+      "pH": 7,
+      "timestamp": "11/12/15"
+    },
+    {
+      "temperature": 54,
+      "turbidity": 9,
+      "conductivity": 4,
+      "pH": 6,
+      "timestamp": "11/12/15"
+    }, 
+    {
+      "temperature": 85,
+      "turbidity": 7,
+      "conductivity": 5,
+      "pH": 7,
+      "timestamp": "11/12/15"
+    }
+]
