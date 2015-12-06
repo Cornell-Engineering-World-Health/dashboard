@@ -70,7 +70,7 @@ app.get('/api/data', function(req, res) {
   /*
   Reading.remove(function(err) {
     if(err)
-      handleError(err);
+      handleError(err);asdf
   });
   */
 
