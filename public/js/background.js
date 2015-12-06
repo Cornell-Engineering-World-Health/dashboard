@@ -1,28 +1,16 @@
+var register = require("./register.js");
 
-
-	var badtemp = 90;
-	var okaytemp = 70;
-	var goodtemp = 50;
-	var badturb = 7;
-	var okayturb = 5;
-	var goodturb = 1;
-	var badcond = 10;
-	var okaycond = 7.5;
-	var goodcond = 5.8;
-	var badpH = 9.5;
-	var okaypH = 8.0;
-	var goodpH = 7.0;
 
 	// scaleTemp will scale the temperature to a number between 0 to 100 based on water quality quotas
 	function scaleTemp (temp){
-		if (temp > badtemp) {
+		if (temp > register.bad_temp()) {
 			return 100;
 		}
-		else if (temp <= badtemp && temp >= okaytemp){
-			return ((100 - 50) * (temp - okaytemp) / (badtemp - okaytemp)) + 50;
+		else if (temp <= register.bad_temp() && temp >= register.okay_temp()){
+			return ((100 - 50) * (temp - register.okay_temp()) / (register.bad_temp() - register.okay_temp())) + 50;
 		}
-		else if (temp < okaytemp && temp >= goodtemp){
-			return ((50 - 0) * (temp - goodtemp) / (okaytemp - goodtemp));
+		else if (temp < register.okay_temp() && temp >= register.good_temp()){
+			return ((50 - 0) * (temp - register.good_temp()) / (register.okay_temp() - register.good_temp()));
 		}
 		else {
 			return 0;
@@ -30,14 +18,14 @@
 	}
 	// scaleTurb will scale the turbidity to a number between 0 to 100 based on water quality quotas
 	function scaleTurb (turb){
-		if (turb > badturb) {
+		if (turb > register.bad_turb()) {
 			return 100;
 		}
-		else if (turb <= badturb && turb >= okayturb){
-			return ((100 - 50) * (turb - okayturb) / (badturb - okayturb)) + 50;
+		else if (turb <= register.bad_turb() && turb >= register.okay_turb()){
+			return ((100 - 50) * (turb - register.okay_turb()) / (register.bad_turb() - register.okay_turb())) + 50;
 		}
-		else if (turb < okayturb && turb >= goodturb) {
-			return ((50 - 0) * (turb - goodturb) / (okayturb - goodturb));
+		else if (turb < register.okay_turb() && turb >= register.good_turb()) {
+			return ((50 - 0) * (turb - register.good_turb()) / (register.okay_turb() - register.good_turb()));
 		}
 		else {
 			return 0;
@@ -45,14 +33,14 @@
 	}
 	// scaleCond will scale the conductivity to a number between 0 to 100 based on water quality quotas
 	function scaleCond (cond){
-		if (cond > badcond) {
+		if (cond > register.bad_cond()) {
 			return 100;
 		}
-		else if (cond <= badcond && cond >= okaycond){
-			return ((100 - 50) * (cond - okaycond) / (badcond - okaycond)) + 50;
+		else if (cond <= register.bad_cond() && cond >= register.okay_cond()){
+			return ((100 - 50) * (cond - register.okay_cond()) / (register.bad_cond() - register.okay_cond())) + 50;
 		}
-		else if (cond < okaycond && cond >= goodcond) {
-			return ((50 - 0) * (cond - goodcond) / (okaycond - goodcond));
+		else if (cond < register.okay_cond() && cond >= register.good_cond()) {
+			return ((50 - 0) * (cond - register.good_cond()) / (register.okay_cond() - register.good_cond()));
 		}
 		else 
 		{
@@ -61,14 +49,14 @@
 	}
 	// scalepH will scale the pH to a number between 0 to 100 based on water quality quotas
 	function scalepH (pH){
-		if (pH > badpH) {
+		if (pH > register.bad_pH()) {
 			return 100;
 		}
-		else if (pH <= badpH && pH >= okaypH){
-			return ((100 - 50) * (pH - okaypH) / (badpH - okaypH)) + 50;
+		else if (pH <= register.bad_pH() && pH >= register.okay_pH()){
+			return ((100 - 50) * (pH - register.okay_pH()) / (register.bad_pH() - register.okay_pH())) + 50;
 		}
-		else if (pH < okaypH && pH >= goodpH) {
-			return ((50 - 0) * (pH - goodpH) / (okaypH - goodpH));
+		else if (pH < register.okay_pH() && pH >= register.good_pH()) {
+			return ((50 - 0) * (pH - register.good_pH()) / (register.okay_pH() - register.good_pH()));
 		}
 		else {
 			return 0;
