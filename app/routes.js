@@ -19,7 +19,7 @@ var new_load = new Array();
 app.use(bodyParser.json());
 app.use(bodyParser.urlEncoded({extended: true}));
 */
-app.post('/', function(req, res)) {
+app.post('/', function(req, res) {
   var new_load = req.body.data;
   console.log(new_load);
   for(i = 0; i < new_load.length; i++) {
@@ -32,7 +32,7 @@ app.post('/', function(req, res)) {
     });
   }
   res.end();
-}
+});
 
 /**
  * Handles the server request to retrieve n records from the database
