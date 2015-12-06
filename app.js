@@ -1,6 +1,6 @@
 var express = require('express');
 var Mailgun = require('mailgun-js');
-var register = require('./register.js');
+var register = require('./public/js/background.js');
 var app = express();
 app.listen(3000)
     /* server */
@@ -79,7 +79,8 @@ app.get('/submit/:mail', function(req,res) {
       to: req.params.mail,
     //Subject and text data  
       subject: 'Alert: Well Water Quality',
-      html:  change_messg (prev_status, current_status) + '<a href="http://0.0.0.0:3030/validate?' + req.params.mail + '">Click here to add your email address to a mailing list</a>'
+      html:  change_messg (prev_status, current_status) + '<a href="http://0.0.0.0:3030/validate?' 
+      + req.params.mail + '">Click here to add your email address to a mailing list</a>'
     }
 	
 	//Invokes the method to send emails given the above data with the helper library
@@ -109,7 +110,8 @@ app.get('/validate/:mail', function(req,res) {
         address: req.params.mail
       }
     ];
-    mailgun.lists('mymailinglist@sandbox8699ab236c864e45b25684c8831c25d9.mailgun.org').members().add({ members: members, subscribed: true }, function (err, body) {
+    mailgun.lists('mymailinglist@sandbox8699ab236c864e45b25684c8831c25d9.mailgun.org').members().add({ members: members, subscribed: true }, 
+        function (err, body) {
       console.log(body);
       if (err) {
             res.send("Error - check console");
@@ -150,51 +152,51 @@ app.get('/invoice/:mail', function(req,res){
         });
 })
 
-    /* models */
-    mongoose.connect('mongodb://127.0.0.1/sampledb');
+/* models */
+mongoose.connect('mongodb://127.0.0.1/sampledb');
 
-    var Schema = mongoose.Schema
+var Schema = mongoose.Schema
       , ObjectId = Schema.ObjectID;
 
-    var Hobby = new Schema({
+var Hobby = new Schema({
         name            : { type: String, required: true, trim: true }
     });
 
-    var Person = new Schema({
+var Person = new Schema({
         first_name      : { type: String, required: true, trim: true }
       , last_name       : { type: String, required: true, trim: true }
       , email        : { type: String, required: true, trim: true }
     });
 
-    var Person = mongoose.model('Person', Person);
+var Person = mongoose.model('Person', Person);
 
-    app.get('/', function(req,res){
+app.get('/', function(req,res){
         Person.find({}, function(error, data){
             res.json(data);
         });
     });
 
-    app.get('/adduser/:first/:last/:email', function(req, res){
-        var person_data = {
-            first_name: req.params.first
-          , last_name: req.params.last
-          , email: req.params.email
-        };
+app.get('/adduser/:first/:last/:email', function(req, res){
+    var person_data = {
+        first_name: req.params.first
+        , last_name: req.params.last
+        , email: req.params.email
+    };
 
-        var person = new Person(person_data);
+    var person = new Person(person_data);
 
-        person.save( function(error, data){
-            if(error){
-                res.json(error);
-            }
-            else{
-                res.json(data);
-            }
-        });
-    });        
+    person.save( function(error, data){
+        if(error){
+            res.json(error);
+        }
+        else{
+            res.json(data);
+        }
+    });
+});        
 
 
-    app.listen(3001);
+app.listen(3001);
 
 //app.listen(3030);
 

@@ -64,12 +64,12 @@ var register = require("./register.js");
 	}
 
 	//waterQuality will calculate an average of all the scaled values of temperature, turbidity, conductivity, and pH
-	function waterQuality (temp, turb, cond, pH){
+	exports.waterQuality = function(temp, turb, cond, pH){
 		return ((scaleTemp (temp) + scaleTurb (turb) + 
 			scaleCond (cond) + scalepH (pH))/4);
 	}
 
-	function changeBackground(temp, turb, cond, pH) {
+	function exports.changeBackground(temp, turb, cond, pH) {
 		if (scaleTemp (temp) >= 100 || scaleTurb (turb) >= 100 || 
 			scaleCond (cond) >= 100 || scalepH (pH) >= 100){
 			document.body.style.background = "#e60000";
