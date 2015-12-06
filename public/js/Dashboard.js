@@ -12,163 +12,156 @@ update();
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-
 function makeGraphs(error, apiData) {
-	/* CODE TO MAKE THE GRAPHS FOR THE READINGS
-//Start Transformations
+	var badtemp = 90;
+	var okaytemp = 70;
+	var goodtemp = 50;
+	var badturb = 7;
+	var okayturb = 5;
+	var goodturb = 1;
+	var badcond = 10;
+	var okaycond = 7.5;
+	var goodcond = 5.8;
+	var badpH = 9.5;
+	var okaypH = 8.0;
+	var goodpH = 7.0;
+	function scaleTemp (temp){
+		if (temp > badtemp) {
+			return 100;
+		}
+		else if (temp <= badtemp && temp >= okaytemp){
+			return ((100 - 50) * (temp - okaytemp) / (badtemp - okaytemp)) + 50;
+		}
+		else if (temp < okaytemp && temp >= goodtemp){
+			return ((50 - 0) * (temp - goodtemp) / (okaytemp - goodtemp));
+		}
+		else {
+			return 0;
+		}
+	}
+	function scaleTurb (turb){
+		if (turb > badturb) {
+			return 100;
+		}
+		else if (turb <= badturb && turb >= okayturb){
+			return ((100 - 50) * (turb - okayturb) / (badturb - okayturb)) + 50;
+		}
+		else if (turb < okayturb && turb >= goodturb) {
+			return ((50 - 0) * (turb - goodturb) / (okayturb - goodturb));
+		}
+		else {
+			return 0;
+		}
+	}
+	function scaleCond (cond){
+		if (cond > badcond) {
+			return 100;
+		}
+		else if (cond <= badcond && cond >= okaycond){
+			return ((100 - 50) * (cond - okaycond) / (badcond - okaycond)) + 50;
+		}
+		else if (cond < okaycond && cond >= goodcond) {
+			return ((50 - 0) * (cond - goodcond) / (okaycond - goodcond));
+		}
+		else 
+		{
+			return 0;
+		}
+	}
+	function scalepH (pH){
+		if (pH > badpH) {
+			return 100;
+		}
+		else if (pH <= badpH && pH >= okaypH){
+			return ((100 - 50) * (pH - okaypH) / (badpH - okaypH)) + 50;
+		}
+		else if (pH < okaypH && pH >= goodpH) {
+			return ((50 - 0) * (pH - goodpH) / (okaypH - goodpH));
+		}
+		else {
+			return 0;
+		}
+	}
+    function waterQuality (temp, turb, cond, pH){
+    	return ((scaleTemp (temp) + scaleTurb (turb) + scaleCond (cond) + scalepH (pH))/4);
+    }
+
+   //Start Transformations
 	var dataSet = apiData;
-	var dateFormat = d3.time.format("%m/%d/%Y");
+	var dateFormat = d3.time.format("%m/%d/%Y"); //pos uneccessary
 	dataSet.forEach(function(d) {
-    console.log(d);
-		d.date_posted = dateFormat.parse(d.date_posted);
-				d.date_posted.setDate(1);
-		d.total_donations = +d.total_donations;
-  });
+		d.timestamp = dateFormat.parse(d.timestamp); //slow down
+	});
 
-	//Create a Crossfilter instance
+	//Create Crossfilter instance
 	var ndx = crossfilter(dataSet);
+	var all = ndx.groupAll()
 
-	//Define Dimensions
-	var datePosted = ndx.dimension(function(d) { return d.date_posted; });
-	var gradeLevel = ndx.dimension(function(d) { return d.grade_level; });
-	var resourceType = ndx.dimension(function(d) { return d.resource_type; });
-	var fundingStatus = ndx.dimension(function(d) { return d.funding_status; });
-	var povertyLevel = ndx.dimension(function(d) { return d.poverty_level; });
-	var state = ndx.dimension(function(d) { return d.school_state; });
-	var totalDonations  = ndx.dimension(function(d) { return d.total_donations; });
+	//Create dimensions
 
+	var timestamp = ndx.dimension(function(d) { return d.timestamp; });
+	// var temperature = ndx.dimension(function(d) { return d.temperature; });
+	// var turbidity = ndx.dimension(function(d) { return d.turbidity; });
+	// var conductivity = ndx.dimension(function(d) { return d.conductivity; });
+	// var pH = ndx.dimension(function(d) { return d.pH; });
 
-	//Calculate metrics
-	var projectsByDate = datePosted.group(); 
-	var projectsByGrade = gradeLevel.group(); 
-	var projectsByResourceType = resourceType.group();
-	var projectsByFundingStatus = fundingStatus.group();
-	var projectsByPovertyLevel = povertyLevel.group();
-	var stateGroup = state.group();
+	//Create Groups
 
-	var all = ndx.groupAll();
+	// var readingsByDate = timestamp().group();
+	// var readingsByTemperature = temperature().group();
+	// var readingsByTurbidity = turbidity().group();
+	// var readingsByConductivity = conductivity().group();
+	// var readingsByPH = pH().group();
+	var temperature = timestamp.group().reduceSum(function(d) { return scaleTemp(d.temperature); }); 
+	var turbidity = timestamp.group().reduceSum(function(d) { return scaleTurb(d.turbidity); }); 
+	var conductivity = timestamp.group().reduceSum(function(d) { return scaleCond(d.conductivity); }); 
+	var pH = timestamp.group().reduceSum(function(d) { return scalepH(d.pH); }); 
+	
 
-	//Calculate Groups
-	var totalDonationsState = state.group().reduceSum(function(d) {
-		return d.total_donations;
-	});
+	var overalllineChart = dc.lineChart("#dc-line-chart");
+	var compositeChart1 = dc.compositeChart('#chart-container1');
 
-	var totalDonationsGrade = gradeLevel.group().reduceSum(function(d) {
-		return d.grade_level;
-	});
-
-	var totalDonationsFundingStatus = fundingStatus.group().reduceSum(function(d) {
-		return d.funding_status;
-	});
-
-
-
-	var netTotalDonations = ndx.groupAll().reduceSum(function(d) {return d.total_donations;});
-
-	//Define threshold values for data
-	var minDate = datePosted.bottom(1)[0].date_posted;
-	var maxDate = datePosted.top(1)[0].date_posted;
-
-console.log(minDate);
-console.log(maxDate);
-
-    //Charts
-	var dateChart = dc.lineChart("#date-chart");
-	var gradeLevelChart = dc.rowChart("#grade-chart");
-	var resourceTypeChart = dc.rowChart("#resource-chart");
-	var fundingStatusChart = dc.pieChart("#funding-chart");
-	var povertyLevelChart = dc.rowChart("#poverty-chart");
-	var totalProjects = dc.numberDisplay("#total-projects");
-	var netDonations = dc.numberDisplay("#net-donations");
-	var stateDonations = dc.barChart("#state-donations");
-
-
-  selectField = dc.selectMenu('#menuselect')
-        .dimension(state)
-        .group(stateGroup); 
-
-       dc.dataCount("#row-selection")
-        .dimension(ndx)
-        .group(all);
-
-
-	totalProjects
-		.formatNumber(d3.format("d"))
-		.valueAccessor(function(d){return d; })
-		.group(all);
-
-	netDonations
-		.formatNumber(d3.format("d"))
-		.valueAccessor(function(d){return d; })
-		.group(netTotalDonations)
-		.formatNumber(d3.format(".3s"));
-
-	dateChart
-		//.width(600)
-		.height(220)
-		.margins({top: 10, right: 50, bottom: 30, left: 50})
-		.dimension(datePosted)
-		.group(projectsByDate)
-		.renderArea(true)
-		.transitionDuration(500)
-		.x(d3.time.scale().domain([minDate, maxDate]))
-		.elasticY(true)
-		.renderHorizontalGridLines(true)
-    	.renderVerticalGridLines(true)
-		.xAxisLabel("Year")
-		.yAxis().ticks(6);
-
-	resourceTypeChart
-        //.width(300)
-        .height(220)
-        .dimension(resourceType)
-        .group(projectsByResourceType)
-        .elasticX(true)
-        .xAxis().ticks(5);
-
-	povertyLevelChart
-		//.width(300)
-		.height(220)
-        .dimension(povertyLevel)
-        .group(projectsByPovertyLevel)
-        .xAxis().ticks(4);
-
-	gradeLevelChart
-		//.width(300)
-		.height(220)
-        .dimension(gradeLevel)
-        .group(projectsByGrade)
-        .xAxis().ticks(4);
-
-  
-          fundingStatusChart
-            .height(220)
-            //.width(350)
-            .radius(90)
-            .innerRadius(40)
-            .transitionDuration(1000)
-            .dimension(fundingStatus)
-            .group(projectsByFundingStatus);
-
-
-    stateDonations
-    	//.width(800)
-        .height(220)
-        .transitionDuration(1000)
-        .dimension(state)
-        .group(totalDonationsState)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
-        .centerBar(false)
-        .gap(5)
-        .elasticY(true)
-        .x(d3.scale.ordinal().domain(state))
-        .xUnits(dc.units.ordinal)
+	overalllineChart
+		  .width(800)
+        .height(200)
+        .dimension(timestamp)
+        .group(temperature)
+        .x(d3.scale.linear().domain([0.5, 5.5]))
+        .valueAccessor(function(d) {
+            return d.value;
+            })
         .renderHorizontalGridLines(true)
-        .renderVerticalGridLines(true)
-        .ordering(function(d){return d.value;})
-        .yAxis().tickFormat(d3.format("s"));
+        .elasticY(true)
+        .xAxis().tickFormat(function(v) {return v;}) 
+        // .stack(turbidity, 'Turbidity', function (d) {
+        //     return d.value;
+        // })
+        // .stack(conductivity, 'Conductivity', function (d) {
+        //     return d.value;
+        // })
+        // .stack(pH, 'pH', function (d) {
+        //     return d.value;
+        // })
+
+//Must call within composite chart object
+        // .compose([
+        // 	dc.lineChart(overalllineChart).group(temperature),
+        // 	dc.lineChart(overalllineChart).group(turbidity),
+        // 	dc.lineChart(overalllineChart).group(conductivity),
+        // 	dc.lineChart(overalllineChart).group(pH)
+        // 	])
+
+	compositeChart1
+		.compose([
+			dc.lineChart(overalllineChart).group(temperature),
+			dc.lineChart(overalllineChart).group(turbidity),
+			dc.lineChart(overalllineChart).group(conductivity),
+			dc.lineChart(overalllineChart).group(pH)
+		])		
+   ;
 
 
-    dc.renderAll();
-    */
+   dc.renderAll();
+   dc.redrawAll();
+
 };
