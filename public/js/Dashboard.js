@@ -141,7 +141,7 @@ function makeGraphs(error, apiData) {
 	overalllineChart
     .width(768)
     .height(480)
-    .x(d3.scale.linear().domain([0,20]))
+    .x(d3.scale.linear().domain([0,100]))
     .interpolate('step-before')
     .renderArea(true)
     .brushOn(false)
