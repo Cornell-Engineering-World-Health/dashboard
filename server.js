@@ -6,6 +6,10 @@ var Schema         = mongoose.Schema;
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 
+// When Receiving new data ================================
+var received = false;
+var dataHistory = require("./public/js/runExportDataPython.js");
+
 // configuration ===========================================
 	
 // config files
@@ -32,3 +36,8 @@ require('./app/routes')(app); // pass our application into our routes
 app.listen(port);	
 console.log('Cornell Engineering World Health presents Dashboard on port ' + port); 			// shoutout to the user
 exports = module.exports = app; 						// expose app
+
+if (!received) {
+    dataHistory.run();
+    received = true;
+}

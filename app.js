@@ -1,5 +1,6 @@
 var express = require('express');
 var Mailgun = require('mailgun-js');
+var register = require('./register.js');
 var app = express();
 app.listen(3000)
     /* server */
@@ -36,8 +37,8 @@ app.get('/submit/:mail', function(req,res) {
     var mailgun = new Mailgun({apiKey: api_key, domain: domain});
     
     //How to get data...
-	var prev_status = waterQuality (temp, turb, cond, pH)
-	var current_status = waterQuality (temp, turb, cond, pH)
+	var prev_status = 75//waterQuality (temp, turb, cond, pH)
+	var current_status = 101 //waterQuality (temp, turb, cond, pH)
 	
 	function change_messg (prev, curr){
 		if (prev<50 && (curr >= 50 && curr < 100))
@@ -89,7 +90,7 @@ app.get('/submit/:mail', function(req,res) {
             console.log("got an error: ", err);
         }
         //Else we can greet    and leave
-        else if (check_change (prev_status, current_status){
+        else if (check_change (prev_status, current_status)){
             //Here "submitted.jade" is the view file for this landing page 
             //We pass the variable "email" from the url parameter in an object rendered by Jade
             res.render('submitted', { email : req.params.mail });
@@ -191,13 +192,9 @@ app.get('/invoice/:mail', function(req,res){
             }
         });
     });        
-			
 
-};
-
-
-    });
 
     app.listen(3001);
 
 //app.listen(3030);
+

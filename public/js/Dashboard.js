@@ -86,53 +86,71 @@ function makeGraphs(error, apiData) {
     	return ((scaleTemp (temp) + scaleTurb (turb) + scaleCond (cond) + scalepH (pH))/4);
     }
 
-   //Start Transformations
+
+ //   //Start Transformations
 	var dataSet = apiData;
+
+	var data = [];
+	for (var i = 0; i < 100; i++) {
+		data.push(apiData[i]);
+	}
+
 	var dateFormat = d3.time.format("%m/%d/%Y"); //pos uneccessary
-	dataSet.forEach(function(d) {
+	console.log('outside foreach')
+	data.forEach(function(d) {
+		console.log('in dataset for begin')
 		d.timestamp = dateFormat.parse(d.timestamp); //slow down
+		console.log('in dataset for end')
 	});
 
 	//Create Crossfilter instance
-	var ndx = crossfilter(dataSet);
-	var all = ndx.groupAll()
+	// var ndx = crossfilter(dataSet);
+	// var all = ndx.groupAll();
+
+	var trial = crossfilter(data);
+	var tempDim = trial.dimension(function (d) { return d.temperature; });
+	var turbidity = tempDim.group().reduceSum(function (d) { return d.turbidity; }); 
+
+
+	var dateDim = trial.dimension(function (d) { return d.timestamp; });
+	var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
+
+
 
 	//Create dimensions
+	// var timestamp = ndx.dimension(function(d) { 
+	// 	console.log("this is" + d.timestamp);
+	// 	return d.timestamp; });
 
-	var timestamp = ndx.dimension(function(d) { return d.timestamp; });
-	// var temperature = ndx.dimension(function(d) { return d.temperature; });
-	// var turbidity = ndx.dimension(function(d) { return d.turbidity; });
-	// var conductivity = ndx.dimension(function(d) { return d.conductivity; });
-	// var pH = ndx.dimension(function(d) { return d.pH; });
+	// var tempDim = ndx.dimension(function(d) { 
+	// 	console.log(d.temperature);
+	// 	return d.temperature; });
+	// var turbidity = tempDim.group().reduceSum(function(d) { 
+	// 	console.log(d.turbidity);
+	// 	return d.turbidity; }); 
 
-	//Create Groups
-
-	// var readingsByDate = timestamp().group();
-	// var readingsByTemperature = temperature().group();
-	// var readingsByTurbidity = turbidity().group();
-	// var readingsByConductivity = conductivity().group();
-	// var readingsByPH = pH().group();
-	var temperature = timestamp.group().reduceSum(function(d) { return scaleTemp(d.temperature); }); 
-	var turbidity = timestamp.group().reduceSum(function(d) { return scaleTurb(d.turbidity); }); 
-	var conductivity = timestamp.group().reduceSum(function(d) { return scaleCond(d.conductivity); }); 
-	var pH = timestamp.group().reduceSum(function(d) { return scalepH(d.pH); }); 
+	// //Create Groups
+	// var temperature = timestamp.group().reduceSum(function(d) { return d.temperature; }); 
+	// var turbidity = timestamp.group().reduceSum(function(d) { return scaleTurb(d.turbidity); }); 
+	// var conductivity = timestamp.group().reduceSum(function(d) { return scaleCond(d.conductivity); }); 
+	// var pH = timestamp.group().reduceSum(function(d) { return scalepH(d.pH); }); 
 	
 
 	var overalllineChart = dc.lineChart("#dc-line-chart");
-	var compositeChart1 = dc.compositeChart('#chart-container1');
+	//var compositeChart1 = dc.compositeChart('#chart-container1');
 
 	overalllineChart
-		  .width(800)
-        .height(200)
-        .dimension(timestamp)
-        .group(temperature)
-        .x(d3.scale.linear().domain([0.5, 5.5]))
-        .valueAccessor(function(d) {
-            return d.value;
-            })
-        .renderHorizontalGridLines(true)
-        .elasticY(true)
-        .xAxis().tickFormat(function(v) {return v;}) 
+    .width(768)
+    .height(480)
+    .x(d3.scale.linear().domain([0,20]))
+    .interpolate('step-before')
+    .renderArea(true)
+    .brushOn(false)
+    .renderDataPoints(true)
+    .clipPadding(10)
+    .yAxisLabel("This is the Y Axis")
+    .dimension(tempDim)
+    .group(turbidity);
         // .stack(turbidity, 'Turbidity', function (d) {
         //     return d.value;
         // })
@@ -151,15 +169,60 @@ function makeGraphs(error, apiData) {
         // 	dc.lineChart(overalllineChart).group(pH)
         // 	])
 
-	compositeChart1
-		.compose([
-			dc.lineChart(overalllineChart).group(temperature),
-			dc.lineChart(overalllineChart).group(turbidity),
-			dc.lineChart(overalllineChart).group(conductivity),
-			dc.lineChart(overalllineChart).group(pH)
-		])		
-   ;
+	// compositeChart1
+	// 	.compose([
+	// 		dc.lineChart(overalllineChart).group(temperature),
+	// 		dc.lineChart(overalllineChart).group(turbidity),
+	// 		dc.lineChart(overalllineChart).group(conductivity),
+	// 		dc.lineChart(overalllineChart).group(pH)
+	// 	])		
+   //;
 
+ //   var experiments = [
+ //    { Run: 1, Age_19_Under: 26.9, Age_19_64: 62.3, Age_65_84: 9.8, Age_85_and_Over: 0.9 },
+ //    { Run: 2, Age_19_Under: 23.5, Age_19_64: 60.3, Age_65_84: 14.5, Age_85_and_Over: 1.8 },
+ //    { Run: 3, Age_19_Under: 24.3, Age_19_64: 62.5, Age_65_84: 11.6, Age_85_and_Over: 1.6 },
+ //    { Run: 4, Age_19_Under: 24.6, Age_19_64: 63.3, Age_65_84: 10.9, Age_85_and_Over: 1.2 },
+ //    { Run: 5, Age_19_Under: 24.5, Age_19_64: 62.1, Age_65_84: 12.1, Age_85_and_Over: 1.3 },
+ //    { Run: 6, Age_19_Under: 24.7, Age_19_64: 63.2, Age_65_84: 10, Age_85_and_Over: 2.2 },
+ //    { Run: 7, Age_19_Under: 25.6, Age_19_64: 58.5, Age_65_84: 13.6, Age_85_and_Over: 2.4 },
+ //    { Run: 8, Age_19_Under: 24.1, Age_19_64: 61.6, Age_65_84: 12.7, Age_85_and_Over: 1.5 },
+ //    { Run: 9, Age_19_Under: 24.8, Age_19_64: 59.5, Age_65_84: 13.5, Age_85_and_Over: 2.2 },
+	// ];
+
+	// var trial = crossfilter(experiments);
+	// var alltrial = trial.groupAll();
+
+	// var runDimension = trial.dimension(function (d) { return d.Run; });
+
+	// var ageDimension = trial.dimension(function (d) { 
+	// 	console.log("dim" + d.Age_19_Under);
+	// 	return d.Age_19_Under; });
+	// var age19To64Group = ageDimension.group().reduceSum(function (d) { 
+	// 	console.log("group" + d.Age_19_64);
+	// 	return d.Age_19_64; });
+
+// 	var age19UnderGroup = runDimension.group().reduceSum(function (d) { return d.Age_19_Under; });
+// 	var age19To64Group = runDimension.group().reduceSum(function (d) { return d.Age_19_64; });
+// 	var age65To84Group = runDimension.group().reduceSum(function (d) { return d.Age_65_84; });
+// 	var age85AndOverGroup = runDimension.group().reduceSum(function (d) { return d.Age_85_and_Over; });
+
+// 	var overalllineChart = dc.lineChart("#dc-line-chart");
+// 	var compositeChart1 = dc.compositeChart('#chart-container1');
+// 	var topicTimeChart = dc.compositeChart("#topicsLineChart");
+
+// overalllineChart
+//     .width(768)
+//     .height(480)
+//     .x(d3.scale.linear().domain([0,20]))
+//     .interpolate('step-before')
+//     .renderArea(true)
+//     .brushOn(false)
+//     .renderDataPoints(true)
+//     .clipPadding(10)
+//     .yAxisLabel("This is the Y Axis!")
+//     .dimension(ageDimension)
+//     .group(age19To64Group);
 
    dc.renderAll();
    dc.redrawAll();
