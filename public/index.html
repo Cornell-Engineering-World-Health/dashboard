@@ -25,6 +25,18 @@
 <link rel="stylesheet" href="css/stylenew.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+
+	<script>
+    var myColor = getColor(100,100,100,100);
+    document.write('\
+        <style>\
+            body{\
+                background-color: '+myColor+';\
+            }\
+        </style>\
+    	');
+	</script>
+	
 	</head>
 	<body>
 		<div id="wrapper">
@@ -109,7 +121,7 @@
 				</div>	
 			</div>
 
-		<BODY onload="changeBackground(90, 7, 10, 9.5);">
+		<!--BODY onload="changeBackground(90, 7, 10, 9.5);"-->
 			
 
 		</div>

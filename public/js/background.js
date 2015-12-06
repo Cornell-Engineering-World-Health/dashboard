@@ -106,7 +106,7 @@ var register = require('./register.js');
 			scaleCond (cond) + scalepH (pH))/4);
 	}
 
-	function changeBackground(temp, turb, cond, pH) {
+	function getColor(temp, turb, cond, pH) {
 		if (scaleTemp (temp) >= 100 || scaleTurb (turb) >= 100 || 
 			scaleCond (cond) >= 100 || scalepH (pH) >= 100){
 			//document.body.style.background = "#e60000";
@@ -114,11 +114,11 @@ var register = require('./register.js');
 		}
 		else if (scaleTemp (temp) >= 50  || scaleTurb (turb) >= 50 || 
 			scaleCond (cond) >= 50 || scalepH (pH) >= 50){
-			//document.body.style.background = "#ffff66";
-			return "yellow";
+			//document.body.style.background = "#e60000";
+			return "#e60000";
 		}
 		else{
-			document.body.style.background = "green";
+			//document.body.style.background = "green";
 			return "green";
 		}
 			
@@ -127,7 +127,7 @@ var register = require('./register.js');
 	console.log(scaleTurb(badturb));
 	console.log(scaleCond(badcond));
 	console.log(scalepH(badpH));
-	console.log(changeBackground(100,100,100,100));
+	console.log(getColor(100,100,100,100));
 
 		
 
