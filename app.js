@@ -1,6 +1,7 @@
 var express = require('express');
 var Mailgun = require('mailgun-js');
-var register = require('./public/js/background.js');
+var register1 = require('./public/js/background.js');
+var register2 = require('./public/js/RequestData.js');
 var app = express();
 app.listen(3000)
     /* server */
@@ -36,9 +37,15 @@ app.get('/submit/:mail', function(req,res) {
     //We pass the api_key and domain to the wrapper, or it won't be able to identify + send emails
     var mailgun = new Mailgun({apiKey: api_key, domain: domain});
     
-    //How to get data...
-	var prev_status = 75//waterQuality (temp, turb, cond, pH)
-	var current_status = 101 //waterQuality (temp, turb, cond, pH)
+    var prev2 = register2.getRecent(2);
+    var array2 = JSON.parse(prev2);
+
+    var prev_status = array2[0];
+    var curr_status = array2[1];
+
+    //waterQuality (temp, turb, cond, pH)
+	var prev = register1.waterQuality(prev_status.temperature, prev_status.turbidity, prev_status.conductivity, prev_status.pH)
+	var curr = register1.waterQuality(curr_status.temperature, curr_status.turbidity, curr_status.conductivity, curr_status.pH) 
 	
 	function change_messg (prev, curr){
 		if (prev<50 && (curr >= 50 && curr < 100))
