@@ -1,6 +1,7 @@
 //MAIN UPDATE LOOP
 //MAKES SERVER REQUEST, WHICH RETURNS THE DATA TO BE USED TO CREATE THE GRAPHS
 //CURRENTLY MAKES NO GRAPHS BECAUSE THERE IS NO CODE TO MAKE GRAPHS
+//var requests = require("request");
 
 function update() {
   queue()
@@ -11,13 +12,6 @@ update();
 //SET TO UPDATE EVERY 10 SECONDS
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
-
-getRecent = function(n) {
-  $.post("/api/data", {data: n}, function(data) {
-    console.log(data);
-    return data;
-  });
-}
 
 getRecent(2);
 
