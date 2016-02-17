@@ -13,7 +13,9 @@ update();
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-getRecent(2);
+getRecent(2, function(res) {
+  console.log(res)
+});
 
 function makeGraphs(error, apiData) {
 	var badtemp = 90;
