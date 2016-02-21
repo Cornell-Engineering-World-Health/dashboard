@@ -1,0 +1,24 @@
+.pH-chart {
+  position: relative;
+}
+
+.pH-left {
+  float: left;
+  height: 100%;
+  position: relative;  
+  background-color: transparent;
+}
+
+.pH-reading {
+  height: 100%;
+  position: relative;
+  float: left;
+  background-color: #ED3A1D;
+}
+
+.pH-right {
+  height: 100%;
+  position: relative;
+  float: right;
+  background-color: transparent;
+}
