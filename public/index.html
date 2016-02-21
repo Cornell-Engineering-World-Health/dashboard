@@ -6,6 +6,7 @@
 -->
 <html>
 	<head>
+
 		<title>EWH Dashboard</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
@@ -22,8 +23,8 @@
 		<script src="js/bundle.js"></script>
 		<script type="text/javascript" src="js/pH.js"></script>
 
-			<link rel="stylesheet" href="css/dc.css" />
-<link rel="stylesheet" href="css/stylenew.css" />
+		<link rel="stylesheet" href="css/dc.css" />
+		<link rel="stylesheet" href="css/stylenew.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
 
@@ -40,6 +41,8 @@
 
 	</head>
 	<body>
+		
+		
 		<div id="wrapper">
 			
 			<!-- Header -->
@@ -62,12 +65,19 @@
 				<div class="container">
 
 					<div class="row">
-						<div class="2u chart-wrapper" id="menuselect" style="background-color: #33CC99; height: 60px;">
-							<div class="chart-title">  <strong> State Selector </strong> </div>					
-						</div>
+						
 						<div class='12u line-graph' id='dc-line-chart'>
                                 <h4>Water Quality</h4>
                         </div>
+
+						
+					</div>
+
+				</div>
+					<a href="data/data.zip">EXPORT Data</a>
+			</div>	
+		</div>
+
 						<div class="12u pie-chart" id='dc-pie-chart'>
                         		<h4>Conductivity</h4>
                         </div>
@@ -79,7 +89,44 @@
 				<div class="pH-chart" id="myChart"></div>
 			</div>
 
-		<!--BODY onload="changeBackground(90, 7, 10, 9.5);"-->
+		<svg height="200" width="200">
+  			<circle text-anchor="middle" cx = "105" cy = "88" r = "80" id = "turb" fill="#ffeb99" fill-opacity="1"/>
+  			<text text-anchor="middle" id = "turbnum" x="50%" y="50%" fill="gray" font-family="Calibri" font-size="55">10.0</text>
+	 	</svg>
+
+	 	<script>
+
+	        $(document).ready(function() {
+	          var request;
+	          getRecent(1, function(res) {
+	              console.log(res)
+	            request = res;
+	            var data = request[0];
+	            console.log(scaleTemp(data.temperature));
+	            console.log(scaleTurb(data.turbidity));
+	            console.log(scaleCond(data.conductivity));
+	            console.log(scalepH(data.pH));
+	            console.log(getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH)));
+
+	              var myColor = getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH));
+	              document.write('\
+	                  <style>\
+	                      body{\
+	                          background-color: '+ myColor +';\
+	                      }\
+	                  </style>\
+	                ');
+	          });
+	        });
+  
+  		
+			document.getElementById("turbnum").textContent = data.turbidity; //insert turbidity value here
+			
+			function turbColor(op){
+			  document.getElementById("turb").setAttribute("fill-opacity", op); 
+			}
+			turbColor (scaleTurb(data.turbidity)/100); //parameter entered should be turbidity divided by 10
+		</script>
 			
 
 		</div>
