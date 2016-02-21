@@ -1,25 +1,27 @@
 //MAIN UPDATE LOOP
 //MAKES SERVER REQUEST, WHICH RETURNS THE DATA TO BE USED TO CREATE THE GRAPHS
 //CURRENTLY MAKES NO GRAPHS BECAUSE THERE IS NO CODE TO MAKE GRAPHS
+//var requests = require("request");
+$(document).ready(function() {
+  $('#myChart').createPH(300, 40, 0);
+  update();
+});
 
 function update() {
   queue()
     .defer(d3.json, "/api/data")
     .await(makeGraphs);
+
+  getRecent(1, function(res) {
+    $('#phLabel').html('pH: ' + res[0].pH);
+    $('#myChart').updatePH(res[0].pH);
+  });
 }
-update();
+
 //SET TO UPDATE EVERY 10 SECONDS
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-getRecent = function(n) {
-  $.post("/api/data", {data: n}, function(data) {
-    console.log(data);
-    return data;
-  });
-}
-
-getRecent(2);
 
 function makeGraphs(error, apiData) {
 	var badtemp = 90;
@@ -114,16 +116,22 @@ function makeGraphs(error, apiData) {
 	// var all = ndx.groupAll();
 
 	var trial = crossfilter(data);
+
+/******* Dimensions *******/
 	var tempDim = trial.dimension(function (d) { return d.temperature; });
+	var dateDim = trial.dimension(function (d) { return d.timestamp; });
+
+/******* Groups *******/
 	var turbidity = tempDim.group().reduceSum(function (d) { return d.turbidity; }); 
 	var conductivity = tempDim.group().reduceSum(function (d) { return d.conductivity; }); 
 	var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
+	var temp = tempDim.group().reduceSum(function (d) { return d.temperature; }); 
 
-
-	var dateDim = trial.dimension(function (d) { return d.timestamp; });
-	var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
-
-
+	/* Uncomment only one section */ 
+	// var turbidity = dateDim.group().reduceSum(function (d) { return d.turbidity; }); 
+	// var conductivity = dateDim.group().reduceSum(function (d) { return d.conductivity; }); 
+	// var pH = dateDim.group().reduceSum(function(d) { return d.pH; }); 
+	// var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
 
 	//Create dimensions
 	// var timestamp = ndx.dimension(function(d) { 
@@ -147,6 +155,7 @@ function makeGraphs(error, apiData) {
 	var overalllineChart = dc.lineChart("#dc-line-chart");
 	var compositeChart1 = dc.compositeChart('#chart-container1');
 
+/******* Overlayed line chart *******/
 	overalllineChart
     .width(768)
     .height(480)
@@ -157,19 +166,38 @@ function makeGraphs(error, apiData) {
     .renderDataPoints(true)
     .clipPadding(10)
     .yAxisLabel("This is the Y Axis")
+
     .dimension(tempDim)
+    // .dimension(dateDim)
+    
     .group(turbidity)
     .brushOn(true)
     .legend(dc.legend().x(50).y(10).itemHeight(15).gap(5))
     .stack(turbidity, 'Turbidity', function (d) {
-            return d.value;
-        })
-        .stack(conductivity, 'Conductivity', function (d) {
-            return d.value;
-        })
-        .stack(pH, 'pH', function (d) {
-            return d.value;
-        });
+        return d.value;
+    })
+    .stack(conductivity, 'Conductivity', function (d) {
+    	return d.value;
+    })
+    .stack(pH, 'pH', function (d) {
+    	return d.value;
+    });
+    // .stack(temp, 'Temperature', function (d) {
+    // 	return d.value;
+    // });
+
+
+//CONDUCTIVITY PIE CHART - ERIN
+	var conductivityChart = dc.pieChart("#dc-pie-chart");
+
+	conductivityChart
+	.width(250)
+	.height(250)
+	.radius(100)
+	.innerRadius(0)
+	.dimension(tempDim)
+	.group(conductivity)
+	.title(function (d) { return d.value; });
 
 //Must call within composite chart object
         // .compose([
