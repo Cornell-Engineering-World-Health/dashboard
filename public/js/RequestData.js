@@ -26,7 +26,7 @@ add = function(json, callback) {
   }); 
 }
 
-resetDB = function() {
+resetDB = function(callback) {
   $.get("/reset", function(res) {
     if(typeof callback === "function") {
       callback(res);
