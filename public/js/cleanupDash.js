@@ -8,7 +8,9 @@ update();
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-getRecent(2);
+getRecent(2, function(res) {
+  console.log(res)
+});
 
 function makeGraphs(error, apiData) {
 	
@@ -90,11 +92,6 @@ function makeGraphs(error, apiData) {
 /********* Start Transformations *********/ 
 	var dataSet = apiData;
 
-	var dateFormat = d3.time.format("%m/%d/%Y"); //pos uneccessary; already formatted?
-	data.forEach(function(d) {
-		d.timestamp = dateFormat.parse(d.timestamp); //slow down
-	});
-
 	//Fill data array with 100 values from apiData; graphs only plot 100 values
 	// most recent data is at 0 index?
 	var data = [];
@@ -102,20 +99,25 @@ function makeGraphs(error, apiData) {
 		data.push(apiData[i]);
 	}
 
+	var dateFormat = d3.time.format("%m/%d/%Y"); //pos uneccessary
+	data.forEach(function(d) {
+		d.timestamp = dateFormat.parse(d.timestamp); //slow down
+	});
+
 /********* END *********/ 
 
 /********* Create a Crossfilter instance and All *********/ 
 
-	var readings = crossfilter(data);
-	var all = readings.groupAll();
+	var trial = crossfilter(data);
+	var all = trial.groupAll();
 
 /********* END *********/ 
 
 /********* Define Dimensions *********/ 
 
 	// IDEAL: use dateDim - order by date
-	var tempDim = readings.dimension(function (d) { return d.temperature; });
-	var dateDim = readings.dimension(function (d) { return d.timestamp; });
+	var tempDim = trial.dimension(function (d) { return d.temperature; });
+	var dateDim = trial.dimension(function (d) { return d.timestamp; });
 
 /********* END *********/ 
 
@@ -126,10 +128,10 @@ function makeGraphs(error, apiData) {
 	// var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
 	// var temp = tempDim.group().reduceSum(function (d) { return d.temperature; }); 
 
-	var turbidity = dateDim.group().reduceSum(function (d) { return d.turbidity; }); 
-	var conductivity = dateDim.group().reduceSum(function (d) { return d.conductivity; }); 
-	var pH = dateDim.group().reduceSum(function(d) { return d.pH; }); 
-	var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
+	var turbidity = tempDim.group().reduceSum(function (d) { return d.turbidity; }); 
+	var conductivity = tempDim.group().reduceSum(function (d) { return d.conductivity; }); 
+	var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
+	var temp = tempDim.group().reduceSum(function (d) { return d.temperature; }); 
 
 
 /********* END *********/ 
@@ -168,7 +170,7 @@ function makeGraphs(error, apiData) {
 	    })
 	    .stack(pH, 'pH', function (d) {
 	    	return d.value;
-	    });
+    });
 
 
 
