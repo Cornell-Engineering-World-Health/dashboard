@@ -118,12 +118,8 @@ function makeGraphs(error, apiData) {
 	var turbidity = tempDim.group().reduceSum(function (d) { return d.turbidity; }); 
 	var conductivity = tempDim.group().reduceSum(function (d) { return d.conductivity; }); 
 	var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
-
-
 	var dateDim = trial.dimension(function (d) { return d.timestamp; });
 	var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
-
-
 
 	//Create dimensions
 	// var timestamp = ndx.dimension(function(d) { 
@@ -170,6 +166,18 @@ function makeGraphs(error, apiData) {
         .stack(pH, 'pH', function (d) {
             return d.value;
         });
+
+//CONDUCTIVITY PIE CHART - ERIN
+	var conductivityChart = dc.pieChart("#dc-pie-chart");
+
+	conductivityChart
+	.width(250)
+	.height(250)
+	.radius(100)
+	.innerRadius(0)
+	.dimension(tempDim)
+	.group(conductivity)
+	.title(function (d) { return d.value; });
 
 //Must call within composite chart object
         // .compose([
