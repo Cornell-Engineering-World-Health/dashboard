@@ -1,3 +1,8 @@
+$(document).ready(function() {
+  $('#myChart').createPH(300, 40, 0);
+  update();
+});
+
 function update() {
   queue()
     .defer(d3.json, "/api/data")
