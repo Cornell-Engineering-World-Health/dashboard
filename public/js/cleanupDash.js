@@ -97,7 +97,14 @@ function makeGraphs(error, apiData) {
 	    	return d.value;
     });
 
-
+	conductivityChart
+		.width(250)
+		.height(250)
+		.radius(100)
+		.innerRadius(0)
+		.dimension(tempDim)
+		.group(conductivity)
+		.title(function (d) { return d.value; });
 
 
 
