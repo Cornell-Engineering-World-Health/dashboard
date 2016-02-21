@@ -1,5 +1,6 @@
 
 var register = require('./register.js');
+var register = require('./RequestData.js');
 
 
 	var badtemp = register.bad_temp();
@@ -123,6 +124,14 @@ var register = require('./register.js');
 			return "green";
 		}
 			
+	}
+
+	var prev = getRecent(1);
+	var array = JSON.parse(prev);
+	var data = array[0];
+
+	function changeBackground (){
+		getColor(data.temperature, data.turbidity, data.conductivity, data.pH);
 	}
 	console.log(scaleTemp(badtemp));
 	console.log(scaleTurb(badturb));

@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Synchronous by TEMPLATED</title>
+		<title>Analytics Dashboard</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -17,12 +17,12 @@
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/background.js"></script>
-		<script src="js/register.js"></script>
+		
 		<script src="js/bundle.js"></script>
 
 
-			<link rel="stylesheet" href="css/dc.css" />
-<link rel="stylesheet" href="css/stylenew.css" />
+		<link rel="stylesheet" href="css/dc.css" />
+		<link rel="stylesheet" href="css/stylenew.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
 
@@ -39,6 +39,8 @@
 
 	</head>
 	<body>
+		
+		
 		<div id="wrapper">
 			
 			<!-- Header -->
@@ -61,67 +63,56 @@
 				<div class="container">
 
 					<div class="row">
-						<div class="2u chart-wrapper" id="menuselect" style="background-color: #33CC99; height: 60px;">
-							<div class="chart-title">  <strong> State Selector </strong> </div>					
-						</div>
+						
 						<div class='12u line-graph' id='dc-line-chart'>
                                 <h4>Water Quality</h4>
                         </div>
-						<!-- <div class="2u">
-				<div> <span> &nbsp</span></div>
-						</div>
-						<div class="2u chart-wrapper" id="total-projects">
-							<div class="chart-title">  <strong> Total Donation Count </strong> </div>					
-						</div>
-						<div class="2u chart-wrapper" id="net-donations">
-							<div class="chart-title">  <strong> Nett Donations ($) </strong> </div>					
-						</div>
-
-
-					<div class="3u dc-data-count dc-chart" id="row-selection">
-						<span class="filter-count">_</span> selected out of <span class="total-count">_</span> records |
-						<span>
-							<a href='javascript:dc.filterAll();dc.redrawAll();'><font color="#33CC99">Reset All</font></a>
-						</span>
+						
 					</div>
-							
 
 				</div>
-
-
-					<div class="row">
-						<div class="6u chart-wrapper"  id="date-chart">
-							<div class="chart-title bold"> <strong> Number of Donations </strong></div>
-
-						</div>
-						<div class="3u chart-wrapper" id="resource-chart">
-							<div class="chart-title">  <strong> Donation Count for Resources </strong> </div>							
-
-						</div>
-						<div class="3u chart-wrapper" id="funding-chart">
-							<div class="chart-title">  <strong> Funding Status </strong> </div>					
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="4u chart-wrapper"  id="grade-chart">
-							<div class="chart-title">  <strong> Donation Count by Grade </strong> </div>
-						</div>
-						<div class="4u chart-wrapper" id="poverty-chart">
-							<div class="chart-title">  <strong> Donation Count by Poverty Level</strong></div>							
-
-						</div>
-
-												<div class="4u chart-wrapper"  id="state-donations">
-							<div class="chart-title">  <strong> Donation Amount by State ($) </strong> </div> -->
-						</div>
-
-					</div>
 					<a href="data/data.zip">EXPORT Data</a>
-				</div>	
-			</div>
+			</div>	
+		</div>
 
-		<!--BODY onload="changeBackground(90, 7, 10, 9.5);"-->
+		<svg height="200" width="200">
+  			<circle text-anchor="middle" cx = "105" cy = "88" r = "80" id = "turb" fill="#ffeb99" fill-opacity="1"/>
+  			<text text-anchor="middle" id = "turbnum" x="50%" y="50%" fill="gray" font-family="Calibri" font-size="55">10.0</text>
+	 	</svg>
+
+	 	<script>
+
+	        $(document).ready(function() {
+	          var request;
+	          getRecent(1, function(res) {
+	              console.log(res)
+	            request = res;
+	            var data = request[0];
+	            console.log(scaleTemp(data.temperature));
+	            console.log(scaleTurb(data.turbidity));
+	            console.log(scaleCond(data.conductivity));
+	            console.log(scalepH(data.pH));
+	            console.log(getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH)));
+
+	              var myColor = getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH));
+	              document.write('\
+	                  <style>\
+	                      body{\
+	                          background-color: '+ myColor +';\
+	                      }\
+	                  </style>\
+	                ');
+	          });
+	        });
+  
+  		
+			document.getElementById("turbnum").textContent = data.turbidity; //insert turbidity value here
+			
+			function turbColor(op){
+			  document.getElementById("turb").setAttribute("fill-opacity", op); 
+			}
+			turbColor (scaleTurb(data.turbidity)/100); //parameter entered should be turbidity divided by 10
+		</script>
 			
 
 		</div>
@@ -130,6 +121,7 @@
 <script src='js/d3.js' type='text/javascript'></script>
 <script src='js/dc.js' type='text/javascript'></script>
 <script src='js/queue.js' type='text/javascript'></script>
+<script src="js/register.js"></script>
 <script src='js/Dashboard.js' type='text/javascript'></script>
 <script src=''
 	</body>
