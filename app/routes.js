@@ -41,7 +41,7 @@ app.post('/', function(req, res) {
 app.post('/api/data', function(req, res) {
   var n = parseInt(req.body.data);
 
-  Reading.find().limit(n).exec(function(err, readingDetails) {
+  Reading.find().sort({timestamp : -1}).limit(n).exec(function(err, readingDetails) {
    // if there is an error retrieving, send the error. 
    // nothing after res.send(err) will execute
     if (err) 
@@ -70,7 +70,7 @@ app.get('/api/data', function(req, res) {
   /*
   Reading.remove(function(err) {
     if(err)
-      handleError(err);
+      handleError(err);asdf
   });
   */
 

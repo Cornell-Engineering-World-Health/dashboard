@@ -6,9 +6,11 @@
  *                database if there are less than n records, returns however
  *                many there are
  */              
-getRecent = function(n) {
-  $.post("/api/data", {data: n}, function(data) {
-    return data;
+getRecent = function(n, callback) {
+  $.post("/api/data", {data: n}, function(res) {
+    if(typeof callback === "function") {
+      callback(res);
+    }
   });
 }
 
@@ -16,8 +18,10 @@ getRecent = function(n) {
  * precondition: json is a valid json that fits the Readings schema
  * postcondition: [add json] adds the records in the json to the database
  */   
-add = function(json) {
-  $.post("/", {data: json}, function(data) {
-    return data;
+add = function(json, callback) {
+  $.post("/", {data: json}, function(res) {
+    if(typeof callback === "function") {
+      callback(res);
+    }
   }); 
 }

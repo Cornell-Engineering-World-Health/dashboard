@@ -13,7 +13,9 @@ update();
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-getRecent(2);
+getRecent(2, function(res) {
+  console.log(res)
+});
 
 function makeGraphs(error, apiData) {
 	var badtemp = 90;
@@ -125,7 +127,6 @@ function makeGraphs(error, apiData) {
 	// var pH = dateDim.group().reduceSum(function(d) { return d.pH; }); 
 	// var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
 
-
 	//Create dimensions
 	// var timestamp = ndx.dimension(function(d) { 
 	// 	console.log("this is" + d.timestamp);
@@ -179,6 +180,18 @@ function makeGraphs(error, apiData) {
     // 	return d.value;
     // });
 
+
+//CONDUCTIVITY PIE CHART - ERIN
+	var conductivityChart = dc.pieChart("#dc-pie-chart");
+
+	conductivityChart
+	.width(250)
+	.height(250)
+	.radius(100)
+	.innerRadius(0)
+	.dimension(tempDim)
+	.group(conductivity)
+	.title(function (d) { return d.value; });
 
 //Must call within composite chart object
         // .compose([
