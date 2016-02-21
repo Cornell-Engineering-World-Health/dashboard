@@ -13,9 +13,6 @@ update();
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-getRecent(2, function(res) {
-  console.log(res)
-});
 
 function makeGraphs(error, apiData) {
 
@@ -27,6 +24,7 @@ function makeGraphs(error, apiData) {
 	var data = [];
 	for (var i = 0; i < 100; i++) {
 		data.push(apiData[i]);
+		console.log(apiData[i])
 	}
 
 	var dateFormat = d3.time.format("%m/%d/%Y"); //pos uneccessary
@@ -62,7 +60,6 @@ function makeGraphs(error, apiData) {
 	var conductivity = tempDim.group().reduceSum(function (d) { return d.conductivity; }); 
 	var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
 	var temp = tempDim.group().reduceSum(function (d) { return d.temperature; }); 
-
 
 /********* END *********/ 
 
@@ -110,8 +107,7 @@ function makeGraphs(error, apiData) {
 		.innerRadius(0)
 		.dimension(tempDim)
 		.group(conductivity)
-		.title(function (d) { return d.value; });
-
+		// .title(function (d) { return d.value; });
 
 
 /********* Draw Graphs *********/ 
