@@ -25,3 +25,11 @@ add = function(json, callback) {
     }
   }); 
 }
+
+resetDB = function() {
+  $.get("/reset", function(res) {
+    if(typeof callback === "function") {
+      callback(res);
+    }
+  })
+}

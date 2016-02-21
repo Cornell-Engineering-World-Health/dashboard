@@ -3,4 +3,4 @@
 //module.exports allows us to pass this to other files when imported
 var mongoose = require("mongoose");
 
-module.exports = connection.model('Reading', new mongoose.Schema({temperature : Number, turbidity : Number, conductivity : Number, pH : Number, timestamp : {type : Date, default: Date.now}, usage: Number}));
+module.exports = connection.model('Usage', new mongoose.Schema({timestamp: {type : Date, default: Date.now}, usage: Number}));
