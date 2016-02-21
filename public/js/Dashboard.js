@@ -2,20 +2,26 @@
 //MAKES SERVER REQUEST, WHICH RETURNS THE DATA TO BE USED TO CREATE THE GRAPHS
 //CURRENTLY MAKES NO GRAPHS BECAUSE THERE IS NO CODE TO MAKE GRAPHS
 //var requests = require("request");
+$(document).ready(function() {
+  $('#myChart').createPH(300, 40, 0);
+  update();
+});
 
 function update() {
   queue()
     .defer(d3.json, "/api/data")
     .await(makeGraphs);
+
+  getRecent(1, function(res) {
+    $('#phLabel').html('pH: ' + res[0].pH);
+    $('#myChart').updatePH(res[0].pH);
+  });
 }
-update();
+
 //SET TO UPDATE EVERY 10 SECONDS
 //IN THE FUTURE SHOULD UPDATE BASED ON REAL TIME FOR WHEN THE DATA IS RECEIVED
 setInterval(update, 10000);
 
-getRecent(2, function(res) {
-  console.log(res)
-});
 
 function makeGraphs(error, apiData) {
 	var badtemp = 90;
