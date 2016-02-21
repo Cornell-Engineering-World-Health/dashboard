@@ -3,6 +3,7 @@ Setup:
 - install node.js
 - install mongoDB
 - clone this repo
+
 Run:
 - start mongoDB with "mongo"
 - start node with "npm start"
