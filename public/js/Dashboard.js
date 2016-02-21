@@ -108,15 +108,22 @@ function makeGraphs(error, apiData) {
 	// var all = ndx.groupAll();
 
 	var trial = crossfilter(data);
+
+/******* Dimensions *******/
 	var tempDim = trial.dimension(function (d) { return d.temperature; });
+	var dateDim = trial.dimension(function (d) { return d.timestamp; });
+
+/******* Groups *******/
 	var turbidity = tempDim.group().reduceSum(function (d) { return d.turbidity; }); 
 	var conductivity = tempDim.group().reduceSum(function (d) { return d.conductivity; }); 
 	var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
+	var temp = tempDim.group().reduceSum(function (d) { return d.temperature; }); 
 
-
-	var dateDim = trial.dimension(function (d) { return d.timestamp; });
-	var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
-
+	/* Uncomment only one section */ 
+	// var turbidity = dateDim.group().reduceSum(function (d) { return d.turbidity; }); 
+	// var conductivity = dateDim.group().reduceSum(function (d) { return d.conductivity; }); 
+	// var pH = dateDim.group().reduceSum(function(d) { return d.pH; }); 
+	// var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
 
 
 	//Create dimensions
@@ -141,6 +148,7 @@ function makeGraphs(error, apiData) {
 	var overalllineChart = dc.lineChart("#dc-line-chart");
 	var compositeChart1 = dc.compositeChart('#chart-container1');
 
+/******* Overlayed line chart *******/
 	overalllineChart
     .width(768)
     .height(480)
@@ -151,19 +159,26 @@ function makeGraphs(error, apiData) {
     .renderDataPoints(true)
     .clipPadding(10)
     .yAxisLabel("This is the Y Axis")
+
     .dimension(tempDim)
+    // .dimension(dateDim)
+    
     .group(turbidity)
     .brushOn(true)
     .legend(dc.legend().x(50).y(10).itemHeight(15).gap(5))
     .stack(turbidity, 'Turbidity', function (d) {
-            return d.value;
-        })
-        .stack(conductivity, 'Conductivity', function (d) {
-            return d.value;
-        })
-        .stack(pH, 'pH', function (d) {
-            return d.value;
-        });
+        return d.value;
+    })
+    .stack(conductivity, 'Conductivity', function (d) {
+    	return d.value;
+    })
+    .stack(pH, 'pH', function (d) {
+    	return d.value;
+    });
+    // .stack(temp, 'Temperature', function (d) {
+    // 	return d.value;
+    // });
+
 
 //Must call within composite chart object
         // .compose([
