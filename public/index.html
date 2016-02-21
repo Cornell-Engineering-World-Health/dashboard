@@ -96,28 +96,28 @@
 
 	 	<script>
 
-	        $(document).ready(function() {
-	          var request;
-	          getRecent(1, function(res) {
-	              console.log(res)
-	            request = res;
-	            var data = request[0];
-	            console.log(scaleTemp(data.temperature));
-	            console.log(scaleTurb(data.turbidity));
-	            console.log(scaleCond(data.conductivity));
-	            console.log(scalepH(data.pH));
-	            console.log(getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH)));
+	        // $(document).ready(function() {
+	        //   var request;
+	        //   getRecent(1, function(res) {
+	        //       console.log(res)
+	        //     request = res;
+	        //     var data = request[0];
+	        //     console.log(scaleTemp(data.temperature));
+	        //     console.log(scaleTurb(data.turbidity));
+	        //     console.log(scaleCond(data.conductivity));
+	        //     console.log(scalepH(data.pH));
+	        //     console.log(getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH)));
 
-	              var myColor = getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH));
-	              document.write('\
-	                  <style>\
-	                      body{\
-	                          background-color: '+ myColor +';\
-	                      }\
-	                  </style>\
-	                ');
-	          });
-	        });
+	        //       var myColor = getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH));
+	        //       document.write('\
+	        //           <style>\
+	        //               body{\
+	        //                   background-color: '+ myColor +';\
+	        //               }\
+	        //           </style>\
+	        //         ');
+	        //   });
+	        // });
   
   		
 			document.getElementById("turbnum").textContent = data.turbidity; //insert turbidity value here
