@@ -48,6 +48,7 @@ function makeGraphs(error, apiData) {
 	// IDEAL: use dateDim - order by date
 	var tempDim = trial.dimension(function (d) { return d.temperature; });
 	var dateDim = trial.dimension(function (d) { return d.timestamp; });
+	var usageDim = trial.dimenstion(function (d) { return d.usage; });
 
 /********* END *********/ 
 
@@ -71,6 +72,7 @@ function makeGraphs(error, apiData) {
 	var overalllineChart = dc.lineChart("#dc-line-chart");
 	var compositeChart1 = dc.compositeChart('#chart-container1');
 	var conductivityChart = dc.pieChart("#dc-pie-chart");
+	var usageLineChart = dc.lineChart("dc-line-chart")
 
 /********* END *********/ 
 
@@ -112,7 +114,17 @@ function makeGraphs(error, apiData) {
 		.group(conductivity)
 		.title(function (d) { return d.value; });
 
-
+	usageLineChart
+		.width(384)
+		.height(240)
+	    .x(d3.scale.linear().domain([0,100]))
+	    .interpolate('step-before')
+	    .renderArea(true)
+	    .brushOn(false)
+	    .renderDataPoints(true)
+	    .clipPadding(10)
+	    .dimension(usageDim)
+	    .group()
 
 /********* Draw Graphs *********/ 
 
