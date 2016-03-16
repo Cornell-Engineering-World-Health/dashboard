@@ -144,7 +144,6 @@ function makeGraphs(error, apiData) {
 	config1.minValue = 0;
 	config1.maxValue = 10;
 
-
 /********* Draw Graphs *********/ 
 
    dc.renderAll();
