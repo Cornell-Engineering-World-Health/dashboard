@@ -268,8 +268,6 @@ function loadLiquidFillGauge(elementId, value, config) {
     }
 
     return new GaugeUpdater();
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> 11a494ce8916ce1161b9bdba5138e6c5c2c684e7
+

@@ -57,7 +57,6 @@ function makeGraphs(error, apiData) {
 	var dateDim = trial.dimension(function (d) { return d.timestamp; });
 	var minDate = dateDim.bottom(1)[0].timestamp;
 	var maxDate = dateDim.top(1)[0].timestamp;
-
 /********* END *********/ 
 
 /********* Groups *********/ 
@@ -82,7 +81,6 @@ function makeGraphs(error, apiData) {
 	var overalllineChart = dc.compositeChart("#dc-line-chart");
 	var compositeChart1 = dc.compositeChart('#chart-container1');
 	var conductivityChart = dc.pieChart("#dc-pie-chart");
-	var usageLineChart = dc.lineChart("dc-line-chart")
 
 /********* END *********/ 
 
@@ -131,18 +129,17 @@ function makeGraphs(error, apiData) {
 	// 	.dimension(dateDim)
 	// 	.group(conductivity)
 	// 	// .title(function (d) { return d.value; });
-
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.circleColor = "#FF7777";
-	config1.textColor = "#FF4444";
-	config1.waveTextColor = "#FFAAAA";
-	config1.circleThickness = 0.2;
-	config1.textVertPosition = 0.2;
-	config1.waveAnimateTime = 1000;
-	config1.displayPercent = false;
-	config1.minValue = 0;
-	config1.maxValue = 10;
+var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
+var config1 = liquidFillGaugeDefaultSettings();
+config1.circleColor = "#FF7777";
+config1.textColor = "#FF4444";
+config1.waveTextColor = "#FFAAAA";
+config1.circleThickness = 0.2;
+config1.textVertPosition = 0.2;
+config1.waveAnimateTime = 1000;
+config1.displayPercent = false;
+config1.minValue = 0;
+config1.maxValue = 10;
 
 /********* Draw Graphs *********/ 
 
