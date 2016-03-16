@@ -4,3 +4,5 @@
 var mongoose = require("mongoose");
 
 module.exports = connection.model('Reading', new mongoose.Schema({temperature : Number, turbidity : Number, conductivity : Number, pH : Number, timestamp : {type : Date, default: Date.now}, usage: Number}));
+
+// module.exports = connection.model('Reading', new mongoose.Schema({temperature : Number, turbidity : Number, conductivity : [Number], pH : Number, timestamp : {type : Date, default: Date.now}, usage: Number}));

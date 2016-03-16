@@ -22,6 +22,8 @@
 		<script src="js/background.js"></script>
 		<script src="js/bundle.js"></script>
 		<script type="text/javascript" src="js/pH.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    	<script src="js/liquidFillGauge.js" language="JavaScript"></script>
 
 		<link rel="stylesheet" href="css/dc.css" />
 		<link rel="stylesheet" href="css/stylenew.css" />
@@ -90,71 +92,22 @@
 				<div id="test"></div>
 			</div>
 
-		<svg height="200" width="200">
-  			<circle text-anchor="middle" cx = "105" cy = "88" r = "80" id = "turb" fill="#ffeb99" fill-opacity="1"/>
-  			<text text-anchor="middle" id = "turbnum" x="50%" y="50%" fill="gray" font-family="Calibri" font-size="55">10.0</text>
-	 	</svg>
+		<svg id="turbidity-graph" width="97%" height="250"></svg>
+		<!--<script language="JavaScript">
+			var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
+		    var config1 = liquidFillGaugeDefaultSettings();
+		    config1.circleColor = "#FF7777";
+		    config1.textColor = "#FF4444";
+		    config1.waveTextColor = "#FFAAAA";
+		    config1.circleThickness = 0.2;
+		    config1.textVertPosition = 0.2;
+		    config1.waveAnimateTime = 1000;
+		    config1.displayPercent = false;
+		    config1.minValue = 0;
+    		config1.maxValue = 10;
 
-	 	<script>
-<<<<<<< HEAD
-	 		/*
-	        $(document).ready(function() {
-	          var request;
-	          getRecent(1, function(res) {
-	              console.log(res)
-	            request = res;
-	            var data = request[0];
-	            console.log(scaleTemp(data.temperature));
-	            console.log(scaleTurb(data.turbidity));
-	            console.log(scaleCond(data.conductivity));
-	            console.log(scalepH(data.pH));
-	            console.log(getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH)));
-
-	              var myColor = getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH));
-	              document.write('\
-	                  <style>\
-	                      body{\
-	                          background-color: '+ myColor +';\
-	                      }\
-	                  </style>\
-	                ');
-	          });
-	        });
-  		*/
-=======
-
-	        // $(document).ready(function() {
-	        //   var request;
-	        //   getRecent(1, function(res) {
-	        //       console.log(res)
-	        //     request = res;
-	        //     var data = request[0];
-	        //     console.log(scaleTemp(data.temperature));
-	        //     console.log(scaleTurb(data.turbidity));
-	        //     console.log(scaleCond(data.conductivity));
-	        //     console.log(scalepH(data.pH));
-	        //     console.log(getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH)));
-
-	        //       var myColor = getColor(scaleTemp(data.temperature), scaleTurb(data.turbidity), scaleCond(data.conductivity), scalepH(data.pH));
-	        //       document.write('\
-	        //           <style>\
-	        //               body{\
-	        //                   background-color: '+ myColor +';\
-	        //               }\
-	        //           </style>\
-	        //         ');
-	        //   });
-	        // });
-  
->>>>>>> f38c8915fb01bacf0b6ada8d74c7c26e771c8292
-  		
-			document.getElementById("turbnum").textContent = data.turbidity; //insert turbidity value here
-			
-			function turbColor(op){
-			  document.getElementById("turb").setAttribute("fill-opacity", op); 
-			}
-			turbColor (scaleTurb(data.turbidity)/100); //parameter entered should be turbidity divided by 10
-		</script>
+		</script> -->
+		<div id="turbidity-graph"></div>
 			
 
 		</div>

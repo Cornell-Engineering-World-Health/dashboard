@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>dc.js - Filtering Example</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
+</head>
+<body>
+
+  <div id="chart-ring-year" style="width:300px; height:300px">
+    <div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+      <a href="javascript:yearRingChart.filterAll();dc.redrawAll();">reset</a>
+    </div>
+  </div>
+  <div id="chart-hist-spend" style="width:300px; height:300px">
+    <div class="reset" style="visibility: hidden;">range: <span class="filter"></span>
+      <a href="javascript:spendHistChart.filterAll();dc.redrawAll();">reset</a>
+    </div>
+  </div>
+  <div id="chart-row-spenders">
+    <div class="reset" style="visibility: hidden;">selected: <span class="filter"></span>
+      <a href="javascript:spenderRowChart.filterAll();dc.redrawAll();">reset</a>
+    </div>
+  </div>
+
+<script type="text/javascript" src="../js/d3.js"></script>
+<script type="text/javascript" src="../js/crossfilter.js"></script>
+<script type="text/javascript" src="../js/dc.js"></script>
+<script type="text/javascript">
+var yearRingChart   = dc.pieChart("#chart-ring-year"),
+    spendHistChart  = dc.barChart("#chart-hist-spend"),
+    spenderRowChart = dc.rowChart("#chart-row-spenders");
+// use static or load via d3.csv("dataSet.csv", function(error, dataSet) {/* do stuff */});
+var dataSet = [
+   {"_id":"56e5a85c1c12328509a8a75c","temperature":78,"turbidity":4,"conductivity":7,"pH":8,"usage":23,"__v":0,"timestamp":"2015-11-11T05:00:00.000Z"},
+    {"_id":"56e5a85c1c12328509a8a75d","temperature":54,"turbidity":9,"conductivity":4,"pH":6,"usage":25,"__v":0,"timestamp":"2015-11-12T05:00:00.000Z"},
+    {"_id":"56e5a85c1c12328509a8a75e","temperature":85,"turbidity":7,"conductivity":5,"pH":8,"usage":7,"__v":0,"timestamp":"2015-11-13T05:00:00.000Z"},
+    {"_id":"56e5a85c1c12328509a8a75f","temperature":54,"turbidity":9,"conductivity":4,"pH":6,"usage":9,"__v":0,"timestamp":"2015-11-14T05:00:00.000Z"},
+    {"_id":"56e5a85c1c12328509a8a760","temperature":92,"turbidity":5,"conductivity":5,"pH":7,"usage":32,"__v":0,"timestamp":"2015-11-15T05:00:00.000Z"},
+    {"_id":"56e5a85c1c12328509a8a761","temperature":37,"turbidity":7,"conductivity":5,"pH":4,"usage":10,"__v":0,"timestamp":"2015-11-16T05:00:00.000Z"}
+];
+// normalize/parse data
+dataSet.forEach(function(d) {
+    d.temperature = +d.temperature;
+    d.turbidity = +d.turbidity;
+    d.conductivity = +d.conductivity;
+    d.pH = +d.pH;
+});
+// set crossfilter
+var ndx = crossfilter(dataSet),
+    yearDim  = ndx.dimension(function(d) {return +d.Year;}),
+    spendDim = ndx.dimension(function(d) {return Math.floor(d.Spent/10);}),
+    nameDim  = ndx.dimension(function(d) {return d.Name;}),
+    spendPerYear = yearDim.group().reduceSum(function(d) {return +d.Spent;}),
+    spendPerName = nameDim.group().reduceSum(function(d) {return +d.Spent;}),
+    spendHist    = spendDim.group().reduceCount();
+yearRingChart
+    .dimension(yearDim)
+    .group(spendPerYear)
+    .innerRadius(50);
+    //.controlsUseVisibility(true);
+spendHistChart
+    .dimension(spendDim)
+    .group(spendHist)
+    .x(d3.scale.linear().domain([0,10]))
+    .elasticY(true);
+    //.controlsUseVisibility(true);
+spendHistChart.xAxis().tickFormat(function(d) {return d*10}); // convert back to base unit
+spendHistChart.yAxis().ticks(2);
+spenderRowChart
+    .dimension(nameDim)
+    .group(spendPerName)
+    .elasticX(true);
+    //.controlsUseVisibility(true);
+dc.renderAll();
+</script>
+
+</body>
+</html>
