@@ -132,6 +132,18 @@ function makeGraphs(error, apiData) {
 	// 	.group(conductivity)
 	// 	// .title(function (d) { return d.value; });
 
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
+  var config1 = liquidFillGaugeDefaultSettings();
+  config1.circleColor = "#FF7777";
+  config1.textColor = "#FF4444";
+  config1.waveTextColor = "#FFAAAA";
+  config1.circleThickness = 0.2;
+  config1.textVertPosition = 0.2;
+  config1.waveAnimateTime = 1000;
+  config1.displayPercent = false;
+  config1.minValue = 0;
+  config1.maxValue = 10;
+
 /********* Draw Graphs *********/ 
 
    dc.renderAll();
