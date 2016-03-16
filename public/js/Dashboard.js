@@ -57,6 +57,7 @@ function makeGraphs(error, apiData) {
 	var dateDim = trial.dimension(function (d) { return d.timestamp; });
 	var minDate = dateDim.bottom(1)[0].timestamp;
 	var maxDate = dateDim.top(1)[0].timestamp;
+
 /********* END *********/ 
 
 /********* Groups *********/ 
@@ -81,6 +82,7 @@ function makeGraphs(error, apiData) {
 	var overalllineChart = dc.compositeChart("#dc-line-chart");
 	var compositeChart1 = dc.compositeChart('#chart-container1');
 	var conductivityChart = dc.pieChart("#dc-pie-chart");
+	var usageLineChart = dc.lineChart("dc-line-chart")
 
 /********* END *********/ 
 
@@ -129,7 +131,6 @@ function makeGraphs(error, apiData) {
 	// 	.dimension(dateDim)
 	// 	.group(conductivity)
 	// 	// .title(function (d) { return d.value; });
-
 
 /********* Draw Graphs *********/ 
 
