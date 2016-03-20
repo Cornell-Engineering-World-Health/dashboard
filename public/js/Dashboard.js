@@ -131,18 +131,13 @@ function makeGraphs(error, apiData) {
 	// 	.group(conductivity)
 	// 	// .title(function (d) { return d.value; });
 
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity);	
+	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
 	var config1 = liquidFillGaugeDefaultSettings();
-	config1.circleColor = "#FF7777";
-	config1.textColor = "#FF4444";
-	config1.waveTextColor = "#FFAAAA";
-	config1.circleThickness = 0.2;
-	config1.textVertPosition = 0.2;
-	config1.waveAnimateTime = 1000;
-	config1.displayPercent = false;
-	config1.minValue = 0;
-	config1.maxValue = 10;
-	console.log(data[dataSet.length-1].pH)
+	config1.waveColor = turbScale(data[dataSet.length-1].turbidity);
+	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
+
+
 	$('#myChart').updatePH(data[dataSet.length-1].pH);
 		
 	conductivityChart
@@ -154,17 +149,6 @@ function makeGraphs(error, apiData) {
 		.group(conductivity)
 		// .title(function (d) { return d.value; });
 
-var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
-var config1 = liquidFillGaugeDefaultSettings();
-config1.circleColor = "#FF7777";
-config1.textColor = "#FF4444";
-config1.waveTextColor = "#FFAAAA";
-config1.circleThickness = 0.2;
-config1.textVertPosition = 0.2;
-config1.waveAnimateTime = 1000;
-config1.displayPercent = false;
-config1.minValue = 0;
-config1.maxValue = 10;
 
 /********* Draw Graphs *********/ 
 
