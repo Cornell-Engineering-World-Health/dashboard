@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#myChart').createPH(300, 40, 0);
+  $('#myChart').createPH(280, 40, 7);
   resetDB(function(res) {
 	});
   update();
@@ -121,6 +121,7 @@ function makeGraphs(error, apiData) {
 				.group(conductivity, 'Conductivity')
 				.ordinalColors(["#76B041"])
 			])
+<<<<<<< HEAD
 	// conductivityChart
 	// 	.width(250)
 	// 	.height(250)
@@ -142,6 +143,29 @@ function makeGraphs(error, apiData) {
 	config1.minValue = 0;
 	config1.maxValue = 10;
 	console.log(data[dataSet.length-1].turbidity * 1.5);
+=======
+		
+	conductivityChart
+		.width(250)
+		.height(250)
+		.radius(100)
+		.innerRadius(0)
+		.dimension(dateDim)
+		.group(conductivity)
+		// .title(function (d) { return d.value; });
+
+var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
+var config1 = liquidFillGaugeDefaultSettings();
+config1.circleColor = "#FF7777";
+config1.textColor = "#FF4444";
+config1.waveTextColor = "#FFAAAA";
+config1.circleThickness = 0.2;
+config1.textVertPosition = 0.2;
+config1.waveAnimateTime = 1000;
+config1.displayPercent = false;
+config1.minValue = 0;
+config1.maxValue = 10;
+>>>>>>> 8a2b3f21f58fa516a77b4b03df902573b735efb8
 
 /********* Draw Graphs *********/ 
 

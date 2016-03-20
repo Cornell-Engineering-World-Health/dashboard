@@ -27,6 +27,7 @@ $.fn.createPH = function(width, height, pH) {
   chart.children('.pH-reading').width(unit);
   chart.children('.pH-right').width((14 - new_pH) * unit);
   chart.children('.pH-reading').css("background-color", color_scheme[new_pH]);
+  chart.parent().children('.pH-label').text('pH: ' + new_pH);
 }
 
 $.fn.updatePH = function(pH) {
@@ -38,4 +39,5 @@ $.fn.updatePH = function(pH) {
   chart.children('.pH-reading').width(unit);
   chart.children('.pH-right').width((14 - new_pH) * unit);
   chart.children('.pH-reading').css("background-color", color_scheme[new_pH]);
+  chart.parent().children('.pH-label').text('pH: ' + new_pH);
 }
