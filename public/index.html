@@ -26,43 +26,58 @@
   <body>
     <div id="wrapper">
       <div id="header">
-        <span id="title">Water Quality Dashboard</span>
-        <span id="status">4/5 Good</span>
+        <div class="col-sm-4 header-col">
+        </div>
+        <div class="col-sm-4 header-col">
+          <span id="title">Water Quality Dashboard</span>
+        </div>
+        <div class="col-sm-4 header-col" style="text-align: right">
+          <span id="status">4/5 Good</span>
+        </div>
       </div>
       <div id="content">
         <div class="container-fluid">
-          <div class="row">
-            <div class='12u line-graph' id='dc-line-chart'>
-              <h4>Water Quality</h4>
-            </div>
+          <div class="row" style="text-align: center;">
+            <span>
+              <div class='12u line-graph' id='dc-line-chart'>
+                <h4>Water Quality</h4>
+              </div>
+            </span>
           </div>
           <br>
           <div class="row">
             <div class="col-sm-3 indiv-graph">
-              <div>
-                <p class="pH-label" id="phLabel"></p>
-                <div class="pH-chart" id="myChart"></div>
-              </div>
+              <span>
+                <div>
+                  <p class="pH-label" id="phLabel" style="text-align: left;"></p>
+                  <div class="pH-chart" id="myChart"></div>
+                </div>
+              </span>
             </div>
             <div class="col-sm-3 indiv-graph" style="text-align: center;">
-              <p>Turbidity</p>
-              <svg id="turbidity-graph" width="90%" height="250px"></svg>
-              <div id="turbidity-graph"></div>
+              <span>
+                <p>Turbidity</p>
+                <svg id="turbidity-graph" width="90%" height="250px"></svg>
+                <div id="turbidity-graph"></div>
+              </span>
             </div>
             <div class="col-sm-3 indiv-graph">
               <div class="2u chart-wrapper" id='dc-pie-chart'>
                 <h4>Conductivity</h4>
               </div>
+              <span><img src="http://farm4.static.flickr.com/3554/3480778622_13391fdfc0.jpg"/ style="width: 90%;"></span>
             </div>
-            <div class="col-sm-3 indiv-graph">
+            <div class="col-sm-3 indiv-graph" style="text-align: center;">
               <p>Temperature</p>
-              <img src="http://images.clipartpanda.com/thermometer-clip-art-medical_red_thermometer_1.png" style="width: auto; height: 250px;"/>
+              <span><img src="http://images.clipartpanda.com/thermometer-clip-art-medical_red_thermometer_1.png" style="width: auto; height: 250px;"/><span>
             </div>
           </div>
         </div>
-        <a href="data/data.zip">EXPORT Data</a>
-        
-        
+        <div id="export-div">
+          <span>
+            <a id="export-button" href="data/data.zip" class="myButton">EXPORT Data</a>
+          </span>
+        </div>
       </div>
       <div id="footer">
       </div>

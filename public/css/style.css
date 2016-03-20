@@ -12,7 +12,7 @@
 	height: 80px;
 	top: 0;
 	left: 0;
-	z-index: 9999;
+	z-index: 9998;
 	position: fixed;
 	background: white;
 	box-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -35,17 +35,35 @@
 /**************************************************
  * ELEMENT STRUCTURE
  **************************************************/
-.container {
-	left: 20%;
+#export-div {
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
+#export-button {
+	background-color: #12F729;
+	display: inline-block;
+	cursor: pointer;
+	color: #FFFFFF;
+	font-size: 22px;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 8px 0 8px 0;
+	width: 400px;
+	border-bottom: 4px solid #63D13E;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	border-radius: 1px;
+}
+#export-button:hover {
+	text-decoration: none;
+}
 /**************************************************
  * HEADER INNER
  **************************************************/
-#header-inner {
+.header-col {
 	width: 100%;
-	height: 100%;
-	position: relative;
+	padding-top: 15px;
 }
 
 /**************************************************
@@ -55,13 +73,16 @@ span, div, p {
 	font-family: 'Abel', sans-serif;
 }
 
+.indiv-graph {
+	text-align: center;
+}
+
 #title {
-	font-size: 24px;
+	font-size: 36px;
 	color: black;
 }
 
 #status {
 	font-size: 24px;
 	color: green;
-	float: right;
 }
