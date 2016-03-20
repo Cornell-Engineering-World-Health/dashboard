@@ -26,8 +26,14 @@
   <body>
     <div id="wrapper">
       <div id="header">
-        <span id="title">Water Quality Dashboard</span>
-        <span id="status">4/5 Good</span>
+        <div class="col-sm-4 header-col">
+        </div>
+        <div class="col-sm-4 header-col">
+          <span id="title">Water Quality Dashboard</span>
+        </div>
+        <div class="col-sm-4 header-col" style="text-align: right">
+          <span id="status">4/5 Good</span>
+        </div>
       </div>
       <div id="content">
         <div class="container-fluid">
@@ -41,15 +47,19 @@
           <br>
           <div class="row">
             <div class="col-sm-3 indiv-graph">
-              <div>
-                <p class="pH-label" id="phLabel"></p>
-                <div class="pH-chart" id="myChart"></div>
-              </div>
+              <span>
+                <div>
+                  <p class="pH-label" id="phLabel" style="text-align: left;"></p>
+                  <div class="pH-chart" id="myChart"></div>
+                </div>
+              </span>
             </div>
             <div class="col-sm-3 indiv-graph" style="text-align: center;">
-              <p>Turbidity</p>
-              <svg id="turbidity-graph" width="90%" height="250px"></svg>
-              <div id="turbidity-graph"></div>
+              <span>
+                <p>Turbidity</p>
+                <svg id="turbidity-graph" width="90%" height="250px"></svg>
+                <div id="turbidity-graph"></div>
+              </span>
             </div>
             <div class="col-sm-3 indiv-graph">
               <div class="2u chart-wrapper" id='dc-pie-chart'>
@@ -63,9 +73,11 @@
             </div>
           </div>
         </div>
-        <a href="data/data.zip">EXPORT Data</a>
-        
-        
+        <div id="export-div">
+          <span>
+            <a id="export-button" href="data/data.zip" class="myButton">EXPORT Data</a>
+          </span>
+        </div>
       </div>
       <div id="footer">
       </div>
