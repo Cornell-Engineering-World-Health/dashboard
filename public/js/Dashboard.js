@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#myChart').createPH(300, 40, 0);
+  $('#myChart').createPH(280, 40, 7);
   resetDB(function(res) {
 	});
   update();
