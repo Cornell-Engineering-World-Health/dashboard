@@ -6,6 +6,7 @@
  * Liquid Fill Gauge v1.1
  */
 var turbScale = d3.scale.linear().domain([0,10]).range(["#FFFCF7", "#ffe6b3"]);
+
 function liquidFillGaugeDefaultSettings(){
     return {
         minValue: 0, // The gauge minimum value.
