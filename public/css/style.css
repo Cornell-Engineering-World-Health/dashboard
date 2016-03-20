@@ -55,6 +55,10 @@ span, div, p {
 	font-family: 'Abel', sans-serif;
 }
 
+.indiv-graph {
+	text-align: center;
+}
+
 #title {
 	font-size: 24px;
 	color: black;
