@@ -121,7 +121,7 @@ function makeGraphs(error, apiData) {
 				.group(conductivity, 'Conductivity')
 				.ordinalColors(["#76B041"])
 			])
-<<<<<<< HEAD
+
 	// conductivityChart
 	// 	.width(250)
 	// 	.height(250)
@@ -142,8 +142,8 @@ function makeGraphs(error, apiData) {
 	config1.displayPercent = false;
 	config1.minValue = 0;
 	config1.maxValue = 10;
-	console.log(data[dataSet.length-1].turbidity * 1.5);
-=======
+	console.log(data[dataSet.length-1].pH)
+	$('#myChart').updatePH(data[dataSet.length-1].pH);
 		
 	conductivityChart
 		.width(250)
@@ -165,7 +165,6 @@ config1.waveAnimateTime = 1000;
 config1.displayPercent = false;
 config1.minValue = 0;
 config1.maxValue = 10;
->>>>>>> 8a2b3f21f58fa516a77b4b03df902573b735efb8
 
 /********* Draw Graphs *********/ 
 
