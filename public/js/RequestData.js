@@ -19,6 +19,7 @@ getRecent = function(n, callback) {
  * postcondition: [add json] adds the records in the json to the database
  */   
 add = function(json, callback) {
+  console.log("in add");
   $.post("/", {data: json}, function(res) {
     if(typeof callback === "function") {
       callback(res);

@@ -4,7 +4,7 @@
       "turbidity": 4,
       "conductivity": 7,
       "pH": 8,
-      "timestamp": "11/11/15",
+      "timestamp": "2015-11-11T12:00:00",
       "usage": 23
     }, 
     {
@@ -12,7 +12,7 @@
       "turbidity": 9,
       "conductivity": 4,
       "pH": 6,
-      "timestamp": "11/12/15",
+      "timestamp": "2015-11-12T12:00:00",
       "usage": 25
     }, 
     {
@@ -20,7 +20,7 @@
       "turbidity": 7,
       "conductivity": 5,
       "pH": 8,
-      "timestamp": "11/13/15",
+      "timestamp": "2015-11-13T09:00:00Z",
       "usage": 7
     },
     {
@@ -28,7 +28,7 @@
       "turbidity": 9,
       "conductivity": 4,
       "pH": 6,
-      "timestamp": "11/14/15",
+      "timestamp": "2015-11-14T12:00:00Z",
       "usage": 9
     }, 
     {
@@ -36,7 +36,7 @@
       "turbidity": 5,
       "conductivity": 5,
       "pH": 7,
-      "timestamp": "11/15/15",
+      "timestamp": "2015-11-15T12:00:00Z",
       "usage": 32
     },
     {
@@ -44,7 +44,7 @@
       "turbidity": 7,
       "conductivity": 5,
       "pH": 4,
-      "timestamp": "11/16/15",
+      "timestamp": "2015-11-16T12:00:00Z",
       "usage": 10
     }
 ]
