@@ -121,15 +121,25 @@ function makeGraphs(error, apiData) {
 				.group(conductivity, 'Conductivity')
 				.ordinalColors(["#76B041"])
 			])
-		
+	
+	var ionData          = [ 
+  { 'Name': 'ion1', 'Value': 10}, 
+  { 'Name': 'ion2', 'Value': 20}, 
+  { 'Name': 'ion3', 'Value': 30}, 
+];
+	var ndx = crossfilter(ionData);
+	var condDim = ndx.dimension(function(d) { return d.Name; });
+	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.value;});
+	
 	conductivityChart
 		.width(250)
 		.height(250)
 		.radius(100)
 		.innerRadius(0)
-		.dimension(dateDim)
-		.group(conductivity)
-		// .title(function (d) { return d.value; });
+		.dimension(condDim)
+		.group(condGroup)
+		.renderLabel(true)
+		.label(function (d) { return d.value; });
 
 var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
 var config1 = liquidFillGaugeDefaultSettings();
