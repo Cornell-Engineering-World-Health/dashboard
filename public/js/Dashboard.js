@@ -129,19 +129,21 @@ function makeGraphs(error, apiData) {
 ];
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.value;});
+	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.Value;});
 
 		
 	conductivityChart
 		.width(250)
 		.height(250)
 		.radius(100)
-		.innerRadius(0)
+		.innerRadius(90)
 		.dimension(condDim)
 		.group(condGroup)
 		.renderLabel(true)
 		.label(function (d) { return d.value; });
-		
+
+	conductivityChart.render();
+
 	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.waveColor = turbScale(data[dataSet.length-1].turbidity);
