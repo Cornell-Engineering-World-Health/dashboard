@@ -1,10 +1,17 @@
 /**************************************************
  * PAGE STRUCTURE
  **************************************************/
+body {
+	height: 100%;
+	width: 100%;
+	background: url('../images/blur_background.png');
+}
+
 #wrapper {
 	height: 100%;
 	width: 100%;
 	position: absolute;
+	background: transparent;
 }
 
 #header {
@@ -17,12 +24,16 @@
 	background: white;
 	box-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 	text-align: center;
+	background: transparent;
 }
 
 #content {
 	margin-top: 100px;
 	width: 100%;
 	position: relative;
+	background: transparent;
+	padding: 0px 70px 0px 70px;
+
 }
 
 #footer {
@@ -75,6 +86,9 @@ span, div, p {
 
 .indiv-graph {
 	text-align: center;
+	background: rgba(255, 255, 255, 0.1);
+	height: 250px;
+	background-clip: content-box;
 }
 
 #title {
