@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#myChart').createPH(300, 40, 0);
+  $('#myChart').createPH(280, 40, 7);
   resetDB(function(res) {
 	});
   update();
@@ -130,7 +130,8 @@ function makeGraphs(error, apiData) {
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
 	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.value;});
-	
+
+		
 	conductivityChart
 		.width(250)
 		.height(250)
@@ -140,18 +141,17 @@ function makeGraphs(error, apiData) {
 		.group(condGroup)
 		.renderLabel(true)
 		.label(function (d) { return d.value; });
+		
+	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
+	var config1 = liquidFillGaugeDefaultSettings();
+	config1.waveColor = turbScale(data[dataSet.length-1].turbidity);
+	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
 
-var gauge1 = loadLiquidFillGauge("turbidity-graph", 7);
-var config1 = liquidFillGaugeDefaultSettings();
-config1.circleColor = "#FF7777";
-config1.textColor = "#FF4444";
-config1.waveTextColor = "#FFAAAA";
-config1.circleThickness = 0.2;
-config1.textVertPosition = 0.2;
-config1.waveAnimateTime = 1000;
-config1.displayPercent = false;
-config1.minValue = 0;
-config1.maxValue = 10;
+
+	$('#myChart').updatePH(data[dataSet.length-1].pH);
+
+
 
 /********* Draw Graphs *********/ 
 
