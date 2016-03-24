@@ -27,7 +27,7 @@
 <script type="text/javascript" src="../js/crossfilter.js"></script>
 <script type="text/javascript" src="../js/dc.js"></script>
 <script type="text/javascript">
-var yearRingChart   = dc.pieChart("#chart-ring-year"),
+var yearRingChart   = dc.lineChart("#chart-ring-year"),
     spendHistChart  = dc.barChart("#chart-hist-spend"),
     spenderRowChart = dc.rowChart("#chart-row-spenders");
 // use static or load via d3.csv("spendData.csv", function(error, spendData) {/* do stuff */});
@@ -49,7 +49,6 @@ var ewhData = [
     {"_id":"56e9ad499f57ee68386e4ed3","temperature":92,"turbidity":5,"conductivity":5,"pH":7,"usage":32,"__v":0,"timestamp":"2015-11-15T05:00:00.000Z"},
     {"_id":"56e9ad499f57ee68386e4ed4","temperature":37,"turbidity":7,"conductivity":5,"pH":4,"usage":10,"__v":0,"timestamp":"2015-11-16T05:00:00.000Z"}
     ];
-
 var ewhData1 = [
     {"conductivity":[1,2,3]},
     {"conductivity":[2,3,4]},
@@ -78,28 +77,40 @@ ewhData.forEach(function(d) {
     d.timestamp = parser.parse(d.timestamp);
 });
 
+
 var ndx2 = crossfilter(ewhData),
     dateDim = ndx2.dimension(function (d) { return d.timestamp; }),
-    turbidity = dateDim.group().reduceSum(function (d) { return +d.turbidity; }); 
+    usage = dateDim.group().reduceSum(function (d) { 
+        console.log(d.usage);
+        return +d.usage; }); 
+var minDate = dateDim.bottom(1)[0].timestamp;
+var maxDate = dateDim.top(1)[0].timestamp;
 
 
 
 yearRingChart
+    .width(768)
+    .height(480)
+    .x(d3.time.scale().domain([minDate, maxDate]))
     .dimension(dateDim)
-    .group(turbidity)
-    .innerRadius(145);
-    //.controlsUseVisibility(true);
+    .group(usage)
+    // .innerRadius(50);
+    // .controlsUseVisibility(true);
 // yearRingChart
 //     .dimension(yearDim)
 //     .group(spendPerYear)
-//     .innerRadius(50);
+//     .innerRadius(50)
+//     .title(function(d){
+//       return d.Spent
+//       + "\nNumber of Events: " + d.Spent;
+//       });
 
 spendHistChart
     .dimension(spendDim)
     .group(spendHist)
     .x(d3.scale.linear().domain([0,10]))
     .elasticY(true);
-    //.controlsUseVisibility(true);
+    // .controlsUseVisibility(true);
 spendHistChart.xAxis().tickFormat(function(d) {return d*10}); // convert back to base unit
 spendHistChart.yAxis().ticks(2);
 spenderRowChart
