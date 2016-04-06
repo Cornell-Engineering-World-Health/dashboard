@@ -316,10 +316,20 @@ function makeGraphs(error, apiData) {
 
 	conductivityChart.render();
 
-	var turbScale = d3.scale.linear().domain([0,100]).range(["#33cc33", "#FF0000", "#FFFF00"]);
+	var cTurb = data[dataSet.length-1].turbidity;
+
+	function getTurbColor(){
+    	if(cTurb <= 500){
+    		return "#33cc33";
+    	}
+    	else{
+    		return "#FF0000";
+    	}
+    };
+
 	var config1 = liquidFillGaugeDefaultSettings();
-	config1.waveColor = turbScale(data[dataSet.length-1].turbidity);
-	config1.circleColor = turbScale(data[dataSet.length-1].turbidity);
+	config1.waveColor = getTurbColor();
+	config1.circleColor = getTurbColor();
 	config1.waveTextColor = "#ffffff";
 	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
 	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
@@ -404,20 +414,36 @@ usageBarChart.render();
 
 /********************* Thermometer *********************/ 
 
-console.log(data[dataSet.length-1].temperature);
-
 var width = 80,
     height = 180,
     maxTemp = 80,
     minTemp = 0,
     currentTemp = data[dataSet.length-1].temperature;
 
+var cTemp = data[dataSet.length-1].temperature;
+
+//[red, yellow, green, yellow, red]
+//[1, 10, 15, 25]
+//[33.8, 50, 59, 77]
+function getTempColor(){
+    	if(cTemp >= 50 && cTemp <= 59){
+    		return "#33cc33";
+    	}
+    	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
+    		return "#FFFF00";
+    	}
+    	else{
+    		return "#FF0000";
+    	}
+    };
+
+
 var bottomY = height - 5,
     topY = 5,
     bulbRadius = 20,
     tubeWidth = 21.5,
     tubeBorderWidth = 1,
-    mercuryColor = "rgb(230,0,0)",
+    mercuryColor = getTempColor();
     innerBulbColor = "rgb(230, 200, 200)"
     tubeBorderColor = "#999999";
 
