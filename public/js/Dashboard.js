@@ -402,13 +402,13 @@ usageBarChart
 
 usageBarChart.render();
 
-/********* Thermometer *********/ 
+/********************* Thermometer *********************/ 
 
 console.log(data[dataSet.length-1].temperature);
 
 var width = 80,
     height = 180,
-    maxTemp = 120,
+    maxTemp = 80,
     minTemp = 0,
     currentTemp = data[dataSet.length-1].temperature;
 
@@ -444,14 +444,8 @@ var bulbGradient = defs.append("radialGradient")
   .attr("fy", "50%");
 
 bulbGradient.append("stop")
-  .attr("offset", "0%")
-  .style("stop-color", innerBulbColor);
-
-bulbGradient.append("stop")
   .attr("offset", "90%")
   .style("stop-color", mercuryColor);
-
-
 
 
 // Circle element for rounded tube top
@@ -485,8 +479,6 @@ svg.append("circle")
   .style("fill", "#FFFFFF")
   .style("stroke", "none")
 
-
-
 // Main bulb of thermometer (empty), white fill
 svg.append("circle")
   .attr("r", bulbRadius)
@@ -512,6 +504,7 @@ svg.append("rect")
 var step = 20;
 
 // Determine a suitable range of the temperature scale
+// Fahrenheit
 var domain = [
   step * Math.floor(minTemp / step),
   step * Math.ceil(maxTemp / step)
@@ -523,12 +516,25 @@ if (minTemp - domain[0] < 0.66 * step)
 if (domain[1] - maxTemp < 0.66 * step)
   domain[1] += step;
 
+//Celsius
+var domainC = [
+  step * Math.floor(minTempC / step),
+  step * Math.ceil(maxTempC / step)
+  ];
+  if (minTemp - domain[0] < 0.66 * step)
+  domain[0] -= step;
+
+if (domain[1] - maxTemp < 0.66 * step)
+  domain[1] += step;
 
 // D3 scale object
 var scale = d3.scale.linear()
   .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
   .domain(domain);
-
+//Celsius
+var scaleC = d3.scaleC.linear()
+  .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
+  .domain(domainC);
 
 var tubeFill_bottom = bulb_cy,
     tubeFill_top = scale(currentTemp);
@@ -554,22 +560,36 @@ svg.append("circle")
 
 
 // Values to use along the scale ticks up the thermometer
+//Fahrenheit
 var tickValues = d3.range((domain[1] - domain[0])/step + 1).map(function(v) { return domain[0] + v * step; });
-
+//Celsius
+var tickValuesC = d3.range((domainC[1] - domainC[0])/step + 1).map(function(v) { return domainC[0] + v * step; });
 
 // D3 axis object for the temperature scale
+//Fahrenheit
 var axis = d3.svg.axis()
   .scale(scale)
   .innerTickSize(7)
   .outerTickSize(0)
   .tickValues(tickValues)
   .orient("left");
+//Celsius
+var axisC = d3.svg.axis()
+  .scale(scaleC)
+  .innerTickSize(7)
+  .outerTickSize(0)
+  .tickValues(tickValuesC)
+  .orient("right");
 
 // Add the axis to the image
 var svgAxis = svg.append("g")
   .attr("id", "tempScale")
   .attr("transform", "translate(" + (width/2 - tubeWidth/2) + ",0)")
   .call(axis);
+var svgAxisC = svg.append("g")
+  .attr("id", "tempScale")
+  .attr("transform", "translate(" + (width/2 - tubeWidth/2) + ",0)")
+  .call(axisC);
 
 // Format text labels
 svgAxis.selectAll(".tick text")
