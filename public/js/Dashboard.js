@@ -451,10 +451,8 @@ var bulb_cy = bottomY - bulbRadius,
 
 
 var svg = d3.select("#thermo")
-  .append("svg")
   .attr("width", width)
   .attr("height", height);
-
 
 var defs = svg.append("defs");
 
