@@ -3,6 +3,9 @@
       "temperature": 78,
       "turbidity": 4,
       "conductivity": 7,
+      "sodium": 2,
+      "magnesium": 3,
+      "calcium": 2,
       "pH": 8,
       "timestamp": "2015-11-11T12:00:00",
       "usage": 23
@@ -11,6 +14,9 @@
       "temperature": 54,
       "turbidity": 9,
       "conductivity": 4,
+      "sodium": 2,
+      "magnesium": 3,
+      "calcium": 4,
       "pH": 6,
       "timestamp": "2015-11-12T12:00:00",
       "usage": 25
@@ -19,6 +25,9 @@
       "temperature": 85,
       "turbidity": 7,
       "conductivity": 5,
+      "sodium": 1,
+      "magnesium": 2,
+      "calcium": 2,
       "pH": 8,
       "timestamp": "2015-11-13T09:00:00Z",
       "usage": 7
@@ -27,6 +36,9 @@
       "temperature": 54,
       "turbidity": 9,
       "conductivity": 4,
+      "sodium": 1,
+      "magnesium": 1,
+      "calcium": 2,
       "pH": 6,
       "timestamp": "2015-11-14T12:00:00Z",
       "usage": 9
@@ -35,6 +47,9 @@
       "temperature": 92,
       "turbidity": 5,
       "conductivity": 5,
+      "sodium": 2,
+      "magnesium": 2,
+      "calcium": 1,
       "pH": 7,
       "timestamp": "2015-11-15T12:00:00Z",
       "usage": 32
@@ -43,6 +58,9 @@
       "temperature": 37,
       "turbidity": 7,
       "conductivity": 5,
+      "sodium": 1,
+      "magnesium": 3,
+      "calcium": 1,
       "pH": 4,
       "timestamp": "2015-11-16T12:00:00Z",
       "usage": 10
