@@ -33,8 +33,7 @@ body {
 	width: 100%;
 	position: relative;
 	background: transparent;
-	padding: 0px 70px 0px 70px;
-
+	padding: 0px 10% 0px 10%;
 }
 
 #footer {
@@ -134,9 +133,24 @@ span, div, p {
 }
 
 /**************************************************
- * MAIN GRAPH BUTTON
+ * MAIN GRAPH BUTTONS
  **************************************************/
 
+#select-filter button {
+	border: none;
+	background: rgba(255, 255, 255, 0.1);
+	font-size: 14px;
+	color: white;
+	width: 100px;
+}
+
+#select-filter button:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+#select-filter .btn.btn-default.active {
+	background: rgba(150, 150, 150, 0.1);
+}
 
 /**************************************************
  * MAIN GRAPH SELECTION
