@@ -283,7 +283,6 @@ function makeGraphs(error, apiData) {
 	//     .group(usage);
 
 
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].conductivity);
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.circleColor = "#FF7777";
 	config1.textColor = "#FF4444";
