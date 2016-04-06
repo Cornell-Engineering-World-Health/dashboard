@@ -42,8 +42,27 @@
             <span>
               <div class='12u line-graph' id='dc-line-chart'>
                 <h4>Water Quality</h4>
+                <span class='reset' style='display: none;'>Current filter: <span class='filter'></span></span>
               </div>
             </span>
+          </div>
+          <div class="container-fluid">
+            <div class="row" style="text-align: center;">
+              <span>
+                <div id='timeline'>
+                  <!-- <span class='reset' style='display: none;'>Current filter: <span class='filter'></span></span> -->
+                  <a
+                    href="javascript:timeChart.filterAll();timeChart.redrawAll();">reset</a>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div class="btn-group" role="group" aria-label="..."> <!--aria-label?-->
+            <button type="button" class="btn btn-default" id="temperature">Temperature</button>
+            <button type="button" class="btn btn-default" id="conductivity">Conductivity</button>
+            <button type="button" class="btn btn-default" id="turbidity">Turbidity</button>
+            <button type="button" class="btn btn-default" id="pH">pH</button>
+            <button type="button" class="btn btn-default" id="usage">Usage</button>
           </div>
           <br>
           <div class="row">
@@ -70,11 +89,17 @@
             <div class="col-sm-3 indiv-graph">
               <br>
               <br>
+
               <div class="2u chart-wrapper" id='dc-pie-chart'>
               </div>
               
               <div id="indiv-cond" class="graph-label">
                 <p style="margin-top: 10px;">Conductivity</p>
+
+              <!-- <div class="2u chart-wrapper" id='dc-pie-chart'> -->
+<!--               <div id='conductivity-pie-chart'>
+                <svg id="conductivity-pie-chart" width="90%" height="250px"></svg> -->
+
               </div>
             </div>
             <div class="col-sm-3 indiv-graph" style="text-align: center;">

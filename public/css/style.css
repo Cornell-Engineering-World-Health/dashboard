@@ -5,6 +5,7 @@ body {
 	height: 100%;
 	width: 100%;
 	background: url('../images/blur_background.png');
+	fill: white;
 }
 
 #wrapper {
@@ -132,6 +133,31 @@ span, div, p {
 	color: green;
 }
 
-#dc-line-chart {
-	background-color: rgba(255, 255, 255, 0.1);
+/**************************************************
+ * MAIN GRAPH BUTTON
+ **************************************************/
+
+
+/**************************************************
+ * MAIN GRAPH SELECTION
+ **************************************************/
+/*button:focus {
+	outline:0;
+}
+
+button:active {
+	outline: none;
+	border: none;
+}*/
+#temperature:focus, #conductivity:focus, #turbidity:focus, #pH:focus, #usage:focus {
+	outline:0;
+}
+
+#temperature:active, #conductivity:active, #turbidity:active, #pH:active, #usage:active {
+	outline: none;
+	border: none;
+}
+
+.btn-group {
+	transform: translate(0, 100);
 }
