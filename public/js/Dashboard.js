@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#myChart').createPH(300, 40, 0);
+  $('#myChart').createPH(280, 40, 7);
   resetDB(function(res) {
 	});
   update();
@@ -96,13 +96,10 @@ function makeGraphs(error, apiData) {
 	// var pH = tempDim.group().reduceSum(function(d) { return d.pH; }); 
 	// var temp = tempDim.group().reduceSum(function (d) { return d.temperature; }); 
 
-	var turbidity = dateDim.group().reduceSum(function (d) { 
-		console.log(d.turbidity);
-		return +d.turbidity; 
-	}); 
+	var turbidity = dateDim.group().reduceSum(function (d) { return +d.turbidity; }); 
 	var conductivity = dateDim.group().reduceSum(function (d) { return +d.conductivity; }); 
-	var pH = dateDim.group().reduceSum(function(d) { return d.pH; }); 
-	var temp = dateDim.group().reduceSum(function (d) { return d.temperature; }); 
+	var pH = dateDim.group().reduceSum(function(d) { return +d.pH; }); 
+	var temp = dateDim.group().reduceSum(function (d) { return +d.temperature; }); 
 
 	var usage = dateDim2.group().reduceSum(function (d) { return +d.usage; });
 
@@ -110,18 +107,25 @@ function makeGraphs(error, apiData) {
 
 /********* Chart Declaration *********/ 
 
-	var overalllineChart = dc.compositeChart("#dc-line-chart");
-	var compositeChart1 = dc.compositeChart('#chart-container1');
-	var conductivityChart = dc.pieChart("#dc-pie-chart");
+	// var overalllineChart = dc.compositeChart("#dc-line-chart");
+	// var tempLine = dc.lineChart("#dc-line-chart");
+	// var turbitityLine = dc.lineChart("#dc-line-chart");
+	// var conductivityLine = dc.lineChart("#dc-line-chart");
+	// var pHLine = dc.lineChart("#dc-line-chart");
+	var lineChart = dc.lineChart("#dc-line-chart");
+	var compositeChart1 = dc.lineChart('#chart-container1');
+	// var conductivityChart = dc.pieChart("#dc-pie-chart");
 	var usagelineChart = dc.lineChart("#dc-usage-graph");
-	var yearRingChart = dc.pieChart("#chart-ring-year");
+	var conductivityPie = dc.pieChart("#conductivity-pie-chart");
+	var yearRingChart   = dc.pieChart("#chart-ring-year");
+	var timeChart  = dc.barChart("#timeline");
 
 /********* END *********/ 
 
 /******* Overlayed line chart *******/
 
-	overalllineChart
-	    .width(868)
+	lineChart
+		.width(868)
 	    .height(480)
 	    .x(d3.time.scale().domain([minDate, maxDate]))
 	    .margins({top: 30, right: 50, bottom: 25, left: 60})
@@ -130,51 +134,143 @@ function makeGraphs(error, apiData) {
 	    .yAxisLabel("This is the Y Axis")
 	    .elasticY(true)
 	    .renderLabel(true)
-	    .label(function (p) {
-            return p.key;
-        })
-        .title(function(d){
-		     return "Temperature: " + d.temperature;
-		})
-		// .on("filter", getCurrent) // on click event
-
-	    .round(d3.time.day.round) // select only day ranges
+	    .ordinalColors(["#E4572E"])
+	    .rangeChart(timeChart)
 	    .dimension(dateDim)
-	    // .on("filter", getCurrent)
-		.compose([
-			dc.lineChart(overalllineChart)
-				.group(turbidity, 'Turbidity')
-	// 			May need this later... (also .keyAccessor)
-	//			 .valueAccessor(function (p) {
-    //         		return p.value;
-    //     		})
-				// .on("filter", getCurrent)
-				.ordinalColors(["#FFC914"]), //line orange
-			dc.lineChart(overalllineChart)
-				.group(temp, 'Temperature')
-				.title(function(d){
-		     		return "Temperature: " + d.temperature;
-		      	})
-				.ordinalColors(["#17BEBB"]),
-			dc.lineChart(overalllineChart)
-				.group(pH, 'pH')
-				.ordinalColors(["#E4572E"]),
-			dc.lineChart(overalllineChart)
-				.group(conductivity, 'Conductivity')
-				.ordinalColors(["#76B041"])
-			]);
+	    .group(temp);
+
+
+	$("button").click( function () {
+		$(this).addClass('active').siblings().removeClass('active');
+		switch(this.id) {
+			case "temperature":
+				timeChart.filterAll();
+				timeChart.render();
+				lineChart
+					.width(868)
+				    .height(480)
+				    .x(d3.time.scale().domain([minDate, maxDate]))
+				    .margins({top: 30, right: 50, bottom: 25, left: 60})
+				    .brushOn(false)
+				    .clipPadding(10)
+				    .yAxisLabel("This is the Y Axis")
+				    .elasticY(true)
+				    .renderLabel(true)
+				    .ordinalColors(["#E4572E"])
+				    .rangeChart(timeChart)
+				    .dimension(dateDim)
+				    .group(temp);
+				lineChart.render();
+				break;
+			case "conductivity":
+				timeChart.filterAll();
+				timeChart.render();
+				lineChart
+					.width(868)
+				    .height(480)
+				    .x(d3.time.scale().domain([minDate, maxDate]))
+				    .margins({top: 30, right: 50, bottom: 25, left: 60})
+				    .brushOn(false)
+				    .clipPadding(10)
+				    .yAxisLabel("This is the Y Axis")
+				    .elasticY(true)
+				    .renderLabel(true)
+				    .ordinalColors(["#FFC914"])
+				    .rangeChart(timeChart)
+				    .dimension(dateDim)
+				    .group(conductivity);
+				lineChart.render();
+				break;
+			case "turbidity":
+				timeChart.filterAll();
+				timeChart.render();
+				lineChart
+					.width(868)
+				    .height(480)
+				    .x(d3.time.scale().domain([minDate, maxDate]))
+				    .margins({top: 30, right: 50, bottom: 25, left: 60})
+				    .brushOn(false)
+				    .clipPadding(10)
+				    .yAxisLabel("This is the Y Axis")
+				    .elasticY(true)
+				    .renderLabel(true)
+				    .ordinalColors(["#17BEBB"])
+				    .rangeChart(timeChart)
+				    .dimension(dateDim)
+				    .group(turbidity);
+				lineChart.render();
+				break;
+			case "pH":
+				timeChart.filterAll();
+				timeChart.render();
+				lineChart
+					.width(868)
+				    .height(480)
+				    .x(d3.time.scale().domain([minDate, maxDate]))
+				    .margins({top: 30, right: 50, bottom: 25, left: 60})
+				    .brushOn(false)
+				    .clipPadding(10)
+				    .yAxisLabel("This is the Y Axis")
+				    .elasticY(true)
+				    .renderLabel(true)
+				    .ordinalColors(["#76B041"])
+				    .rangeChart(timeChart)
+				    .dimension(dateDim)
+				    .group(pH);
+				lineChart.render();
+				break;
+			// TODO: No fake data
+			// case "usage":
+			// 	lineChart
+			// 		.width(868)
+			// 	    .height(480)
+			// 	    .x(d3.time.scale().domain([minDate, maxDate]))
+			// 	    .margins({top: 30, right: 50, bottom: 25, left: 60})
+			// 	    .brushOn(false)
+			// 	    .clipPadding(10)
+			// 	    .yAxisLabel("This is the Y Axis")
+			// 	    .elasticY(true)
+			// 	    .renderLabel(true)
+			// 	    .rangeChart(timeChart)
+			// 	    .dimension(dateDim)
+			// 	    .group(usage);
+			// 	break;
+			default:
+				return true;
+		}
+	})
+
+	
 	/*  Erin: Conductivity
 		Create a new crossfilter instance based on recentData (copy how it was done above)
 		Dimension: create a dimension title
 		Group: create group based on value
 	 */
+	timeChart
+		.height(40)
+		.width(868)
+		.margins({top: 0, right: 50, bottom: 20, left: 60})
+	    .dimension(dateDim)
+	    .group(pH)
+	    .centerBar(true)
+	    .brushOn(true)
+	    .round(d3.time.day.round)
+	    .alwaysUseRounding(true)
+	    .x(d3.time.scale().domain([minDate, maxDate]))
+	timeChart.render();
 
-	yearRingChart
+
+	conductivityPie
 	    .width(768)
 	    .height(480)
 	    .dimension(dateDim)
 	    .group(conductivity)
 	    .innerRadius(50);
+	yearRingChart
+	    .dimension(dateDim)
+	    .group(conductivity)
+	    .innerRadius(145);
+	yearRingChart.render();
 
 	// usagelineChart
 	// 	.width(768)
@@ -184,25 +280,35 @@ function makeGraphs(error, apiData) {
 	//     .dimension(dateDim2)
 	//     .group(usage);
 
-	// conductivityChart
-	// 	.width(250)
-	// 	.height(250)
-	// 	.radius(100)
-	// 	.innerRadius(0)
-	// 	.dimension(dateDim)
-	// 	.group(conductivity)
-	// 	// .title(function (d) { return d.value; });
-var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].conductivity);
-var config1 = liquidFillGaugeDefaultSettings();
-config1.circleColor = "#FF7777";
-config1.textColor = "#FF4444";
-config1.waveTextColor = "#FFAAAA";
-config1.circleThickness = 0.2;
-config1.textVertPosition = 0.2;
-config1.waveAnimateTime = 1000;
-config1.displayPercent = false;
-config1.minValue = 0;
-config1.maxValue = 10;
+
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].conductivity);
+	var config1 = liquidFillGaugeDefaultSettings();
+	config1.circleColor = "#FF7777";
+	config1.textColor = "#FF4444";
+	config1.waveTextColor = "#FFAAAA";
+	config1.circleThickness = 0.2;
+	config1.textVertPosition = 0.2;
+	config1.waveAnimateTime = 1000;
+	config1.displayPercent = false;
+	config1.minValue = 0;
+	config1.maxValue = 10;
+
+
+	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
+	var config1 = liquidFillGaugeDefaultSettings();
+	config1.waveColor = turbScale(data[dataSet.length-1].turbidity);
+	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
+
+
+	$('#myChart').updatePH(data[dataSet.length-1].pH);
+
+	// Returns array of already parsed time
+	// If dates are the same then return more current data
+	$("#timeline").click( function () {
+		console.log(timeChart.brush().extent());
+	});
+		
 
 /********* Draw Graphs *********/ 
 
