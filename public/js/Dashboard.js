@@ -310,6 +310,76 @@ function makeGraphs(error, apiData) {
 	});
 		
 
+/************************** Single Day Usage Bar Chart ***************************/
+
+var SELECTED_DAY = "2015-12-27T00:00:00Z";
+var BAR_GRAPH_THICKNESS = 10;
+//input d3 date object, returns boolean
+var _isSelectedDay = function(d) {return (dayParser(timestampParser.parse(SELECTED_DAY))==dayParser(d))};
+
+var singleDayData = [
+    {timestamp: "2015-12-27T02:00:00Z", usage: 0},
+    {timestamp: "2015-12-27T04:00:00Z", usage: 0},
+    {timestamp: "2015-12-27T06:00:00Z", usage: 2},
+    {timestamp: "2015-12-27T08:00:00Z", usage: 4},
+    {timestamp: "2015-12-27T10:00:00Z", usage: 8},
+    {timestamp: "2015-12-27T12:00:00Z", usage: 12},
+    {timestamp: "2015-12-27T14:00:00Z", usage: 8},
+    {timestamp: "2015-12-27T16:00:00Z", usage: 4},
+    {timestamp: "2015-12-27T18:00:00Z", usage: 12},
+    {timestamp: "2015-12-27T20:00:00Z", usage: 10},
+    {timestamp: "2015-12-27T22:00:00Z", usage: 2},
+    {timestamp: "2015-12-27T23:59:00Z", usage: 0},
+    {timestamp: "2015-12-28T02:00:00Z", usage: 0},
+    {timestamp: "2015-12-28T04:00:00Z", usage: 0},
+    {timestamp: "2015-12-28T06:00:00Z", usage: 2},
+    {timestamp: "2015-12-28T08:00:00Z", usage: 4},
+    {timestamp: "2015-12-28T10:00:00Z", usage: 8},
+    {timestamp: "2015-12-28T12:00:00Z", usage: 12},
+    {timestamp: "2015-12-28T14:00:00Z", usage: 8},
+    {timestamp: "2015-12-28T16:00:00Z", usage: 4},
+    {timestamp: "2015-12-28T18:00:00Z", usage: 12},
+    {timestamp: "2015-12-28T20:00:00Z", usage: 10},
+    {timestamp: "2015-12-28T22:00:00Z", usage: 2},
+    {timestamp: "2015-12-28T23:59:00Z", usage: 0}
+    ];
+
+//time parsers
+var timestampParser = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
+var dayParser = d3.time.format("%Y-%m-%d");
+
+//Data formating and filtering
+singleDayData.forEach(function(d) {
+  d.timestamp = timestampParser.parse(d.timestamp);
+  d.usage = d.usage;
+});
+var ndx = crossfilter(singleDayData);
+var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
+var singleDayFilter = timestampDim.filterFunction(function(d) { if (_isSelectedDay(d)) {return d} });
+
+//get y-axis
+var usageGroup = singleDayFilter.group().reduceSum(dc.pluck('usage')); 
+
+//set MIN MAX X-AXIS
+var singleDayMinDate = singleDayFilter.bottom(1)[0].timestamp;
+var singleDayMaxDate = singleDayFilter.top(1)[0].timestamp;
+
+//graph code
+//var usageBarChart  = dc.barChart("#usage-bar-chart"); 
+usageBarChart
+  .width(500).height(200).gap(20)
+  .centerBar(true)
+  .dimension(singleDayFilter)
+  .group(usageGroup)
+  .x(d3.time.scale().domain([singleDayMinDate,singleDayMaxDate]))
+  .brushOn(false)
+  .yAxisLabel("Well Usage")
+  .xUnits(function(){return BAR_GRAPH_THICKNESS;});
+
+usageBarChart.render();
+
+
+
 /********* Draw Graphs *********/ 
 
    dc.renderAll();

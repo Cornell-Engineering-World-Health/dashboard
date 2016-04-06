@@ -16,6 +16,7 @@
 
     <!-- scripts -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/graphColor.js"></script>
     <script src="js/RequestData.js"></script>
     <script src="js/background.js"></script>
     <script src="js/bundle.js"></script>
@@ -77,12 +78,18 @@
                   <div class="pH-chart" id="myChart"></div>
                 </div>
               </span>
+              <div id="indiv-ph" class="graph-label">
+                <p style="margin-top: 10px;">pH</p>
+              </div>
             </div>
             <div class="col-sm-3 indiv-graph" style="text-align: center;">
               <span>
                 <svg id="turbidity-graph" width="90%" height="250px"></svg>
                 <div id="turbidity-graph"></div>
               </span>
+              <div id="indiv-turb" class="graph-label">
+                <p style="margin-top: 10px;">Turbidity</p>
+              </div>
             </div>
             <div class="col-sm-3 indiv-graph">
               <br>
@@ -91,16 +98,18 @@
               <div id='conductivity-pie-chart'>
                 <svg id="conductivity-pie-chart" width="90%" height="250px"></svg>
               </div>
-              <!-- <div class='12u line-graph' id='conductivity-pie-chart'> -->
             </div>
             <div class="col-sm-3 indiv-graph" style="text-align: center;">
               <br>
               <span><img src="http://images.clipartpanda.com/thermometer-clip-art-medical_red_thermometer_1.png" style="width: auto; height: 210px;"/><span>
+              <div id="indiv-temp" class="graph-label">
+                <p style="margin-top: 10px;">Temperature</p>
+              </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" style="text-align: center;">
             <span>
-              
+              <div id="usage-bar-chart"></div>
             </span>
           </div>
         </div>
