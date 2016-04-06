@@ -317,9 +317,11 @@ function makeGraphs(error, apiData) {
 
 	conductivityChart.render();
 
-	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
+	var turbScale = d3.scale.linear().domain([0,100]).range(["#33cc33", "#FF0000", "#FFFF00"]);
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.waveColor = turbScale(data[dataSet.length-1].turbidity);
+	config1.circleColor = turbScale(data[dataSet.length-1].turbidity);
+	config1.waveTextColor = "#ffffff";
 	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
 	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
 
