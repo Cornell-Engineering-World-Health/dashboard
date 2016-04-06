@@ -140,7 +140,7 @@ function makeGraphs(error, apiData) {
 	    .rangeChart(timeChart)
 	    .dimension(dateDim)
 	    .group(temp);
-
+  lineChart.render();
 
 	$("button").click( function () {
 		$(this).addClass('active').siblings().removeClass('active');
@@ -240,7 +240,7 @@ function makeGraphs(error, apiData) {
 			default:
 				return true;
 		}
-	})
+	});
 
 	
 	/*  Erin: Conductivity
@@ -305,10 +305,8 @@ function makeGraphs(error, apiData) {
 	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.Value;});
 		
 	conductivityChart
-		.width(250)
-		.height(250)
 		.radius(100)
-		.innerRadius(90)
+		.innerRadius(75)
 		.dimension(condDim)
 		.group(condGroup)
 		.renderLabel(true)
