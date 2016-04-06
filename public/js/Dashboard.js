@@ -120,6 +120,8 @@ function makeGraphs(error, apiData) {
 	var yearRingChart   = dc.pieChart("#chart-ring-year");
 	var timeChart  = dc.barChart("#timeline");
 
+	var usageBarChart = dc.barChart("#usage-bar-chart");
+
 /********* END *********/ 
 
 /******* Overlayed line chart *******/
