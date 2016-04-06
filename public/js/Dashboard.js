@@ -414,13 +414,13 @@ usageBarChart.render();
 
 /********* Thermometer *********/ 
 
+var cTemp = data[dataSet.length-1].temperature;
+
 var width = 80,
     height = 180,
     maxTemp = 120,
     minTemp = 0,
-    currentTemp = data[dataSet.length-1].temperature;
-
-var cTemp = data[dataSet.length-1].temperature;
+    currentTemp = cTemp;
 
 //[red, yellow, green, yellow, red]
 //[1, 10, 15, 25]
