@@ -14,8 +14,7 @@ module.exports = function(app) {
 
 var new_load = new Array();
 
-//this should be how we add to the database from now on, except I'm not sure
-//what we put in the first param for app.post
+//this should be how we add to the database from now on
 /*
 app.use(bodyParser.json());
 app.use(bodyParser.urlEncoded({extended: true}));
@@ -28,6 +27,9 @@ app.post('/', function(req, res) {
       temperature: new_load[i].temperature,
       turbidity: new_load[i].turbidity,
       conductivity: new_load[i].conductivity,
+      sodium: new_load[i].sodium,
+      magnesium: new_load[i].magnesium,
+      calcium: new_load[i].calcium,
       pH: new_load[i].pH,
       timestamp: new Date(new_load[i].timestamp),
       usage: new_load[i].usage
@@ -68,6 +70,9 @@ app.get('/reset', function(req, res) {
       temperature: new_load[i].temperature,
       turbidity: new_load[i].turbidity,
       conductivity: new_load[i].conductivity,
+      sodium: new_load[i].sodium,
+      magnesium: new_load[i].magnesium,
+      calcium: new_load[i].calcium,
       pH: new_load[i].pH,
       timestamp: new Date(new_load[i].timestamp),
       usage: new_load[i].usage
