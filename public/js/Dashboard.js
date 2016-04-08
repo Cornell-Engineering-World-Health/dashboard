@@ -412,13 +412,26 @@ function makeGraphs(error, apiData) {
 	var condDim = ndx.dimension(function(d) { return d.Name; });
 	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
 
+	var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
+	//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
+	var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
 		
+	function getColorScale(){
+		if(getCondStat){
+			return gColors;
+		}
+		else{
+			return rColors;
+		}
+	};
+
 	conductivityChart
 		.radius(100)
 		.innerRadius(75)
 		.dimension(condDim)
 		.group(condGroup)
 		.renderLabel(true)
+		.colors(getColorScale())
 		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
 
 	conductivityChart.render();
@@ -476,7 +489,7 @@ function makeGraphs(error, apiData) {
 
 /********************* Thermometer *********************/ 
 
-var cTemp = data[apiData.length-1].temperature;
+var cTemp = recentData.temperature;
 
 var width = 80,
     height = 180,
@@ -672,8 +685,8 @@ svgAxis.selectAll(".tick line")
   .style("stroke-width", "1px");
 
 
-
 /********* End Thermometer *********/ 
+
 
 /********** Status ***************/
 
