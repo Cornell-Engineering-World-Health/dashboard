@@ -293,15 +293,15 @@ function makeGraphs(error, apiData) {
 	config1.displayPercent = false;
 	config1.minValue = 0;
 	config1.maxValue = 10;
-	
+
 	var ionData          = [ 
-  { 'Name': 'ion1', 'Value': 10}, 
-  { 'Name': 'ion2', 'Value': 20}, 
-  { 'Name': 'ion3', 'Value': 30}, 
-];
+	  { 'Name': 'Calcium', 'Value': data[dataSet.length-3].calcium}, 
+	  { 'Name': 'Sodium', 'Value': data[dataSet.length-3].sodium}, 
+	  { 'Name': 'Magnesium', 'Value': data[dataSet.length-3].magnesium}, 
+	];
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.Value;});
+	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
 		
 	conductivityChart
 		.radius(100)
@@ -309,7 +309,7 @@ function makeGraphs(error, apiData) {
 		.dimension(condDim)
 		.group(condGroup)
 		.renderLabel(true)
-		.label(function (d) { return d.value; });
+		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
 
 	conductivityChart.render();
 
@@ -589,7 +589,7 @@ var svgAxis = svg.append("g")
 
 // Format text labels
 svgAxis.selectAll(".tick text")
-    .style("fill", "#777777")
+    .style("fill", "#E3E0E0")
     .style("font-size", "10px");
 
 // Set main axis line to no stroke or fill
