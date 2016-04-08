@@ -611,7 +611,7 @@ function makeGraphs(error, apiData) {
 	/*************** END TURBIDITY GRAPH ***************/
 
 	function updateCond(recentData){
-		$('#indiv-cond').empty();
+		//$('#indiv-cond').empty();
 		var cMg = recentData.magnesium;
 		var cNa = recentData.sodium;
 		var cCa = recentData.calcium;
