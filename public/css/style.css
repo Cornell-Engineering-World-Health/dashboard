@@ -71,6 +71,13 @@ body {
 
 #export-button:hover {
 	text-decoration: none;
+	background: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	outline: none;
+	color: #716A62;
+	-webkit-transition: background .5s, color .5s; 
+    transition: background .5s, color .5s;
+}
 }
 /**************************************************
  * HEADER INNER
@@ -140,6 +147,23 @@ span, div, p {
 	font-size: 24px;
 	color: green;
 }
+
+line {
+	opacity: 0;
+}
+
+.dc-chart g.axis text {
+	font-family: 'Lato', sans-serif;
+}
+
+/*#timeline svg {
+	padding-left: 12px;
+}*/
+.dc-chart .axis path, .axis line {
+	stroke: #ccc;
+	opacity: .3;
+}
+
 
 /**************************************************
  * MAIN GRAPH BUTTONS

@@ -1,7 +1,11 @@
 var date;
 $(document).ready(function() {
-  $('#myChart').createPH(200, 40, 7);
-  resetDB(function(res) {
+	setTimeout(function() {
+		console.log("CALL");
+		$( "#temperature" ).trigger( "click" );
+	}, 0);
+ 	$('#myChart').createPH(200, 40, 7);
+ 	resetDB(function(res) {
 	});
   update();
 });
@@ -313,13 +317,15 @@ function updateUsage(recentData) {
 	//graph code
 	//var usageBarChart  = dc.barChart("#usage-bar-chart"); 
 	usageBarChart
-	  .width(500).height(200).gap(20)
+	  .width(700).height(400).gap(20)
 	  .centerBar(true)
 	  .dimension(singleDayFilter)
 	  .group(usageGroup)
 	  .x(d3.time.scale().domain([singleDayMinDate,singleDayMaxDate]))
 	  .brushOn(false)
 	  .yAxisLabel("Well Usage")
+	  .renderHorizontalGridLines(true)
+	  .renderVerticalGridLines(true)
 	  .xUnits(function(){return BAR_GRAPH_THICKNESS;});
 
 	usageBarChart.render();
@@ -406,6 +412,7 @@ function makeGraphs(error, apiData) {
 	var conductivity = dateDim.group().reduceSum(function (d) { return +d.conductivity; }); 
 	var pH = dateDim.group().reduceSum(function(d) { return +d.pH; }); 
 	var temp = dateDim.group().reduceSum(function (d) { return +d.temperature; }); 
+	var usageMain = dateDim.group().reduceSum(function (d) { return +d.usage; });
 	var usage = dateDim2.group().reduceSum(function (d) { return +d.usage; });
 
 /********* END *********/ 
@@ -436,21 +443,23 @@ function makeGraphs(error, apiData) {
 	    .margins({top: 30, right: 50, bottom: 25, left: 60})
 	    .brushOn(false)
 	    .clipPadding(10)
-	    .yAxisLabel("This is the Y Axis")
+	    .yAxisLabel("Fahrenheit")
 	    .elasticY(true)
 	    .renderLabel(true)
 	    .ordinalColors(["#E4572E"])
 	    .rangeChart(timeChart)
 	    .dimension(dateDim)
-	    .group(temp);
+	    .group(temp)
+	    .renderHorizontalGridLines(true)
+	    .renderVerticalGridLines(true)
   lineChart.render();
 
 	$("button").click( function () {
 		$(this).addClass('active').siblings().removeClass('active');
 		switch(this.id) {
 			case "temperature":
-				// timeChart.filterAll();
-				// timeChart.render();
+				timeChart.filterAll();
+				timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -458,12 +467,14 @@ function makeGraphs(error, apiData) {
 				    .margins({top: 30, right: 50, bottom: 25, left: 60})
 				    .brushOn(false)
 				    .clipPadding(10)
-				    .yAxisLabel("This is the Y Axis")
+				    .yAxisLabel("Fahrenheit")
 				    .elasticY(true)
 				    .renderLabel(true)
 				    .ordinalColors(["#E4572E"])
 				    .rangeChart(timeChart)
 				    .dimension(dateDim)
+				    .renderHorizontalGridLines(true)
+	    			.renderVerticalGridLines(true)
 				    .group(temp);
 				lineChart.render();
 				break;
@@ -477,18 +488,20 @@ function makeGraphs(error, apiData) {
 				    .margins({top: 30, right: 50, bottom: 25, left: 60})
 				    .brushOn(false)
 				    .clipPadding(10)
-				    .yAxisLabel("This is the Y Axis")
+				    .yAxisLabel("mg/L")
 				    .elasticY(true)
 				    .renderLabel(true)
 				    .ordinalColors(["#FFC914"])
 				    .rangeChart(timeChart)
 				    .dimension(dateDim)
+				    .renderHorizontalGridLines(true)
+	    			.renderVerticalGridLines(true)
 				    .group(conductivity);
 				lineChart.render();
 				break;
 			case "turbidity":
-				// timeChart.filterAll();
-				// timeChart.render();
+				timeChart.filterAll();
+				timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -496,18 +509,20 @@ function makeGraphs(error, apiData) {
 				    .margins({top: 30, right: 50, bottom: 25, left: 60})
 				    .brushOn(false)
 				    .clipPadding(10)
-				    .yAxisLabel("This is the Y Axis")
+				    .yAxisLabel("uS/cm")
 				    .elasticY(true)
 				    .renderLabel(true)
 				    .ordinalColors(["#17BEBB"])
 				    .rangeChart(timeChart)
 				    .dimension(dateDim)
+				    .renderHorizontalGridLines(true)
+	    			.renderVerticalGridLines(true)
 				    .group(turbidity);
 				lineChart.render();
 				break;
 			case "pH":
-				// timeChart.filterAll();
-				// timeChart.render();
+				timeChart.filterAll();
+				timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -515,31 +530,39 @@ function makeGraphs(error, apiData) {
 				    .margins({top: 30, right: 50, bottom: 25, left: 60})
 				    .brushOn(false)
 				    .clipPadding(10)
-				    .yAxisLabel("This is the Y Axis")
 				    .elasticY(true)
 				    .renderLabel(true)
 				    .ordinalColors(["#76B041"])
 				    .rangeChart(timeChart)
 				    .dimension(dateDim)
+				    .renderHorizontalGridLines(true)
+	    			.renderVerticalGridLines(true)
+	    			.yAxisLabel("")
 				    .group(pH);
 				lineChart.render();
 				break;
 			// TODO: No fake data
-			// case "usage":
-			// 	lineChart
-			// 		.width(868)
-			// 	    .height(480)
-			// 	    .x(d3.time.scale().domain([minDate, maxDate]))
-			// 	    .margins({top: 30, right: 50, bottom: 25, left: 60})
-			// 	    .brushOn(false)
-			// 	    .clipPadding(10)
-			// 	    .yAxisLabel("This is the Y Axis")
-			// 	    .elasticY(true)
-			// 	    .renderLabel(true)
-			// 	    .rangeChart(timeChart)
-			// 	    .dimension(dateDim)
-			// 	    .group(usage);
-			// 	break;
+			case "usage":
+				timeChart.filterAll();
+				timeChart.render();
+				lineChart
+					.width(868)
+				    .height(480)
+				    .x(d3.time.scale().domain([minDate, maxDate]))
+				    .margins({top: 30, right: 50, bottom: 25, left: 60})
+				    .brushOn(false)
+				    .clipPadding(10)
+				    .yAxisLabel("Liters")
+				    .elasticY(true)
+				    .renderLabel(true)
+				    .rangeChart(timeChart)
+				    .dimension(dateDim)
+				    .ordinalColors(["#9975b9"])
+					.renderHorizontalGridLines(true)
+	    			.renderVerticalGridLines(true)
+				    .group(usageMain);
+				lineChart.render();
+				break;
 			default:
 				return true;
 		}
@@ -556,6 +579,7 @@ function makeGraphs(error, apiData) {
 	    .round(d3.time.day.round)
 	    .alwaysUseRounding(true)
 	    .x(d3.time.scale().domain([minDate, maxDate]))
+	    .showYAxis(false) // Self-defined changed dc.js
 	timeChart.render();
 
 
