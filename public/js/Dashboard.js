@@ -20,10 +20,6 @@ function getCurrent() {
 	var current = document.getElementsByClassName("filter").value;
 }
 
-function foo() {
-	console.log("in foo");
-}
-
 function updateUsage(recentData) {
 	console.log(recentData.timestamp);
 	var SELECTED_DAY = recentData.timestamp;
@@ -360,7 +356,14 @@ function makeGraphs(error, apiData) {
 	yearRingChart.render();
 
 
+	/*************** TURBIDITY GRAPH ***************/
 
+	var cTurb = data[apiData.length-1].turbidity;
+
+	//turbidity status is true if green/yellow and false if red
+	function getTurbStat(){
+    	return (cTurb <= 500);
+    };
 
 	// var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	// var config1 = liquidFillGaugeDefaultSettings();
@@ -373,25 +376,25 @@ function makeGraphs(error, apiData) {
 	// config1.displayPercent = false;
 	// config1.minValue = 0;
 	// config1.maxValue = 10;
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.circleColor = "#FF7777";
-	config1.textColor = "#FF4444";
-	config1.waveTextColor = "#FFAAAA";
-	config1.circleThickness = 0.2;
-	config1.textVertPosition = 0.2;
-	config1.waveAnimateTime = 1000;
-	config1.displayPercent = false;
-	config1.minValue = 0;
-	config1.maxValue = 10;
 
+	function getTurbColor(){
+    	if(cTurb <= 500){
+    		return "#33cc33";
+    	}
+    	else{
+    		return "#FF0000";
+    	}
+    };
 
-	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
 	var config1 = liquidFillGaugeDefaultSettings();
-	config1.waveColor = turbScale(recentData.turbidity);
-	config1.maxValue = recentData.turbidity*1.3;
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity, config1);
+	config1.waveColor = getTurbColor();
+	config1.circleColor = getTurbColor();
+	config1.waveTextColor = "#ffffff";
+	config1.maxValue = data[apiData.length-1].turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[apiData.length-1].turbidity, config1);	
 	
+	/*************** END TURBIDITY GRAPH ***************/
+
 	var cMg = data[apiData.length-1].magnesium;
 	var cNa = data[apiData.length-1].sodium;
 	var cCa = data[apiData.length-1].calcium;
@@ -401,13 +404,14 @@ function makeGraphs(error, apiData) {
 	};
 
 	var ionData          = [ 
-  { 'Name': 'ion1', 'Value': 10}, 
-  { 'Name': 'ion2', 'Value': 20}, 
-  { 'Name': 'ion3', 'Value': 30}, 
-];
+	  { 'Name': 'Calcium', 'Value': data[apiData.length-1].calcium}, 
+	  { 'Name': 'Sodium', 'Value': data[apiData.length-1].sodium}, 
+	  { 'Name': 'Magnesium', 'Value': data[apiData.length-1].magnesium}, 
+	];
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) {return d.Value;});
+	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
+
 		
 	conductivityChart
 		.radius(100)
@@ -415,7 +419,7 @@ function makeGraphs(error, apiData) {
 		.dimension(condDim)
 		.group(condGroup)
 		.renderLabel(true)
-		.label(function (d) { return d.value; });
+		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
 
 	conductivityChart.render();
 
@@ -434,13 +438,6 @@ function makeGraphs(error, apiData) {
     		return "#FF0000";
     	}
     };
-
-	// var config1 = liquidFillGaugeDefaultSettings();
-	// config1.waveColor = getTurbColor();
-	// config1.circleColor = getTurbColor();
-	// config1.waveTextColor = "#ffffff";
-	// config1.maxValue = data[apiData.length-1].turbidity*1.3;
-	// var gauge1 = loadLiquidFillGauge("turbidity-graph", data[apiData.length-1].turbidity, config1);	
 
 
 	$('#myChart').updatePH(recentData.pH);
@@ -659,7 +656,7 @@ var svgAxis = svg.append("g")
 
 // Format text labels
 svgAxis.selectAll(".tick text")
-    .style("fill", "#777777")
+    .style("fill", "#E3E0E0")
     .style("font-size", "10px");
 
 // Set main axis line to no stroke or fill
