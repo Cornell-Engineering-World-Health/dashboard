@@ -491,6 +491,7 @@ function makeGraphs(error, apiData) {
 			console.log(dataSelcted);
 		}
 		$('#myChart').updatePH(recentData.pH);
+		config1.maxValue = recentData.turbidity*1.3;
 		gauge1.update(recentData.turbidity);
 		// foo();
 		// updateUsage(recentData);
