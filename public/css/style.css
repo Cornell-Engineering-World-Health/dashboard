@@ -7,6 +7,7 @@ body {
 	height: 100%;
 	width: 100%;
 	background: url('../images/blur_background.png');
+	background-size: 100% auto;
 	fill: white;
 }
 
@@ -24,13 +25,12 @@ body {
 	left: 0;
 	z-index: 9998;
 	background: white;
-	box-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 	text-align: center;
 	background: rgba(255, 255, 255, 0.05);
 }
 
 #content {
-	margin-top: 10px;
+	margin-top: 70px;
 	width: 100%;
 	position: relative;
 	background: transparent;
@@ -80,11 +80,11 @@ body {
 }
 
 /**************************************************
- * TEXT STYLING
+ * TEXT AND ELEMENT STYLING
  **************************************************/
 span, div, p {
 	font-family: 'Lato', sans-serif;
-	color: white;
+	color: rgba(255, 255, 255, 0.7);
 	font-weight: 300;
 }
 
@@ -97,7 +97,7 @@ span, div, p {
 }
 
 .graph-label {
-	height: 40px;
+	height: 45px;
 	width: 100%;
 	padding: 0 30px 0 0;
 	background: white;
@@ -105,12 +105,14 @@ span, div, p {
 	position: absolute;
 	bottom: 0px;
 	text-align: left;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 300px;
 }
 
 .graph-label p {
-	margin: 8px 0 0 8px;
+	line-height: 45px;
+	margin: 0 0 0 10px;
+	color: white;
 }
 
 #indiv-ph {
@@ -131,7 +133,7 @@ span, div, p {
 
 #title {
 	font-size: 32px;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(255, 255, 255, 0.7);
 	font-weight: 300;
 	text-transform: uppercase;
 }
@@ -141,6 +143,15 @@ span, div, p {
 	color: green;
 }
 
+#subscribe {
+	width: 450px;
+	text-align: center;
+}
+
+#subscribe span {
+	border-top: 1px solid rgba(255, 255, 255, 0.7);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+}
 /**************************************************
  * MAIN GRAPH BUTTONS
  **************************************************/
