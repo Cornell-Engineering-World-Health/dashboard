@@ -18,28 +18,6 @@ setInterval(update, 100000000);
 
 function getCurrent() {
 	var current = document.getElementsByClassName("filter").value;
-	 console.log(current);
-}
-
-function updateTurbidity(recentData) {
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.circleColor = "#FF7777";
-	config1.textColor = "#FF4444";
-	config1.waveTextColor = "#FFAAAA";
-	config1.circleThickness = 0.2;
-	config1.textVertPosition = 0.2;
-	config1.waveAnimateTime = 1000;
-	config1.displayPercent = false;
-	config1.minValue = 0;
-	config1.maxValue = 10;
-
-
-	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.waveColor = turbScale(recentData.turbidity);
-	config1.maxValue = recentData.turbidity*1.3;
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity, config1);
 }
 
 function foo() {
@@ -78,18 +56,18 @@ function updateUsage(recentData) {
 	    {timestamp: "2015-11-12T20:00:00Z", usage: 4},
 	    {timestamp: "2015-11-12T22:00:00Z", usage: 4},
 	    {timestamp: "2015-11-12T23:59:00Z", usage: 4},
-	    {timestamp: "2015-11-13T02:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T04:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T06:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T08:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T10:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T12:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T14:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T16:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T18:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T20:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T22:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T23:59:00Z", usage: 8}
+	    {timestamp: "2015-11-16T02:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T04:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T06:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T08:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T10:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T12:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T14:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T16:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T18:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T20:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T22:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T23:59:00Z", usage: 8}
 	    ];
 
 	//time parsers
@@ -101,6 +79,9 @@ function updateUsage(recentData) {
 	  d.timestamp = timestampParser.parse(d.timestamp);
 	  d.usage = d.usage;
 	});
+
+	var usageBarChart = dc.barChart("#usage-bar-chart");
+	
 	var ndx = crossfilter(singleDayData);
 	var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
 	var singleDayFilter = timestampDim.filterFunction(function(d) { 
@@ -476,7 +457,6 @@ function makeGraphs(error, apiData) {
 	// If dates are the same then return more current data
 
 	$("#timeline").click( function () {
-		console.log(timeChart);
 		date = timeChart.brush().extent();
 		console.log(date);
 		// If selected dates are the same, then nothing is selected
@@ -488,13 +468,12 @@ function makeGraphs(error, apiData) {
 		else {
 			var dataSelcted = dateDim.top(Infinity);
 			recentData = dataSelcted[0];
-			console.log(dataSelcted);
+			// console.log(dataSelcted);
 		}
 		$('#myChart').updatePH(recentData.pH);
 		gauge1.update(recentData.turbidity);
 		// foo();
-		// updateUsage(recentData);
-		// usage(recentData);
+		updateUsage(recentData);
 	});
 
 /********************* Thermometer *********************/ 
