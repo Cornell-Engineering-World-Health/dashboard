@@ -103,10 +103,10 @@ function updateUsage(recentData) {
 	var ndx = crossfilter(singleDayData);
 	var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
 	var singleDayFilter = timestampDim.filterFunction(function(d) { 
-		console.log(d);
-		console.log(_isSelectedDay(d));
+		// console.log(d);
+		// console.log(_isSelectedDay(d));
 		if (_isSelectedDay(d)) {
-		console.log(d);
+		// console.log(d);
 		return d;} });
 
 	//get y-axis
@@ -196,7 +196,7 @@ function makeGraphs(error, apiData) {
 	var minDate = dateDim.bottom(1)[0].timestamp;
 	var maxDate = dateDim.top(1)[0].timestamp;
 
-	var dataDateDim = dataCross.dimension(function (d) { return d.timestamp; });
+	// var dataDateDim = dataCross.dimension(function (d) { return d.timestamp; });
 
 	var dateDim2 = ndx.dimension(function (d) { return d.timestamp; });
 	var minDate2 = dateDim2.bottom(1)[0].timestamp;
@@ -255,8 +255,8 @@ function makeGraphs(error, apiData) {
 		$(this).addClass('active').siblings().removeClass('active');
 		switch(this.id) {
 			case "temperature":
-				timeChart.filterAll();
-				timeChart.render();
+				// timeChart.filterAll();
+				// timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -293,8 +293,8 @@ function makeGraphs(error, apiData) {
 				lineChart.render();
 				break;
 			case "turbidity":
-				timeChart.filterAll();
-				timeChart.render();
+				// timeChart.filterAll();
+				// timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -312,8 +312,8 @@ function makeGraphs(error, apiData) {
 				lineChart.render();
 				break;
 			case "pH":
-				timeChart.filterAll();
-				timeChart.render();
+				// timeChart.filterAll();
+				// timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -379,17 +379,6 @@ function makeGraphs(error, apiData) {
 
 
 	/*************** TURBIDITY GRAPH ***************/
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.circleColor = "#FF7777";
-	config1.textColor = "#FF4444";
-	config1.waveTextColor = "#FFAAAA";
-	config1.circleThickness = 0.2;
-	config1.textVertPosition = 0.2;
-	config1.waveAnimateTime = 1000;
-	config1.displayPercent = false;
-	config1.minValue = 0;
-	config1.maxValue = 10;
 
 	var cTurb = data[apiData.length-1].turbidity;
 
@@ -431,7 +420,7 @@ function makeGraphs(error, apiData) {
 ];
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.Value;});
+	var condGroup = condDim.group().reduceSum(function(d) {return d.Value;});
 		
 	conductivityChart
 		.radius(100)
@@ -443,7 +432,21 @@ function makeGraphs(error, apiData) {
 
 	conductivityChart.render();
 
-	
+	// var cTurb = data[apiData.length-1].turbidity;
+
+	//turbidity status is true if green/yellow and false if red
+	function getTurbStat(){
+    	return (cTurb <= 500);
+    };
+
+	function getTurbColor(){
+    	if(cTurb <= 500){
+    		return "#33cc33";
+    	}
+    	else{
+    		return "#FF0000";
+    	}
+    };
 
 
 	$('#myChart').updatePH(recentData.pH);
@@ -460,6 +463,7 @@ function makeGraphs(error, apiData) {
 	// If dates are the same then return more current data
 
 	$("#timeline").click( function () {
+		console.log(timeChart);
 		date = timeChart.brush().extent();
 		console.log(date);
 		// If selected dates are the same, then nothing is selected
@@ -471,15 +475,14 @@ function makeGraphs(error, apiData) {
 		else {
 			var dataSelcted = dateDim.top(Infinity);
 			recentData = dataSelcted[0];
+			console.log(dataSelcted);
 		}
-		console.log(recentData);
 		$('#myChart').updatePH(recentData.pH);
-		updateTurbidity(recentData);
-		foo();
-		updateUsage(recentData);
+		gauge1.update(recentData.turbidity);
+		// foo();
+		// updateUsage(recentData);
 		// usage(recentData);
 	});
-
 
 /********************* Thermometer *********************/ 
 
@@ -677,6 +680,7 @@ svgAxis.selectAll(".tick line")
   .style("stroke", tubeBorderColor)
   .style("shape-rendering", "crispEdges")
   .style("stroke-width", "1px");
+
 
 
 /********* End Thermometer *********/ 
