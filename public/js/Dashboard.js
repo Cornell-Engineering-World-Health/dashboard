@@ -50,9 +50,7 @@ function getTempColor(){
     	}
     };
 
-function getTempStat(){
-	return (cTemp >= 34 && cTemp <= 77);
-};
+
 
 var bottomY = height - 5,
     topY = 5,
@@ -368,7 +366,6 @@ function makeGraphs(error, apiData) {
 	});
 
 
-
 /********* END *********/ 
 
 /********* Create a Crossfilter instance and All *********/ 
@@ -433,6 +430,8 @@ function makeGraphs(error, apiData) {
 
 /******* Overlayed line chart *******/
 	updateUsage(recentData);
+
+	updateCond(recentData);
 
 	lineChart
 		.width(868)
@@ -598,10 +597,7 @@ function makeGraphs(error, apiData) {
 
 	var cTurb = data[apiData.length-1].turbidity;
 
-	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
+	
 
 	// var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	// var config1 = liquidFillGaugeDefaultSettings();
@@ -617,9 +613,11 @@ function makeGraphs(error, apiData) {
 
 	function getTurbColor(){
     	if(cTurb <= 500){
+    		$('#indiv-turb').css("background-color", "green");
     		return "#33cc33";
     	}
     	else{
+    		$('#indiv-turb').css("background-color", "red");
     		return "#FF0000";
     	}
     };
@@ -633,63 +631,57 @@ function makeGraphs(error, apiData) {
 	
 	/*************** END TURBIDITY GRAPH ***************/
 
-	var cMg = data[apiData.length-1].magnesium;
-	var cNa = data[apiData.length-1].sodium;
-	var cCa = data[apiData.length-1].calcium;
+	function updateCond(recentData){
+		//$('#indiv-cond').empty();
+		var cMg = recentData.magnesium;
+		var cNa = recentData.sodium;
+		var cCa = recentData.calcium;
 
-	function getCondStat(){
-		return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
-	};
-
-	var ionData          = [ 
-	  { 'Name': 'Calcium', 'Value': data[apiData.length-1].calcium}, 
-	  { 'Name': 'Sodium', 'Value': data[apiData.length-1].sodium}, 
-	  { 'Name': 'Magnesium', 'Value': data[apiData.length-1].magnesium}, 
-	];
-
-	var ndx = crossfilter(ionData);
-	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
-
-	var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
-	//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
-	var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
 		
-	function getColorScale(){
-		if(getCondStat){
-			return gColors;
-		}
-		else{
-			return rColors;
-		}
+
+		var ionData          = [ 
+		  { 'Name': 'Calcium', 'Value': recentData.calcium}, 
+		  { 'Name': 'Sodium', 'Value': recentData.sodium}, 
+		  { 'Name': 'Magnesium', 'Value': recentData.magnesium}, 
+		];
+
+		var ndx = crossfilter(ionData);
+		var condDim = ndx.dimension(function(d) { return d.Name; });
+		var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
+
+		var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
+		//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
+		var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
+			
+		function getColorScale(){
+			if(cNa < 200 && ((cMg + cNa + cCa) <= 150)){
+				$('#indiv-cond').css("background-color", "green");
+				return gColors;
+			}
+			else{
+				$('#indiv-cond').css("background-color", "red");
+				return rColors;
+			}
+		};
+
+		conductivityChart
+			.radius(100)
+			.innerRadius(75)
+			.dimension(condDim)
+			.group(condGroup)
+			.renderLabel(true)
+			.colors(getColorScale())
+			.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
+
+		conductivityChart.render();
+
 	};
-
-	conductivityChart
-		.radius(100)
-		.innerRadius(75)
-		.dimension(condDim)
-		.group(condGroup)
-		.renderLabel(true)
-		.colors(getColorScale())
-		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
-
-	conductivityChart.render();
-
 	// var cTurb = data[apiData.length-1].turbidity;
 
 	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
+	
 
-	function getTurbColor(){
-    	if(cTurb <= 500){
-    		return "#33cc33";
-    	}
-    	else{
-    		return "#FF0000";
-    	}
-    };
+
 
 
 	$('#myChart').updatePH(recentData.pH);
@@ -698,13 +690,16 @@ function makeGraphs(error, apiData) {
 	var cpH = data[apiData.length-1].pH;
 	
 	// true if x>=6.5, x<=8.5
-	function getpHStat(){
-		return (cpH >= 6.5 && cpH <= 8.5);
-	};
+	
+
+	// Returns array of already parsed time
+	// If dates are the same then return more current data
+
+	
+
 
 /********************* Thermometer *********************/ 
 
-$("#thermo").empty();
 
 var cTemp = recentData.temperature;
 
@@ -719,12 +714,15 @@ var width = 80,
 //[33.8, 50, 59, 77]
 function getTempColor(){
     	if(cTemp >= 50 && cTemp <= 59){
+    		$('#indiv-temp').css("background-color", "#33cc33");
     		return "#33cc33";
     	}
     	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		return "#FF0000";
+    		$('#indiv-temp').css("background-color", "gold");
+    		return "gold";
     	}
     	else{
+    		$('#indiv-temp').css("background-color", "#FF0000");
     		return "#FF0000";
     	}
     };
@@ -732,6 +730,7 @@ function getTempColor(){
 function getTempStat(){
 	return (cTemp >= 34 && cTemp <= 77);
 };
+
 
 var bottomY = height - 5,
     topY = 5,
@@ -919,9 +918,7 @@ svgAxis.selectAll(".tick line")
 
 /********** Status ***************/
 
-function getQualStat(){
-	return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
-};
+
 
 
 
@@ -956,6 +953,25 @@ function getQualStat(){
 		cTemp = recentData.temperature;
 		cTurb = recentData.turbidity;
 		cpH = recentData.pH;
+		getTurbColor();
+		function getTurbStat(){
+    		return (cTurb <= 500);
+		};
+		function getpHStat(){
+			return (cpH >= 6.5 && cpH <= 8.5);
+		};
+
+		function getTempStat(){
+			return (cTemp >= 34 && cTemp <= 77);
+		};
+
+		function getCondStat(){
+			return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
+		};
+
+		function getQualStat(){
+			return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
+		};
 	});
 
 /********* Draw Graphs *********/ 
@@ -964,5 +980,6 @@ function getQualStat(){
    // dc.redrawAll();
 
 /********* END *********/ 
+	
 };
 /************************** Single Day Usage Bar Chart ***************************/
