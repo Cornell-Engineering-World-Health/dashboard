@@ -29,6 +29,10 @@ body {
 	background: rgba(255, 255, 255, 0.05);
 }
 
+#header-inner {
+	padding: 20px 0 0 0;
+}
+
 #content {
 	margin-top: 70px;
 	width: 100%;
@@ -91,7 +95,7 @@ span, div, p {
 .indiv-graph {
 	text-align: center;
 	background: rgba(255, 255, 255, 0.05);
-	height: 280px;
+	height: 300px;
 	background-clip: content-box;
 	position: relative;
 }
@@ -144,17 +148,45 @@ span, div, p {
 }
 
 #subscribe {
-	width: 450px;
+	width: 100%;
 	text-align: center;
+	position: relative;
+	height: 80px;
 }
 
-#subscribe span {
-	border-top: 1px solid rgba(255, 255, 255, 0.7);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+#subscribe > div {
+	position: absolute;
+	width: 440px;
+	height: 100%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+#subscribe-inner {
+	height: 100%;
+}
+
+#subscribe-text {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	color: white;
+}
+
 /**************************************************
  * MAIN GRAPH BUTTONS
  **************************************************/
+
+#timeline {
+	padding: 20px 0 20px 0;
+}
+
+#select-filter {
+	padding: 0 0 40px 0;
+}
 
 #select-filter button {
 	border: none;
@@ -162,6 +194,7 @@ span, div, p {
 	font-size: 14px;
 	color: white;
 	width: 100px;
+	padding: 10px 0;
 }
 
 #select-filter button:hover {

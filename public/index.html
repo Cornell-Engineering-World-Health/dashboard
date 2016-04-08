@@ -27,13 +27,8 @@
   <body>
     <div id="wrapper">
       <div id="header">
-        <div class="col-sm-4 header-col">
-        </div>
-        <div class="col-sm-4 header-col">
+        <div id="header-inner">
           <span id="title"><img src="images/teardrop.png" style="width: 40px; margin-right: 10px; opacity: 0.6;"/>Water Quality</span>
-        </div>
-        <div class="col-sm-4 header-col" style="text-align: right">
-          <span id="status">4/5 Good</span>
         </div>
       </div>
       <div id="content">
@@ -41,7 +36,7 @@
           <div class="row" style="text-align: center;">
             <span>
               <div class='12u line-graph' id='dc-line-chart'>
-                <h4>Water Quality</h4>
+                <h4>WATER QUALITY</h4>
                 <div>
                   <span class='reset' style='display: none;'>Current filter: <span class='filter'></span></span>
                 </div>
@@ -70,11 +65,9 @@
           <br>
           <div class="row">
             <div class="col-sm-3 indiv-graph">
-              <span>
-                <div>
+              <span style="display: inline-block;">
                   <p class="pH-label" id="phLabel" style="text-align: left;"></p>
-                  <div class="pH-chart" id="myChart"></div>
-                </div>
+                  <div class="pH-chart" id="myChart" style="margin: 85px 0 0 0"></div>
               </span>
               <div id="indiv-ph" class="graph-label">
                 <p>PH SCALE</p>
@@ -118,9 +111,17 @@
         </div>
         <br><br><br>
         <div id="subscribe">
-          <img src="images/mail.png" style="width: 40px;"/>
+          <div>
+            <div id="subscribe-inner">
+              <h4>SUBSCRIBE</h4>
+              <span style="display: inline-block;"><img src="images/mail.png" style="width: 40px;"/></span>
+              <span style="display: inline-block;">
+                <input id="subscribe-text" type="text" placeholder="Enter email" style="margin-left: 10px"></input>
+              </span>
+            </div>
+          </div>
         </div>
-        <br><br><br>
+        <br>
         <div id="export-div">
           <span>
             <a id="export-button" href="data/data.zip" class="myButton">Export Data History</a>
