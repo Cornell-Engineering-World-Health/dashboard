@@ -1,6 +1,6 @@
 var date;
 $(document).ready(function() {
-  $('#myChart').createPH(280, 40, 7);
+  $('#myChart').createPH(200, 40, 7);
   resetDB(function(res) {
 	});
   update();
@@ -408,17 +408,31 @@ function makeGraphs(error, apiData) {
 	  { 'Name': 'Sodium', 'Value': data[apiData.length-1].sodium}, 
 	  { 'Name': 'Magnesium', 'Value': data[apiData.length-1].magnesium}, 
 	];
+
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
 	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
 
+	var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
+	//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
+	var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
 		
+	function getColorScale(){
+		if(getCondStat){
+			return gColors;
+		}
+		else{
+			return rColors;
+		}
+	};
+
 	conductivityChart
 		.radius(100)
 		.innerRadius(75)
 		.dimension(condDim)
 		.group(condGroup)
 		.renderLabel(true)
+		.colors(getColorScale())
 		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
 
 	conductivityChart.render();
@@ -472,11 +486,21 @@ function makeGraphs(error, apiData) {
 		gauge1.update(recentData.turbidity);
 		// foo();
 		updateUsage(recentData);
+
+		cMg = recentData.magnesium;
+		cNa = recentData.sodium;
+		cCa = recentData.calcium;
+		cTemp = recentData.temperature;
+		cTurb = recentData.turbidity;
+		cpH = recentData.pH;
+		
 	});
 
 /********************* Thermometer *********************/ 
 
-var cTemp = data[apiData.length-1].temperature;
+$("#thermo").empty();
+
+var cTemp = recentData.temperature;
 
 var width = 80,
     height = 180,
@@ -672,8 +696,9 @@ svgAxis.selectAll(".tick line")
   .style("stroke-width", "1px");
 
 
-
 /********* End Thermometer *********/ 
+
+
 
 /********** Status ***************/
 
