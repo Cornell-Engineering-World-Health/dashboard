@@ -22,7 +22,6 @@ function getCurrent() {
 }
 
 function updateTurbidity(recentData) {
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.circleColor = "#FF7777";
 	config1.textColor = "#FF4444";
@@ -379,8 +378,7 @@ function makeGraphs(error, apiData) {
 	yearRingChart.render();
 
 
-
-
+	/*************** TURBIDITY GRAPH ***************/
 	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.circleColor = "#FF7777";
@@ -392,10 +390,35 @@ function makeGraphs(error, apiData) {
 	config1.displayPercent = false;
 	config1.minValue = 0;
 	config1.maxValue = 10;
+
+	var cTurb = data[apiData.length-1].turbidity;
+
+	//turbidity status is true if green/yellow and false if red
+	function getTurbStat(){
+    	return (cTurb <= 500);
+    };
+
+	function getTurbColor(){
+    	if(cTurb <= 500){
+    		return "#33cc33";
+    	}
+    	else{
+    		return "#FF0000";
+    	}
+    };
+
+	var config1 = liquidFillGaugeDefaultSettings();
+	config1.waveColor = getTurbColor();
+	config1.circleColor = getTurbColor();
+	config1.waveTextColor = "#ffffff";
+	config1.maxValue = data[apiData.length-1].turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[apiData.length-1].turbidity, config1);	
 	
-	var cMg = data[dataSet.length-1].magnesium;
-	var cNa = data[dataSet.length-1].sodium;
-	var cCa = data[dataSet.length-1].calcium;
+	/*************** END TURBIDITY GRAPH ***************/
+
+	var cMg = data[apiData.length-1].magnesium;
+	var cNa = data[apiData.length-1].sodium;
+	var cCa = data[apiData.length-1].calcium;
 
 	function getCondStat(){
 		return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
@@ -420,34 +443,13 @@ function makeGraphs(error, apiData) {
 
 	conductivityChart.render();
 
-	var cTurb = data[dataSet.length-1].turbidity;
-
-	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
-
-	function getTurbColor(){
-    	if(cTurb <= 500){
-    		return "#33cc33";
-    	}
-    	else{
-    		return "#FF0000";
-    	}
-    };
-
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.waveColor = getTurbColor();
-	config1.circleColor = getTurbColor();
-	config1.waveTextColor = "#ffffff";
-	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
+	
 
 
 	$('#myChart').updatePH(recentData.pH);
 
 
-	var cpH = data[dataSet.length-1].pH;
+	var cpH = data[apiData.length-1].pH;
 	
 	// true if x>=6.5, x<=8.5
 	function getpHStat(){
@@ -481,7 +483,7 @@ function makeGraphs(error, apiData) {
 
 /********************* Thermometer *********************/ 
 
-var cTemp = data[dataSet.length-1].temperature;
+var cTemp = data[apiData.length-1].temperature;
 
 var width = 80,
     height = 180,
@@ -691,8 +693,8 @@ function getQualStat(){
 
 /********* Draw Graphs *********/ 
 
-   dc.renderAll();
-   dc.redrawAll();
+   // dc.renderAll();
+   // dc.redrawAll();
 
 /********* END *********/ 
 };
