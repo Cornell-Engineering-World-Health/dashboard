@@ -1,6 +1,6 @@
 var date;
 $(document).ready(function() {
-  $('#myChart').createPH(280, 40, 7);
+  $('#myChart').createPH(200, 40, 7);
   resetDB(function(res) {
 	});
   update();
@@ -408,6 +408,7 @@ function makeGraphs(error, apiData) {
 	  { 'Name': 'Sodium', 'Value': data[apiData.length-1].sodium}, 
 	  { 'Name': 'Magnesium', 'Value': data[apiData.length-1].magnesium}, 
 	];
+
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
 	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
@@ -485,9 +486,19 @@ function makeGraphs(error, apiData) {
 		gauge1.update(recentData.turbidity);
 		// foo();
 		updateUsage(recentData);
+
+		cMg = recentData.magnesium;
+		cNa = recentData.sodium;
+		cCa = recentData.calcium;
+		cTemp = recentData.temperature;
+		cTurb = recentData.turbidity;
+		cpH = recentData.pH;
+		
 	});
 
 /********************* Thermometer *********************/ 
+
+$("#thermo").empty();
 
 var cTemp = recentData.temperature;
 
@@ -686,6 +697,7 @@ svgAxis.selectAll(".tick line")
 
 
 /********* End Thermometer *********/ 
+
 
 
 /********** Status ***************/
