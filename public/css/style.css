@@ -57,15 +57,16 @@ body {
 	background-color: transparent;
 	display: inline-block;
 	cursor: pointer;
-	color: #FFFFFF;
-	font-size: 22px;
-	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 16px;
+	line-height: 80px;
 	text-align: center;
-	padding: 8px 0 8px 0;
-	width: 400px;
-	border: 1px solid #FFFFFF;
+	width: 450px;
+	height: 80px;
+	border: 1px solid rgba(255, 255, 255, 0.5);
 	box-shadow: none;
-	border-radius: 25px;
+	border-radius: 32px;
+	font-weight: 400;
 }
 
 #export-button:hover {
@@ -84,26 +85,32 @@ body {
 span, div, p {
 	font-family: 'Lato', sans-serif;
 	color: white;
+	font-weight: 300;
 }
 
 .indiv-graph {
 	text-align: center;
 	background: rgba(255, 255, 255, 0.05);
-	height: 300px;
+	height: 280px;
 	background-clip: content-box;
 	position: relative;
 }
 
 .graph-label {
-	height: 50px;
+	height: 40px;
 	width: 100%;
 	padding: 0 30px 0 0;
 	background: white;
 	background-clip: content-box;
 	position: absolute;
 	bottom: 0px;
-	text-align: center;
-	font-size: 20px;
+	text-align: left;
+	font-size: 18px;
+	font-weight: 300px;
+}
+
+.graph-label p {
+	margin: 8px 0 0 8px;
 }
 
 #indiv-ph {
@@ -124,8 +131,8 @@ span, div, p {
 
 #title {
 	font-size: 32px;
-	color: white;
-	font-weight: 200;
+	color: rgba(255, 255, 255, 0.6);
+	font-weight: 300;
 	text-transform: uppercase;
 }
 
