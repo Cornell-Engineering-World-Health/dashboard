@@ -1,7 +1,12 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+<<<<<<< HEAD
 2 info using npm@2.14.7
 3 info using node@v4.2.1
+=======
+2 info using npm@2.14.12
+3 info using node@v4.2.6
+>>>>>>> 0c170868ad1613cc9447aeb3ae160cc1318827aa
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info prestart starter-node-angular@1.0.1
 6 info start starter-node-angular@1.0.1
@@ -15,6 +20,7 @@
 9 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:24:14)
 9 verbose stack     at emitTwo (events.js:87:13)
 9 verbose stack     at ChildProcess.emit (events.js:172:7)
+<<<<<<< HEAD
 9 verbose stack     at maybeClose (internal/child_process.js:818:16)
 9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 10 verbose pkgid starter-node-angular@1.0.1
@@ -23,6 +29,16 @@
 13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
 14 error node v4.2.1
 15 error npm  v2.14.7
+=======
+9 verbose stack     at maybeClose (internal/child_process.js:821:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+10 verbose pkgid starter-node-angular@1.0.1
+11 verbose cwd /Users/annietran/Documents/EWH/dashboard
+12 error Darwin 14.5.0
+13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+14 error node v4.2.6
+15 error npm  v2.14.12
+>>>>>>> 0c170868ad1613cc9447aeb3ae160cc1318827aa
 16 error code ELIFECYCLE
 17 error starter-node-angular@1.0.1 start: `node server.js`
 17 error Exit status 1
