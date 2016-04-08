@@ -294,6 +294,14 @@ function makeGraphs(error, apiData) {
 	config1.minValue = 0;
 	config1.maxValue = 10;
 	
+	var cMg = data[dataSet.length-1].magnesium;
+	var cNa = data[dataSet.length-1].sodium;
+	var cCa = data[dataSet.length-1].calcium;
+
+	function getCondStat(){
+		return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
+	};
+
 	var ionData          = [ 
   { 'Name': 'ion1', 'Value': 10}, 
   { 'Name': 'ion2', 'Value': 20}, 
@@ -315,6 +323,11 @@ function makeGraphs(error, apiData) {
 
 	var cTurb = data[dataSet.length-1].turbidity;
 
+	//turbidity status is true if green/yellow and false if red
+	function getTurbStat(){
+    	return (cTurb <= 500);
+    };
+
 	function getTurbColor(){
     	if(cTurb <= 500){
     		return "#33cc33";
@@ -333,6 +346,14 @@ function makeGraphs(error, apiData) {
 
 
 	$('#myChart').updatePH(data[dataSet.length-1].pH);
+
+
+	var cpH = data[dataSet.length-1].pH;
+	
+	// true if x>=6.5, x<=8.5
+	function getpHStat(){
+		return (cpH >= 6.5 && cpH <= 8.5);
+	};
 
 	// Returns array of already parsed time
 	// If dates are the same then return more current data
@@ -434,6 +455,9 @@ function getTempColor(){
     	}
     };
 
+function getTempStat(){
+	return (cTemp >= 34 && cTemp <= 77);
+};
 
 var bottomY = height - 5,
     topY = 5,
@@ -606,6 +630,15 @@ svgAxis.selectAll(".tick line")
 
 /********* End Thermometer *********/ 
 
+/********** Status ***************/
+
+function getQualStat(){
+	return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
+};
+
+
+
+/********** Status ***************/
 
 /********* Draw Graphs *********/ 
 
