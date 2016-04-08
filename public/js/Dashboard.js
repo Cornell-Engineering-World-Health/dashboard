@@ -20,6 +20,217 @@ function getCurrent() {
 	var current = document.getElementsByClassName("filter").value;
 }
 
+function updateTemp(recentData) {
+	$("#thermo").empty();
+	var cTemp = recentData.temperature;
+	console.log(cTemp);
+
+var width = 80,
+    height = 180,
+    maxTemp = 80,
+    minTemp = 0,
+    currentTemp = cTemp;
+
+//[red, yellow, green, yellow, red]
+//[1, 10, 15, 25]
+//[33.8, 50, 59, 77]
+function getTempColor(){
+    	if(cTemp >= 50 && cTemp <= 59){
+    		return "#33cc33";
+    	}
+    	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
+    		return "#FFFF00";
+    	}
+    	else{
+    		return "#FF0000";
+    	}
+    };
+
+
+
+var bottomY = height - 5,
+    topY = 5,
+    bulbRadius = 20,
+    tubeWidth = 21.5,
+    tubeBorderWidth = 1,
+    mercuryColor = getTempColor(),
+    innerBulbColor = "rgb(230, 200, 200)"
+    tubeBorderColor = "#999999";
+
+var bulb_cy = bottomY - bulbRadius,
+    bulb_cx = width/2,
+    top_cy = topY + tubeWidth/2;
+
+
+var svg = d3.select("#thermo")
+  .attr("width", width)
+  .attr("height", height);
+
+var defs = svg.append("defs");
+
+// Define the radial gradient for the bulb fill colour
+var bulbGradient = defs.append("radialGradient")
+  .attr("id", "bulbGradient")
+  .attr("cx", "50%")
+  .attr("cy", "50%")
+  .attr("r", "50%")
+  .attr("fx", "50%")
+  .attr("fy", "50%");
+
+bulbGradient.append("stop")
+  .attr("offset", "90%")
+  .style("stop-color", mercuryColor);
+
+
+// Circle element for rounded tube top
+svg.append("circle")
+  .attr("r", tubeWidth/2)
+  .attr("cx", width/2)
+  .attr("cy", top_cy)
+  .style("fill", "#FFFFFF")
+  .style("stroke", tubeBorderColor)
+  .style("stroke-width", tubeBorderWidth + "px");
+
+
+// Rect element for tube
+svg.append("rect")
+  .attr("x", width/2 - tubeWidth/2)
+  .attr("y", top_cy)
+  .attr("height", bulb_cy - top_cy)
+  .attr("width", tubeWidth)
+  .style("shape-rendering", "crispEdges")
+  .style("fill", "#FFFFFF")
+  .style("stroke", tubeBorderColor)
+  .style("stroke-width", tubeBorderWidth + "px");
+
+
+// White fill for rounded tube top circle element
+// to hide the border at the top of the tube rect element
+svg.append("circle")
+  .attr("r", tubeWidth/2 - tubeBorderWidth/2)
+  .attr("cx", width/2)
+  .attr("cy", top_cy)
+  .style("fill", "#FFFFFF")
+  .style("stroke", "none")
+
+// Main bulb of thermometer (empty), white fill
+svg.append("circle")
+  .attr("r", bulbRadius)
+  .attr("cx", bulb_cx)
+  .attr("cy", bulb_cy)
+  .style("fill", "#FFFFFF")
+  .style("stroke", tubeBorderColor)
+  .style("stroke-width", tubeBorderWidth + "px");
+
+
+// Rect element for tube fill colour
+svg.append("rect")
+  .attr("x", width/2 - (tubeWidth - tubeBorderWidth)/2)
+  .attr("y", top_cy)
+  .attr("height", bulb_cy - top_cy)
+  .attr("width", tubeWidth - tubeBorderWidth)
+  .style("shape-rendering", "crispEdges")
+  .style("fill", "#FFFFFF")
+  .style("stroke", "none");
+
+
+// Scale step size
+var step = 20;
+
+// Determine a suitable range of the temperature scale
+// Fahrenheit
+var domain = [
+  step * Math.floor(minTemp / step),
+  step * Math.ceil(maxTemp / step)
+  ];
+
+if (minTemp - domain[0] < 0.66 * step)
+  domain[0] -= step;
+
+if (domain[1] - maxTemp < 0.66 * step)
+  domain[1] += step;
+
+
+// D3 scale object
+var scale = d3.scale.linear()
+  .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
+  .domain(domain);
+
+
+var tubeFill_bottom = bulb_cy,
+    tubeFill_top = scale(currentTemp);
+
+var bar = svg.append("rect")
+	.attr("class", "tempRec")
+	.attr("x", width/2 - (tubeWidth - 10)/2)
+	.attr("y", tubeFill_top)
+	.attr("width", tubeWidth - 10)
+	.attr("height", 0)
+	.style("shape-rendering", "crispEdges")
+	.style("fill", mercuryColor)
+
+	bar
+	.transition().duration(750)
+	.attr("class", "tempRec")
+	.attr("x", width/2 - (tubeWidth - 10)/2)
+	.attr("y", tubeFill_top)
+	.attr("width", tubeWidth - 10)
+	.attr("height", tubeFill_bottom - tubeFill_top)
+	.style("shape-rendering", "crispEdges")
+	.style("fill", mercuryColor)
+
+
+// Main thermometer bulb fill
+svg.append("circle")
+  .attr("r", bulbRadius - 6)
+  .attr("cx", bulb_cx)
+  .attr("cy", bulb_cy)
+  .style("fill", "url(#bulbGradient)")
+  .style("stroke", mercuryColor)
+  .style("stroke-width", "2px");
+
+
+// Values to use along the scale ticks up the thermometer
+//Fahrenheit
+var tickValues = d3.range((domain[1] - domain[0])/step + 1).map(function(v) { return domain[0] + v * step; });
+
+// D3 axis object for the temperature scale
+//Fahrenheit
+var axis = d3.svg.axis()
+  .scale(scale)
+  .innerTickSize(7)
+  .outerTickSize(0)
+  .tickValues(tickValues)
+  .orient("left");
+
+
+// Add the axis to the image
+var svgAxis = svg.append("g")
+  .attr("id", "tempScale")
+  .attr("transform", "translate(" + (width/2 - tubeWidth/2) + ",0)")
+  .call(axis);
+
+// Format text labels
+svgAxis.selectAll(".tick text")
+    .style("fill", "#E3E0E0")
+    .style("font-size", "10px");
+
+// Set main axis line to no stroke or fill
+svgAxis.select("path")
+  .style("stroke", "none")
+  .style("fill", "none")
+
+// Set the style of the ticks 
+svgAxis.selectAll(".tick line")
+  .style("stroke", tubeBorderColor)
+  .style("shape-rendering", "crispEdges")
+  .style("stroke-width", "1px");
+
+
+
+/********* End Thermometer *********/ 
+}
+
 function updateUsage(recentData) {
 	console.log(recentData.timestamp);
 	var SELECTED_DAY = recentData.timestamp;
@@ -149,7 +360,6 @@ function makeGraphs(error, apiData) {
 	});
 
 
-
 /********* END *********/ 
 
 /********* Create a Crossfilter instance and All *********/ 
@@ -212,6 +422,9 @@ function makeGraphs(error, apiData) {
 /********* END *********/ 
 
 /******* Overlayed line chart *******/
+	updateUsage(recentData);
+
+	updateCond(recentData);
 
 	lineChart
 		.width(868)
@@ -360,10 +573,7 @@ function makeGraphs(error, apiData) {
 
 	var cTurb = data[apiData.length-1].turbidity;
 
-	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
+	
 
 	// var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	// var config1 = liquidFillGaugeDefaultSettings();
@@ -379,9 +589,11 @@ function makeGraphs(error, apiData) {
 
 	function getTurbColor(){
     	if(cTurb <= 500){
+    		$('#indiv-turb').css("background-color", "green");
     		return "#33cc33";
     	}
     	else{
+    		$('#indiv-turb').css("background-color", "red");
     		return "#FF0000";
     	}
     };
@@ -395,63 +607,57 @@ function makeGraphs(error, apiData) {
 	
 	/*************** END TURBIDITY GRAPH ***************/
 
-	var cMg = data[apiData.length-1].magnesium;
-	var cNa = data[apiData.length-1].sodium;
-	var cCa = data[apiData.length-1].calcium;
+	function updateCond(recentData){
+		//$('#indiv-cond').empty();
+		var cMg = recentData.magnesium;
+		var cNa = recentData.sodium;
+		var cCa = recentData.calcium;
 
-	function getCondStat(){
-		return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
-	};
-
-	var ionData          = [ 
-	  { 'Name': 'Calcium', 'Value': data[apiData.length-1].calcium}, 
-	  { 'Name': 'Sodium', 'Value': data[apiData.length-1].sodium}, 
-	  { 'Name': 'Magnesium', 'Value': data[apiData.length-1].magnesium}, 
-	];
-
-	var ndx = crossfilter(ionData);
-	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
-
-	var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
-	//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
-	var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
 		
-	function getColorScale(){
-		if(getCondStat){
-			return gColors;
-		}
-		else{
-			return rColors;
-		}
+
+		var ionData          = [ 
+		  { 'Name': 'Calcium', 'Value': recentData.calcium}, 
+		  { 'Name': 'Sodium', 'Value': recentData.sodium}, 
+		  { 'Name': 'Magnesium', 'Value': recentData.magnesium}, 
+		];
+
+		var ndx = crossfilter(ionData);
+		var condDim = ndx.dimension(function(d) { return d.Name; });
+		var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
+
+		var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
+		//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
+		var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
+			
+		function getColorScale(){
+			if(cNa < 200 && ((cMg + cNa + cCa) <= 150)){
+				$('#indiv-cond').css("background-color", "green");
+				return gColors;
+			}
+			else{
+				$('#indiv-cond').css("background-color", "red");
+				return rColors;
+			}
+		};
+
+		conductivityChart
+			.radius(100)
+			.innerRadius(75)
+			.dimension(condDim)
+			.group(condGroup)
+			.renderLabel(true)
+			.colors(getColorScale())
+			.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
+
+		conductivityChart.render();
+
 	};
-
-	conductivityChart
-		.radius(100)
-		.innerRadius(75)
-		.dimension(condDim)
-		.group(condGroup)
-		.renderLabel(true)
-		.colors(getColorScale())
-		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
-
-	conductivityChart.render();
-
 	// var cTurb = data[apiData.length-1].turbidity;
 
 	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
+	
 
-	function getTurbColor(){
-    	if(cTurb <= 500){
-    		return "#33cc33";
-    	}
-    	else{
-    		return "#FF0000";
-    	}
-    };
+
 
 
 	$('#myChart').updatePH(recentData.pH);
@@ -460,45 +666,16 @@ function makeGraphs(error, apiData) {
 	var cpH = data[apiData.length-1].pH;
 	
 	// true if x>=6.5, x<=8.5
-	function getpHStat(){
-		return (cpH >= 6.5 && cpH <= 8.5);
-	};
+	
 
 	// Returns array of already parsed time
 	// If dates are the same then return more current data
 
-	$("#timeline").click( function () {
-		date = timeChart.brush().extent();
-		console.log(date);
-		// If selected dates are the same, then nothing is selected
-		// Default to most current date
-		if (String(date[0]) == String(date[1])) {
-			console.log("IN SAME");
-			recentData = apiData[apiData.length-1];
-		}
-		else {
-			var dataSelcted = dateDim.top(Infinity);
-			recentData = dataSelcted[0];
-			// console.log(dataSelcted);
-		}
-		$('#myChart').updatePH(recentData.pH);
-		config1.maxValue = recentData.turbidity*1.3;
-		gauge1.update(recentData.turbidity);
-		// foo();
-		updateUsage(recentData);
+	
 
-		cMg = recentData.magnesium;
-		cNa = recentData.sodium;
-		cCa = recentData.calcium;
-		cTemp = recentData.temperature;
-		cTurb = recentData.turbidity;
-		cpH = recentData.pH;
-		
-	});
 
 /********************* Thermometer *********************/ 
 
-$("#thermo").empty();
 
 var cTemp = recentData.temperature;
 
@@ -513,12 +690,15 @@ var width = 80,
 //[33.8, 50, 59, 77]
 function getTempColor(){
     	if(cTemp >= 50 && cTemp <= 59){
+    		$('#indiv-temp').css("background-color", "#33cc33");
     		return "#33cc33";
     	}
     	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		return "#FFFF00";
+    		$('#indiv-temp').css("background-color", "gold");
+    		return "gold";
     	}
     	else{
+    		$('#indiv-temp').css("background-color", "#FF0000");
     		return "#FF0000";
     	}
     };
@@ -526,6 +706,7 @@ function getTempColor(){
 function getTempStat(){
 	return (cTemp >= 34 && cTemp <= 77);
 };
+
 
 var bottomY = height - 5,
     topY = 5,
@@ -640,13 +821,24 @@ var tubeFill_bottom = bulb_cy,
     tubeFill_top = scale(currentTemp);
 
 // Rect element for the red mercury column
-svg.append("rect")
-  .attr("x", width/2 - (tubeWidth - 10)/2)
-  .attr("y", tubeFill_top)
-  .attr("width", tubeWidth - 10)
-  .attr("height", tubeFill_bottom - tubeFill_top)
-  .style("shape-rendering", "crispEdges")
-  .style("fill", mercuryColor)
+var bar = svg.append("rect")
+	.attr("class", "tempRec")
+	.attr("x", width/2 - (tubeWidth - 10)/2)
+	.attr("y", tubeFill_top)
+	.attr("width", tubeWidth - 10)
+	.attr("height", 0)
+	.style("shape-rendering", "crispEdges")
+	.style("fill", mercuryColor)
+
+	bar
+	.transition().duration(5000)
+	.attr("class", "tempRec")
+	.attr("x", width/2 - (tubeWidth - 10)/2)
+	.attr("y", tubeFill_top)
+	.attr("width", tubeWidth - 10)
+	.attr("height", tubeFill_bottom - tubeFill_top)
+	.style("shape-rendering", "crispEdges")
+	.style("fill", mercuryColor)
 
 
 // Main thermometer bulb fill
@@ -702,13 +894,61 @@ svgAxis.selectAll(".tick line")
 
 /********** Status ***************/
 
-function getQualStat(){
-	return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
-};
+
 
 
 
 /********** Status ***************/
+
+	// Returns array of already parsed time
+	// If dates are the same then return more current data
+
+	$("#timeline").click( function () {
+		date = timeChart.brush().extent();
+		console.log(date);
+		// If selected dates are the same, then nothing is selected
+		// Default to most current date
+		if (String(date[0]) == String(date[1])) {
+			console.log("IN SAME");
+			recentData = apiData[apiData.length-1];
+		}
+		else {
+			var dataSelcted = dateDim.top(Infinity);
+			recentData = dataSelcted[0];
+			// console.log(dataSelcted);
+		}
+		$('#myChart').updatePH(recentData.pH);
+		config1.maxValue = recentData.turbidity*1.3;
+		gauge1.update(recentData.turbidity);
+		// foo();
+		updateUsage(recentData);
+		updateTemp(recentData);
+		cMg = recentData.magnesium;
+		cNa = recentData.sodium;
+		cCa = recentData.calcium;
+		cTemp = recentData.temperature;
+		cTurb = recentData.turbidity;
+		cpH = recentData.pH;
+		getTurbColor();
+		function getTurbStat(){
+    		return (cTurb <= 500);
+		};
+		function getpHStat(){
+			return (cpH >= 6.5 && cpH <= 8.5);
+		};
+
+		function getTempStat(){
+			return (cTemp >= 34 && cTemp <= 77);
+		};
+
+		function getCondStat(){
+			return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
+		};
+
+		function getQualStat(){
+			return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
+		};
+	});
 
 /********* Draw Graphs *********/ 
 
@@ -716,5 +956,6 @@ function getQualStat(){
    // dc.redrawAll();
 
 /********* END *********/ 
+	
 };
 /************************** Single Day Usage Bar Chart ***************************/
