@@ -314,7 +314,7 @@ function updateUsage(recentData) {
 	//graph code
 	//var usageBarChart  = dc.barChart("#usage-bar-chart"); 
 	usageBarChart
-	  .width(500).height(200).gap(20)
+	  .width(700).height(400).gap(20)
 	  .centerBar(true)
 	  .dimension(singleDayFilter)
 	  .group(usageGroup)
