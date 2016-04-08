@@ -212,6 +212,7 @@ function makeGraphs(error, apiData) {
 /********* END *********/ 
 
 /******* Overlayed line chart *******/
+	updateUsage(recentData);
 
 	lineChart
 		.width(868)
