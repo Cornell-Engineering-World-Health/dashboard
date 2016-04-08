@@ -2014,6 +2014,7 @@ dc.coordinateGridMixin = function (_chart) {
     var _yAxis = d3.svg.axis().orient('left');
     var _yAxisPadding = 0;
     var _yElasticity = false;
+    var _yVisibility = true;
     var _yAxisLabel;
     var _yAxisLabelPadding = 0;
 
@@ -2631,6 +2632,19 @@ dc.coordinateGridMixin = function (_chart) {
         return _chart;
     };
 
+    // FROM: https://github.com/dc-js/dc.js/issues/548
+    /**
+    #### .showYAxis([boolean])
+    Turn on/off y axis.
+    **/
+    _chart.showYAxis = function (_) {
+        if (!arguments.length) {
+            return _yVisibility;
+        }
+        _yVisibility = _;
+        return _chart;
+    };
+
     /**
     #### .renderHorizontalGridLines([boolean])
     Turn on/off horizontal grid lines.
@@ -2954,7 +2968,7 @@ dc.coordinateGridMixin = function (_chart) {
             _chart.renderXAxis(_chart.g());
         }
 
-        if (_chart.elasticY() || render) {
+        if ((_chart.elasticY() || render) && (_chart.showYAxis()) ) {
             _chart.renderYAxis(_chart.g());
         }
 

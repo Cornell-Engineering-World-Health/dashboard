@@ -141,6 +141,23 @@ span, div, p {
 	color: green;
 }
 
+line {
+	opacity: 0;
+}
+
+.dc-chart g.axis text {
+	font-family: 'Lato', sans-serif;
+}
+
+/*#timeline svg {
+	padding-left: 12px;
+}*/
+.dc-chart .axis path, .axis line {
+	stroke: #ccc;
+	opacity: .3;
+}
+
+
 /**************************************************
  * MAIN GRAPH BUTTONS
  **************************************************/
