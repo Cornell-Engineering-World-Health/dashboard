@@ -149,7 +149,6 @@ function makeGraphs(error, apiData) {
 	});
 
 
-
 /********* END *********/ 
 
 /********* Create a Crossfilter instance and All *********/ 
@@ -212,6 +211,8 @@ function makeGraphs(error, apiData) {
 /********* END *********/ 
 
 /******* Overlayed line chart *******/
+
+	updateCond(recentData);
 
 	lineChart
 		.width(868)
@@ -395,48 +396,51 @@ function makeGraphs(error, apiData) {
 	
 	/*************** END TURBIDITY GRAPH ***************/
 
-	var cMg = data[apiData.length-1].magnesium;
-	var cNa = data[apiData.length-1].sodium;
-	var cCa = data[apiData.length-1].calcium;
+	function updateCond(recentData){
+		$('#indiv-cond').empty();
+		var cMg = recentData.magnesium;
+		var cNa = recentData.sodium;
+		var cCa = recentData.calcium;
 
-	function getCondStat(){
-		return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
+		function getCondStat(){
+			return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
+		};
+
+		var ionData          = [ 
+		  { 'Name': 'Calcium', 'Value': recentData.calcium}, 
+		  { 'Name': 'Sodium', 'Value': recentData.sodium}, 
+		  { 'Name': 'Magnesium', 'Value': recentData.magnesium}, 
+		];
+
+		var ndx = crossfilter(ionData);
+		var condDim = ndx.dimension(function(d) { return d.Name; });
+		var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
+
+		var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
+		//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
+		var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
+			
+		function getColorScale(){
+			if(getCondStat){
+				return gColors;
+			}
+			else{
+				return rColors;
+			}
+		};
+
+		conductivityChart
+			.radius(100)
+			.innerRadius(75)
+			.dimension(condDim)
+			.group(condGroup)
+			.renderLabel(true)
+			.colors(getColorScale())
+			.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
+
+		conductivityChart.render();
+
 	};
-
-	var ionData          = [ 
-	  { 'Name': 'Calcium', 'Value': data[apiData.length-1].calcium}, 
-	  { 'Name': 'Sodium', 'Value': data[apiData.length-1].sodium}, 
-	  { 'Name': 'Magnesium', 'Value': data[apiData.length-1].magnesium}, 
-	];
-
-	var ndx = crossfilter(ionData);
-	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) { return d.Value;});
-
-	var gColors = d3.scale.ordinal().range(["#00cc00", "#00b200", "#00ff00"]);
-	//var yColors = d3.scale.ordinal().range(["#ffd700", "#ffe34c", "#ffeb7f"]);
-	var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
-		
-	function getColorScale(){
-		if(getCondStat){
-			return gColors;
-		}
-		else{
-			return rColors;
-		}
-	};
-
-	conductivityChart
-		.radius(100)
-		.innerRadius(75)
-		.dimension(condDim)
-		.group(condGroup)
-		.renderLabel(true)
-		.colors(getColorScale())
-		.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
-
-	conductivityChart.render();
-
 	// var cTurb = data[apiData.length-1].turbidity;
 
 	//turbidity status is true if green/yellow and false if red
@@ -467,38 +471,10 @@ function makeGraphs(error, apiData) {
 	// Returns array of already parsed time
 	// If dates are the same then return more current data
 
-	$("#timeline").click( function () {
-		date = timeChart.brush().extent();
-		console.log(date);
-		// If selected dates are the same, then nothing is selected
-		// Default to most current date
-		if (String(date[0]) == String(date[1])) {
-			console.log("IN SAME");
-			recentData = apiData[apiData.length-1];
-		}
-		else {
-			var dataSelcted = dateDim.top(Infinity);
-			recentData = dataSelcted[0];
-			// console.log(dataSelcted);
-		}
-		$('#myChart').updatePH(recentData.pH);
-		config1.maxValue = recentData.turbidity*1.3;
-		gauge1.update(recentData.turbidity);
-		// foo();
-		updateUsage(recentData);
-
-		cMg = recentData.magnesium;
-		cNa = recentData.sodium;
-		cCa = recentData.calcium;
-		cTemp = recentData.temperature;
-		cTurb = recentData.turbidity;
-		cpH = recentData.pH;
-		
-	});
+	
 
 /********************* Thermometer *********************/ 
 
-$("#thermo").empty();
 
 var cTemp = recentData.temperature;
 
@@ -716,5 +692,34 @@ function getQualStat(){
    // dc.redrawAll();
 
 /********* END *********/ 
+	$("#timeline").click( function () {
+		date = timeChart.brush().extent();
+		console.log(date);
+		// If selected dates are the same, then nothing is selected
+		// Default to most current date
+		if (String(date[0]) == String(date[1])) {
+			console.log("IN SAME");
+			recentData = apiData[apiData.length-1];
+		}
+		else {
+			var dataSelcted = dateDim.top(Infinity);
+			recentData = dataSelcted[0];
+			// console.log(dataSelcted);
+		}
+		$('#myChart').updatePH(recentData.pH);
+		config1.maxValue = recentData.turbidity*1.3;
+		gauge1.update(recentData.turbidity);
+		// foo();
+		updateUsage(recentData);
+		updateCond(recentData);
+		cMg = recentData.magnesium;
+		cNa = recentData.sodium;
+		cCa = recentData.calcium;
+		cTemp = recentData.temperature;
+		cTurb = recentData.turbidity;
+		cpH = recentData.pH;
+		console.log(recentData);
+		
+	});
 };
 /************************** Single Day Usage Bar Chart ***************************/
