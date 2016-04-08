@@ -145,6 +145,11 @@ span, div, p {
 #status {
 	font-size: 24px;
 	color: green;
+	position: absolute; 
+	top: 65px;
+	left: 0;
+	right: 0;
+	margin: auto;
 }
 
 #subscribe {
