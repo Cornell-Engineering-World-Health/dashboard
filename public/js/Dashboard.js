@@ -46,9 +46,7 @@ function getTempColor(){
     	}
     };
 
-function getTempStat(){
-	return (cTemp >= 34 && cTemp <= 77);
-};
+
 
 var bottomY = height - 5,
     topY = 5,
@@ -575,10 +573,7 @@ function makeGraphs(error, apiData) {
 
 	var cTurb = data[apiData.length-1].turbidity;
 
-	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
+	
 
 	// var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	// var config1 = liquidFillGaugeDefaultSettings();
@@ -594,9 +589,11 @@ function makeGraphs(error, apiData) {
 
 	function getTurbColor(){
     	if(cTurb <= 500){
+    		$('#indiv-turb').css("background-color", "green");
     		return "#33cc33";
     	}
     	else{
+    		$('#indiv-turb').css("background-color", "red");
     		return "#FF0000";
     	}
     };
@@ -616,9 +613,7 @@ function makeGraphs(error, apiData) {
 		var cNa = recentData.sodium;
 		var cCa = recentData.calcium;
 
-		function getCondStat(){
-			return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
-		};
+		
 
 		var ionData          = [ 
 		  { 'Name': 'Calcium', 'Value': recentData.calcium}, 
@@ -635,10 +630,12 @@ function makeGraphs(error, apiData) {
 		var rColors = d3.scale.ordinal().range(["#ff0000", "#ff4c4c", "#ff6666"]);
 			
 		function getColorScale(){
-			if(getCondStat){
+			if(cNa < 200 && ((cMg + cNa + cCa) <= 150)){
+				$('#indiv-cond').css("background-color", "green");
 				return gColors;
 			}
 			else{
+				$('#indiv-cond').css("background-color", "red");
 				return rColors;
 			}
 		};
@@ -658,18 +655,9 @@ function makeGraphs(error, apiData) {
 	// var cTurb = data[apiData.length-1].turbidity;
 
 	//turbidity status is true if green/yellow and false if red
-	function getTurbStat(){
-    	return (cTurb <= 500);
-    };
+	
 
-	function getTurbColor(){
-    	if(cTurb <= 500){
-    		return "#33cc33";
-    	}
-    	else{
-    		return "#FF0000";
-    	}
-    };
+
 
 
 	$('#myChart').updatePH(recentData.pH);
@@ -678,9 +666,7 @@ function makeGraphs(error, apiData) {
 	var cpH = data[apiData.length-1].pH;
 	
 	// true if x>=6.5, x<=8.5
-	function getpHStat(){
-		return (cpH >= 6.5 && cpH <= 8.5);
-	};
+	
 
 	// Returns array of already parsed time
 	// If dates are the same then return more current data
@@ -704,12 +690,15 @@ var width = 80,
 //[33.8, 50, 59, 77]
 function getTempColor(){
     	if(cTemp >= 50 && cTemp <= 59){
+    		$('#indiv-temp').css("background-color", "#33cc33");
     		return "#33cc33";
     	}
     	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		return "#FF0000";
+    		$('#indiv-temp').css("background-color", "gold");
+    		return "gold";
     	}
     	else{
+    		$('#indiv-temp').css("background-color", "#FF0000");
     		return "#FF0000";
     	}
     };
@@ -717,6 +706,7 @@ function getTempColor(){
 function getTempStat(){
 	return (cTemp >= 34 && cTemp <= 77);
 };
+
 
 var bottomY = height - 5,
     topY = 5,
@@ -904,9 +894,7 @@ svgAxis.selectAll(".tick line")
 
 /********** Status ***************/
 
-function getQualStat(){
-	return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
-};
+
 
 
 
@@ -941,6 +929,25 @@ function getQualStat(){
 		cTemp = recentData.temperature;
 		cTurb = recentData.turbidity;
 		cpH = recentData.pH;
+		getTurbColor();
+		function getTurbStat(){
+    		return (cTurb <= 500);
+		};
+		function getpHStat(){
+			return (cpH >= 6.5 && cpH <= 8.5);
+		};
+
+		function getTempStat(){
+			return (cTemp >= 34 && cTemp <= 77);
+		};
+
+		function getCondStat(){
+			return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
+		};
+
+		function getQualStat(){
+			return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
+		};
 	});
 
 /********* Draw Graphs *********/ 
@@ -949,34 +956,6 @@ function getQualStat(){
    // dc.redrawAll();
 
 /********* END *********/ 
-	$("#timeline").click( function () {
-		date = timeChart.brush().extent();
-		console.log(date);
-		// If selected dates are the same, then nothing is selected
-		// Default to most current date
-		if (String(date[0]) == String(date[1])) {
-			console.log("IN SAME");
-			recentData = apiData[apiData.length-1];
-		}
-		else {
-			var dataSelcted = dateDim.top(Infinity);
-			recentData = dataSelcted[0];
-			// console.log(dataSelcted);
-		}
-		$('#myChart').updatePH(recentData.pH);
-		config1.maxValue = recentData.turbidity*1.3;
-		gauge1.update(recentData.turbidity);
-		// foo();
-		updateUsage(recentData);
-		updateCond(recentData);
-		cMg = recentData.magnesium;
-		cNa = recentData.sodium;
-		cCa = recentData.calcium;
-		cTemp = recentData.temperature;
-		cTurb = recentData.turbidity;
-		cpH = recentData.pH;
-		console.log(recentData);
-		
-	});
+	
 };
 /************************** Single Day Usage Bar Chart ***************************/
