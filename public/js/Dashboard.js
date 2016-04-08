@@ -104,10 +104,10 @@ function updateUsage(recentData) {
 	var ndx = crossfilter(singleDayData);
 	var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
 	var singleDayFilter = timestampDim.filterFunction(function(d) { 
-		console.log(d);
-		console.log(_isSelectedDay(d));
+		// console.log(d);
+		// console.log(_isSelectedDay(d));
 		if (_isSelectedDay(d)) {
-		console.log(d);
+		// console.log(d);
 		return d;} });
 
 	//get y-axis
@@ -197,7 +197,7 @@ function makeGraphs(error, apiData) {
 	var minDate = dateDim.bottom(1)[0].timestamp;
 	var maxDate = dateDim.top(1)[0].timestamp;
 
-	var dataDateDim = dataCross.dimension(function (d) { return d.timestamp; });
+	// var dataDateDim = dataCross.dimension(function (d) { return d.timestamp; });
 
 	var dateDim2 = ndx.dimension(function (d) { return d.timestamp; });
 	var minDate2 = dateDim2.bottom(1)[0].timestamp;
@@ -256,8 +256,8 @@ function makeGraphs(error, apiData) {
 		$(this).addClass('active').siblings().removeClass('active');
 		switch(this.id) {
 			case "temperature":
-				timeChart.filterAll();
-				timeChart.render();
+				// timeChart.filterAll();
+				// timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -294,8 +294,8 @@ function makeGraphs(error, apiData) {
 				lineChart.render();
 				break;
 			case "turbidity":
-				timeChart.filterAll();
-				timeChart.render();
+				// timeChart.filterAll();
+				// timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -313,8 +313,8 @@ function makeGraphs(error, apiData) {
 				lineChart.render();
 				break;
 			case "pH":
-				timeChart.filterAll();
-				timeChart.render();
+				// timeChart.filterAll();
+				// timeChart.render();
 				lineChart
 					.width(868)
 				    .height(480)
@@ -381,6 +381,17 @@ function makeGraphs(error, apiData) {
 
 
 
+	// var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
+	// var config1 = liquidFillGaugeDefaultSettings();
+	// config1.circleColor = "#FF7777";
+	// config1.textColor = "#FF4444";
+	// config1.waveTextColor = "#FFAAAA";
+	// config1.circleThickness = 0.2;
+	// config1.textVertPosition = 0.2;
+	// config1.waveAnimateTime = 1000;
+	// config1.displayPercent = false;
+	// config1.minValue = 0;
+	// config1.maxValue = 10;
 	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity);
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.circleColor = "#FF7777";
@@ -392,6 +403,13 @@ function makeGraphs(error, apiData) {
 	config1.displayPercent = false;
 	config1.minValue = 0;
 	config1.maxValue = 10;
+
+
+	var turbScale = d3.scale.linear().domain([0,20]).range(["#FFFCF7", "#ffe6b3"]);
+	var config1 = liquidFillGaugeDefaultSettings();
+	config1.waveColor = turbScale(recentData.turbidity);
+	config1.maxValue = recentData.turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity, config1);
 	
 	var ionData          = [ 
   { 'Name': 'ion1', 'Value': 10}, 
@@ -400,7 +418,7 @@ function makeGraphs(error, apiData) {
 ];
 	var ndx = crossfilter(ionData);
 	var condDim = ndx.dimension(function(d) { return d.Name; });
-	var condGroup = condDim.group().reduceSum(function(d) {console.log(d);return d.Value;});
+	var condGroup = condDim.group().reduceSum(function(d) {return d.Value;});
 		
 	conductivityChart
 		.radius(100)
@@ -412,23 +430,23 @@ function makeGraphs(error, apiData) {
 
 	conductivityChart.render();
 
-	var cTurb = data[dataSet.length-1].turbidity;
+	// var cTurb = data[apiData.length-1].turbidity;
 
-	function getTurbColor(){
-    	if(cTurb <= 500){
-    		return "#33cc33";
-    	}
-    	else{
-    		return "#FF0000";
-    	}
-    };
+	// function getTurbColor(){
+ //    	if(cTurb <= 500){
+ //    		return "#33cc33";
+ //    	}
+ //    	else{
+ //    		return "#FF0000";
+ //    	}
+ //    };
 
-	var config1 = liquidFillGaugeDefaultSettings();
-	config1.waveColor = getTurbColor();
-	config1.circleColor = getTurbColor();
-	config1.waveTextColor = "#ffffff";
-	config1.maxValue = data[dataSet.length-1].turbidity*1.3;
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[dataSet.length-1].turbidity, config1);	
+	// var config1 = liquidFillGaugeDefaultSettings();
+	// config1.waveColor = getTurbColor();
+	// config1.circleColor = getTurbColor();
+	// config1.waveTextColor = "#ffffff";
+	// config1.maxValue = data[apiData.length-1].turbidity*1.3;
+	// var gauge1 = loadLiquidFillGauge("turbidity-graph", data[apiData.length-1].turbidity, config1);	
 
 
 	$('#myChart').updatePH(recentData.pH);
@@ -437,6 +455,7 @@ function makeGraphs(error, apiData) {
 	// If dates are the same then return more current data
 
 	$("#timeline").click( function () {
+		console.log(timeChart);
 		date = timeChart.brush().extent();
 		console.log(date);
 		// If selected dates are the same, then nothing is selected
@@ -448,209 +467,209 @@ function makeGraphs(error, apiData) {
 		else {
 			var dataSelcted = dateDim.top(Infinity);
 			recentData = dataSelcted[0];
+			console.log(dataSelcted);
 		}
-		console.log(recentData);
 		$('#myChart').updatePH(recentData.pH);
-		updateTurbidity(recentData);
-		foo();
-		updateUsage(recentData);
+		gauge1.update(recentData.turbidity);
+		// foo();
+		// updateUsage(recentData);
 		// usage(recentData);
 	});
 
 
-/********************* Thermometer *********************/ 
+// /********************* Thermometer *********************/ 
 
-var cTemp = data[dataSet.length-1].temperature;
+// var cTemp = data[apiData.length-1].temperature;
 
-var width = 80,
-    height = 180,
-    maxTemp = 80,
-    minTemp = 0,
-    currentTemp = cTemp;
+// var width = 80,
+//     height = 180,
+//     maxTemp = 80,
+//     minTemp = 0,
+//     currentTemp = cTemp;
 
-//[red, yellow, green, yellow, red]
-//[1, 10, 15, 25]
-//[33.8, 50, 59, 77]
-function getTempColor(){
-    	if(cTemp >= 50 && cTemp <= 59){
-    		return "#33cc33";
-    	}
-    	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		return "#FFFF00";
-    	}
-    	else{
-    		return "#FF0000";
-    	}
-    };
-
-
-var bottomY = height - 5,
-    topY = 5,
-    bulbRadius = 20,
-    tubeWidth = 21.5,
-    tubeBorderWidth = 1,
-    mercuryColor = getTempColor(),
-    innerBulbColor = "rgb(230, 200, 200)"
-    tubeBorderColor = "#999999";
-
-var bulb_cy = bottomY - bulbRadius,
-    bulb_cx = width/2,
-    top_cy = topY + tubeWidth/2;
+// //[red, yellow, green, yellow, red]
+// //[1, 10, 15, 25]
+// //[33.8, 50, 59, 77]
+// function getTempColor(){
+//     	if(cTemp >= 50 && cTemp <= 59){
+//     		return "#33cc33";
+//     	}
+//     	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
+//     		return "#FFFF00";
+//     	}
+//     	else{
+//     		return "#FF0000";
+//     	}
+//     };
 
 
-var svg = d3.select("#thermo")
-  .attr("width", width)
-  .attr("height", height);
+// var bottomY = height - 5,
+//     topY = 5,
+//     bulbRadius = 20,
+//     tubeWidth = 21.5,
+//     tubeBorderWidth = 1,
+//     mercuryColor = getTempColor(),
+//     innerBulbColor = "rgb(230, 200, 200)"
+//     tubeBorderColor = "#999999";
 
-var defs = svg.append("defs");
-
-// Define the radial gradient for the bulb fill colour
-var bulbGradient = defs.append("radialGradient")
-  .attr("id", "bulbGradient")
-  .attr("cx", "50%")
-  .attr("cy", "50%")
-  .attr("r", "50%")
-  .attr("fx", "50%")
-  .attr("fy", "50%");
-
-bulbGradient.append("stop")
-  .attr("offset", "90%")
-  .style("stop-color", mercuryColor);
+// var bulb_cy = bottomY - bulbRadius,
+//     bulb_cx = width/2,
+//     top_cy = topY + tubeWidth/2;
 
 
-// Circle element for rounded tube top
-svg.append("circle")
-  .attr("r", tubeWidth/2)
-  .attr("cx", width/2)
-  .attr("cy", top_cy)
-  .style("fill", "#FFFFFF")
-  .style("stroke", tubeBorderColor)
-  .style("stroke-width", tubeBorderWidth + "px");
+// var svg = d3.select("#thermo")
+//   .attr("width", width)
+//   .attr("height", height);
+
+// var defs = svg.append("defs");
+
+// // Define the radial gradient for the bulb fill colour
+// var bulbGradient = defs.append("radialGradient")
+//   .attr("id", "bulbGradient")
+//   .attr("cx", "50%")
+//   .attr("cy", "50%")
+//   .attr("r", "50%")
+//   .attr("fx", "50%")
+//   .attr("fy", "50%");
+
+// bulbGradient.append("stop")
+//   .attr("offset", "90%")
+//   .style("stop-color", mercuryColor);
 
 
-// Rect element for tube
-svg.append("rect")
-  .attr("x", width/2 - tubeWidth/2)
-  .attr("y", top_cy)
-  .attr("height", bulb_cy - top_cy)
-  .attr("width", tubeWidth)
-  .style("shape-rendering", "crispEdges")
-  .style("fill", "#FFFFFF")
-  .style("stroke", tubeBorderColor)
-  .style("stroke-width", tubeBorderWidth + "px");
+// // Circle element for rounded tube top
+// svg.append("circle")
+//   .attr("r", tubeWidth/2)
+//   .attr("cx", width/2)
+//   .attr("cy", top_cy)
+//   .style("fill", "#FFFFFF")
+//   .style("stroke", tubeBorderColor)
+//   .style("stroke-width", tubeBorderWidth + "px");
 
 
-// White fill for rounded tube top circle element
-// to hide the border at the top of the tube rect element
-svg.append("circle")
-  .attr("r", tubeWidth/2 - tubeBorderWidth/2)
-  .attr("cx", width/2)
-  .attr("cy", top_cy)
-  .style("fill", "#FFFFFF")
-  .style("stroke", "none")
-
-// Main bulb of thermometer (empty), white fill
-svg.append("circle")
-  .attr("r", bulbRadius)
-  .attr("cx", bulb_cx)
-  .attr("cy", bulb_cy)
-  .style("fill", "#FFFFFF")
-  .style("stroke", tubeBorderColor)
-  .style("stroke-width", tubeBorderWidth + "px");
+// // Rect element for tube
+// svg.append("rect")
+//   .attr("x", width/2 - tubeWidth/2)
+//   .attr("y", top_cy)
+//   .attr("height", bulb_cy - top_cy)
+//   .attr("width", tubeWidth)
+//   .style("shape-rendering", "crispEdges")
+//   .style("fill", "#FFFFFF")
+//   .style("stroke", tubeBorderColor)
+//   .style("stroke-width", tubeBorderWidth + "px");
 
 
-// Rect element for tube fill colour
-svg.append("rect")
-  .attr("x", width/2 - (tubeWidth - tubeBorderWidth)/2)
-  .attr("y", top_cy)
-  .attr("height", bulb_cy - top_cy)
-  .attr("width", tubeWidth - tubeBorderWidth)
-  .style("shape-rendering", "crispEdges")
-  .style("fill", "#FFFFFF")
-  .style("stroke", "none");
+// // White fill for rounded tube top circle element
+// // to hide the border at the top of the tube rect element
+// svg.append("circle")
+//   .attr("r", tubeWidth/2 - tubeBorderWidth/2)
+//   .attr("cx", width/2)
+//   .attr("cy", top_cy)
+//   .style("fill", "#FFFFFF")
+//   .style("stroke", "none")
+
+// // Main bulb of thermometer (empty), white fill
+// svg.append("circle")
+//   .attr("r", bulbRadius)
+//   .attr("cx", bulb_cx)
+//   .attr("cy", bulb_cy)
+//   .style("fill", "#FFFFFF")
+//   .style("stroke", tubeBorderColor)
+//   .style("stroke-width", tubeBorderWidth + "px");
 
 
-// Scale step size
-var step = 20;
-
-// Determine a suitable range of the temperature scale
-// Fahrenheit
-var domain = [
-  step * Math.floor(minTemp / step),
-  step * Math.ceil(maxTemp / step)
-  ];
-
-if (minTemp - domain[0] < 0.66 * step)
-  domain[0] -= step;
-
-if (domain[1] - maxTemp < 0.66 * step)
-  domain[1] += step;
+// // Rect element for tube fill colour
+// svg.append("rect")
+//   .attr("x", width/2 - (tubeWidth - tubeBorderWidth)/2)
+//   .attr("y", top_cy)
+//   .attr("height", bulb_cy - top_cy)
+//   .attr("width", tubeWidth - tubeBorderWidth)
+//   .style("shape-rendering", "crispEdges")
+//   .style("fill", "#FFFFFF")
+//   .style("stroke", "none");
 
 
-// D3 scale object
-var scale = d3.scale.linear()
-  .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
-  .domain(domain);
+// // Scale step size
+// var step = 20;
+
+// // Determine a suitable range of the temperature scale
+// // Fahrenheit
+// var domain = [
+//   step * Math.floor(minTemp / step),
+//   step * Math.ceil(maxTemp / step)
+//   ];
+
+// if (minTemp - domain[0] < 0.66 * step)
+//   domain[0] -= step;
+
+// if (domain[1] - maxTemp < 0.66 * step)
+//   domain[1] += step;
 
 
-var tubeFill_bottom = bulb_cy,
-    tubeFill_top = scale(currentTemp);
-
-// Rect element for the red mercury column
-svg.append("rect")
-  .attr("x", width/2 - (tubeWidth - 10)/2)
-  .attr("y", tubeFill_top)
-  .attr("width", tubeWidth - 10)
-  .attr("height", tubeFill_bottom - tubeFill_top)
-  .style("shape-rendering", "crispEdges")
-  .style("fill", mercuryColor)
+// // D3 scale object
+// var scale = d3.scale.linear()
+//   .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
+//   .domain(domain);
 
 
-// Main thermometer bulb fill
-svg.append("circle")
-  .attr("r", bulbRadius - 6)
-  .attr("cx", bulb_cx)
-  .attr("cy", bulb_cy)
-  .style("fill", "url(#bulbGradient)")
-  .style("stroke", mercuryColor)
-  .style("stroke-width", "2px");
+// var tubeFill_bottom = bulb_cy,
+//     tubeFill_top = scale(currentTemp);
+
+// // Rect element for the red mercury column
+// svg.append("rect")
+//   .attr("x", width/2 - (tubeWidth - 10)/2)
+//   .attr("y", tubeFill_top)
+//   .attr("width", tubeWidth - 10)
+//   .attr("height", tubeFill_bottom - tubeFill_top)
+//   .style("shape-rendering", "crispEdges")
+//   .style("fill", mercuryColor)
 
 
-// Values to use along the scale ticks up the thermometer
-//Fahrenheit
-var tickValues = d3.range((domain[1] - domain[0])/step + 1).map(function(v) { return domain[0] + v * step; });
-
-// D3 axis object for the temperature scale
-//Fahrenheit
-var axis = d3.svg.axis()
-  .scale(scale)
-  .innerTickSize(7)
-  .outerTickSize(0)
-  .tickValues(tickValues)
-  .orient("left");
+// // Main thermometer bulb fill
+// svg.append("circle")
+//   .attr("r", bulbRadius - 6)
+//   .attr("cx", bulb_cx)
+//   .attr("cy", bulb_cy)
+//   .style("fill", "url(#bulbGradient)")
+//   .style("stroke", mercuryColor)
+//   .style("stroke-width", "2px");
 
 
-// Add the axis to the image
-var svgAxis = svg.append("g")
-  .attr("id", "tempScale")
-  .attr("transform", "translate(" + (width/2 - tubeWidth/2) + ",0)")
-  .call(axis);
+// // Values to use along the scale ticks up the thermometer
+// //Fahrenheit
+// var tickValues = d3.range((domain[1] - domain[0])/step + 1).map(function(v) { return domain[0] + v * step; });
 
-// Format text labels
-svgAxis.selectAll(".tick text")
-    .style("fill", "#777777")
-    .style("font-size", "10px");
+// // D3 axis object for the temperature scale
+// //Fahrenheit
+// var axis = d3.svg.axis()
+//   .scale(scale)
+//   .innerTickSize(7)
+//   .outerTickSize(0)
+//   .tickValues(tickValues)
+//   .orient("left");
 
-// Set main axis line to no stroke or fill
-svgAxis.select("path")
-  .style("stroke", "none")
-  .style("fill", "none")
 
-// Set the style of the ticks 
-svgAxis.selectAll(".tick line")
-  .style("stroke", tubeBorderColor)
-  .style("shape-rendering", "crispEdges")
-  .style("stroke-width", "1px");
+// // Add the axis to the image
+// var svgAxis = svg.append("g")
+//   .attr("id", "tempScale")
+//   .attr("transform", "translate(" + (width/2 - tubeWidth/2) + ",0)")
+//   .call(axis);
+
+// // Format text labels
+// svgAxis.selectAll(".tick text")
+//     .style("fill", "#777777")
+//     .style("font-size", "10px");
+
+// // Set main axis line to no stroke or fill
+// svgAxis.select("path")
+//   .style("stroke", "none")
+//   .style("fill", "none")
+
+// // Set the style of the ticks 
+// svgAxis.selectAll(".tick line")
+//   .style("stroke", tubeBorderColor)
+//   .style("shape-rendering", "crispEdges")
+//   .style("stroke-width", "1px");
 
 
 /********* End Thermometer *********/ 
@@ -658,8 +677,8 @@ svgAxis.selectAll(".tick line")
 
 /********* Draw Graphs *********/ 
 
-   dc.renderAll();
-   dc.redrawAll();
+   // dc.renderAll();
+   // dc.redrawAll();
 
 /********* END *********/ 
 };
