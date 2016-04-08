@@ -36,12 +36,15 @@ var width = 80,
 //[33.8, 50, 59, 77]
 function getTempColor(){
     	if(cTemp >= 50 && cTemp <= 59){
+    		$('#indiv-temp').css("background-color", "#33cc33");
     		return "#33cc33";
     	}
     	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		return "#FFFF00";
+    		$('#indiv-temp').css("background-color", "gold");
+    		return "gold";
     	}
     	else{
+    		$('#indiv-temp').css("background-color", "#FF0000");
     		return "#FF0000";
     	}
     };
@@ -895,7 +898,17 @@ svgAxis.selectAll(".tick line")
 /********** Status ***************/
 
 
-
+	function getpHColor(){
+		if(recentData.pH >= 7.5 && recentData.pH <= 8.1){
+			$('#indiv-ph').css("background-color", "green");
+		}
+		else if(recentData.pH >= 6.5 && recentData.pH <= 8.5){
+			$('#indiv-ph').css("background-color", "gold");
+		}
+		else{
+			$('#indiv-ph').css("background-color", "red");
+		}
+	}
 
 
 /********** Status ***************/
@@ -930,6 +943,9 @@ svgAxis.selectAll(".tick line")
 		cTurb = recentData.turbidity;
 		cpH = recentData.pH;
 		getTurbColor();
+
+		
+		getpHColor();
 		function getTurbStat(){
     		return (cTurb <= 500);
 		};
