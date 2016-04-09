@@ -7,6 +7,7 @@ body {
 	height: 100%;
 	width: 100%;
 	background: url('../images/blur_background.png');
+	background-size: 100% auto;
 	fill: white;
 }
 
@@ -24,23 +25,30 @@ body {
 	left: 0;
 	z-index: 9998;
 	background: white;
-	box-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 	text-align: center;
 	background: rgba(255, 255, 255, 0.05);
 }
 
+#header-inner {
+	padding: 20px 0 0 0;
+}
+
 #content {
-	margin-top: 10px;
+	margin-top: 70px;
 	width: 100%;
 	position: relative;
 	background: transparent;
 	padding: 0px 10% 0px 10%;
 }
 
+#usage-section {
+	margin-top: 50px;
+}
+
 #footer {
 	width: 100%;
 	height: 200px;
-	background: black;
+	background: rgba(255, 255, 255, 0.05);
 	position: relative;
 }
 
@@ -87,24 +95,24 @@ body {
 }
 
 /**************************************************
- * TEXT STYLING
+ * TEXT AND ELEMENT STYLING
  **************************************************/
 span, div, p {
 	font-family: 'Lato', sans-serif;
-	color: white;
+	color: rgba(255, 255, 255, 0.7);
 	font-weight: 300;
 }
 
 .indiv-graph {
 	text-align: center;
 	background: rgba(255, 255, 255, 0.05);
-	height: 280px;
+	height: 300px;
 	background-clip: content-box;
 	position: relative;
 }
 
 .graph-label {
-	height: 40px;
+	height: 45px;
 	width: 100%;
 	padding: 0 30px 0 0;
 	background: white;
@@ -112,12 +120,14 @@ span, div, p {
 	position: absolute;
 	bottom: 0px;
 	text-align: left;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 300px;
 }
 
 .graph-label p {
-	margin: 8px 0 0 8px;
+	line-height: 45px;
+	margin: 0 0 0 10px;
+	color: white;
 }
 
 #indiv-ph {
@@ -138,7 +148,7 @@ span, div, p {
 
 #title {
 	font-size: 32px;
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(255, 255, 255, 0.7);
 	font-weight: 300;
 	text-transform: uppercase;
 }
@@ -146,6 +156,40 @@ span, div, p {
 #status {
 	font-size: 24px;
 	color: green;
+	position: absolute; 
+	top: 65px;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+#subscribe {
+	width: 100%;
+	text-align: center;
+	position: relative;
+	height: 80px;
+}
+
+#subscribe > div {
+	position: absolute;
+	width: 440px;
+	height: 100%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#subscribe-inner {
+	height: 100%;
+}
+
+#subscribe-text {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	color: white;
 }
 
 line {
@@ -169,12 +213,21 @@ line {
  * MAIN GRAPH BUTTONS
  **************************************************/
 
+#timeline {
+	padding: 20px 0 20px 0;
+}
+
+#select-filter {
+	padding: 0 0 40px 0;
+}
+
 #select-filter button {
 	border: none;
 	background: rgba(255, 255, 255, 0.1);
 	font-size: 14px;
 	color: white;
 	width: 100px;
+	padding: 10px 0;
 }
 
 #select-filter button:hover {
