@@ -2,10 +2,9 @@
 
 var date;
 $(document).ready(function() {
-	setTimeout(function() {
-		console.log("CALL");
-		$( "#temperature" ).trigger( "click" );
-	}, 0);
+	// setTimeout(function() {
+	// 	$( "#temperature" ).trigger( "click" );
+	// }, 0);
  	$('#myChart').createPH(200, 40, 7);
  	resetDB(function(res) {
 	});
@@ -26,10 +25,9 @@ function getCurrent() {
 	var current = document.getElementsByClassName("filter").value;
 }
 
-function updateTemp(recentData) {
+function updateTemp(temp) {
 	$("#thermo").empty();
-	var cTemp = recentData.temperature;
-	console.log(cTemp);
+	var cTemp = temp;
 
 	var width = 80,
 	    height = 180,
@@ -275,6 +273,46 @@ function updateUsage(recentData) {
 	    {timestamp: "2015-11-12T20:00:00Z", usage: 4},
 	    {timestamp: "2015-11-12T22:00:00Z", usage: 4},
 	    {timestamp: "2015-11-12T23:59:00Z", usage: 4},
+
+	    {timestamp: "2015-11-13T02:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T04:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T06:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T08:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T10:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T12:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T14:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T16:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T18:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T20:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T22:00:00Z", usage: 4},
+	    {timestamp: "2015-11-13T23:59:00Z", usage: 4},
+
+	    {timestamp: "2015-11-14T02:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T04:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T06:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T08:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T10:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T12:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T14:00:00Z", usage: 7},
+	    {timestamp: "2015-11-14T16:00:00Z", usage: 4},
+	    {timestamp: "2015-11-14T18:00:00Z", usage: 4},
+	    {timestamp: "2015-11-14T20:00:00Z", usage: 4},
+	    {timestamp: "2015-11-14T22:00:00Z", usage: 4},
+	    {timestamp: "2015-11-14T23:59:00Z", usage: 4},
+
+	    {timestamp: "2015-11-15T02:00:00Z", usage: 9},
+	    {timestamp: "2015-11-15T04:00:00Z", usage: 8},
+	    {timestamp: "2015-11-15T06:00:00Z", usage: 7},
+	    {timestamp: "2015-11-15T08:00:00Z", usage: 6},
+	    {timestamp: "2015-11-15T10:00:00Z", usage: 5},
+	    {timestamp: "2015-11-15T12:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T14:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T16:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T18:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T20:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T22:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T23:59:00Z", usage: 4},
+
 	    {timestamp: "2015-11-16T02:00:00Z", usage: 8},
 	    {timestamp: "2015-11-16T04:00:00Z", usage: 8},
 	    {timestamp: "2015-11-16T06:00:00Z", usage: 8},
@@ -304,10 +342,7 @@ function updateUsage(recentData) {
 	var ndx = crossfilter(singleDayData);
 	var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
 	var singleDayFilter = timestampDim.filterFunction(function(d) { 
-		// console.log(d);
-		// console.log(_isSelectedDay(d));
 		if (_isSelectedDay(d)) {
-		// console.log(d);
 		return d;} });
 
 	//get y-axis
@@ -316,7 +351,6 @@ function updateUsage(recentData) {
 	//set MIN MAX X-AXIS
 	var singleDayMinDate = singleDayFilter.bottom(1)[0].timestamp;
 	// var singleDayMinDate = singleDayFilter.bottom(1)[0];
-	// console.log(singleDayMinDate);
 	var singleDayMaxDate = singleDayFilter.top(1)[0].timestamp;
 
 	//graph code
@@ -367,7 +401,6 @@ function makeGraphs(error, apiData) {
 	data.forEach(function(d) {
 		d.timestamp = parser.parse(d.timestamp);
 		// d.timestamp = d3.time.day(d.timestamp);
-		// console.log(d.timestamp);
 	});
 	ewhData.forEach(function(d) {
 		d.timestamp = parser.parse(d.timestamp);
@@ -594,11 +627,11 @@ function makeGraphs(error, apiData) {
 	    .dimension(dateDim)
 	    .group(conductivity)
 	    .innerRadius(50);
-	yearRingChart
-	    .dimension(dateDim)
-	    .group(conductivity)
-	    .innerRadius(145);
-	yearRingChart.render();
+	// yearRingChart
+	//     .dimension(dateDim)
+	//     .group(conductivity)
+	//     .innerRadius(145);
+	// yearRingChart.render();
 
 
 	/*************** TURBIDITY GRAPH ***************/
@@ -938,24 +971,21 @@ svgAxis.selectAll(".tick line")
 
 	$("#timeline").click( function () {
 		date = timeChart.brush().extent();
-		console.log(date);
 		// If selected dates are the same, then nothing is selected
 		// Default to most current date
-		if (String(date[0]) == String(date[1])) {
-			console.log("IN SAME");
-			recentData = apiData[apiData.length-1];
-		}
-		else {
-			var dataSelcted = dateDim.top(Infinity);
-			recentData = dataSelcted[0];
-			// console.log(dataSelcted);
-		}
+		// if (String(date[0]) == String(date[1])) {
+		// 	console.log("IN SAME");
+		// 	recentData = apiData[apiData.length-1];
+		// }
+		// else {
+		var dataSelcted = dateDim.top(Infinity);
+		recentData = dataSelcted[0];
+		// }
+
 		$('#myChart').updatePH(recentData.pH);
 		config1.maxValue = recentData.turbidity*1.3;
 		gauge1.update(recentData.turbidity);
-		// foo();
-		updateUsage(recentData);
-		updateTemp(recentData);
+		updateTemp(recentData.temperature);
 		updateCond(recentData);
 		cMg = recentData.magnesium;
 		cNa = recentData.sodium;
@@ -995,8 +1025,8 @@ svgAxis.selectAll(".tick line")
 		else{
 			$('#indiv-ph').css("background-color", "#e32645");
 		}
-		console.log(recentData.pH);
 		/***************END PH LABEL*****************/
+		updateUsage(recentData);
 	});
 
 /********* Draw Graphs *********/ 
