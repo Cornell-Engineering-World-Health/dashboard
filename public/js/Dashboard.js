@@ -449,7 +449,7 @@ function makeGraphs(error, apiData) {
 
 /******* Overlayed line chart *******/
 	updateUsage(recentData);
-
+	getPHColor(recentData.pH);
 	updateCond(recentData);
 
 	lineChart
