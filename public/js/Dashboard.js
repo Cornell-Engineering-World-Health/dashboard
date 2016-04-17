@@ -33,35 +33,13 @@ function updateTemp(temp) {
 	    minTemp = 0,
 	    currentTemp = cTemp;
 
-	//[red, yellow, green, yellow, red]
-	//[1, 10, 15, 25]
-	//[33.8, 50, 59, 77]
-	function getTempColor(){
-		// green
-    	if(cTemp >= 50 && cTemp <= 59){
-    		$('#indiv-temp').css("background-color", "#86b266");
-    		return "#86b266";
-    	}
-    	// yellow
-    	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		$('#indiv-temp').css("background-color", "#ecbd62");
-    		return "#ecbd62";
-    	}
-    	// red
-    	else{
-    		$('#indiv-temp').css("background-color", "#e32645");
-    		return "#e32645";
-    	}
-    };
-
-
 
 	var bottomY = height - 5,
 	    topY = 5,
 	    bulbRadius = 20,
 	    tubeWidth = 21.5,
 	    tubeBorderWidth = 1,
-	    mercuryColor = getTempColor(),
+	    mercuryColor = getTempColor(cTemp),
 	    innerBulbColor = "rgb(230, 200, 200)"
 	    tubeBorderColor = "#999999";
 
@@ -276,55 +254,55 @@ function updateUsage(recentData) {
 	    {timestamp: "2015-11-12T23:59:00Z", usage: 4},
 
 	    {timestamp: "2015-11-13T02:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T04:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T06:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T08:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T10:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T12:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T14:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T16:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T18:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T20:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T22:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T23:59:00Z", usage: 4},
+	    {timestamp: "2015-11-13T04:00:00Z", usage: 6},
+	    {timestamp: "2015-11-13T06:00:00Z", usage: 8},
+	    {timestamp: "2015-11-13T08:00:00Z", usage: 10},
+	    {timestamp: "2015-11-13T10:00:00Z", usage: 12},
+	    {timestamp: "2015-11-13T12:00:00Z", usage: 18},
+	    {timestamp: "2015-11-13T14:00:00Z", usage: 25},
+	    {timestamp: "2015-11-13T16:00:00Z", usage: 16},
+	    {timestamp: "2015-11-13T18:00:00Z", usage: 10},
+	    {timestamp: "2015-11-13T20:00:00Z", usage: 9},
+	    {timestamp: "2015-11-13T22:00:00Z", usage: 8},
+	    {timestamp: "2015-11-13T23:59:00Z", usage: 5},
 
-	    {timestamp: "2015-11-14T02:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T04:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T06:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T08:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T10:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T12:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T14:00:00Z", usage: 7},
-	    {timestamp: "2015-11-14T16:00:00Z", usage: 4},
-	    {timestamp: "2015-11-14T18:00:00Z", usage: 4},
-	    {timestamp: "2015-11-14T20:00:00Z", usage: 4},
-	    {timestamp: "2015-11-14T22:00:00Z", usage: 4},
-	    {timestamp: "2015-11-14T23:59:00Z", usage: 4},
+	    {timestamp: "2015-11-14T02:00:00Z", usage: 5},
+	    {timestamp: "2015-11-14T04:00:00Z", usage: 8},
+	    {timestamp: "2015-11-14T06:00:00Z", usage: 9},
+	    {timestamp: "2015-11-14T08:00:00Z", usage: 10},
+	    {timestamp: "2015-11-14T10:00:00Z", usage: 17},
+	    {timestamp: "2015-11-14T12:00:00Z", usage: 25},
+	    {timestamp: "2015-11-14T14:00:00Z", usage: 30},
+	    {timestamp: "2015-11-14T16:00:00Z", usage: 18},
+	    {timestamp: "2015-11-14T18:00:00Z", usage: 16},
+	    {timestamp: "2015-11-14T20:00:00Z", usage: 10},
+	    {timestamp: "2015-11-14T22:00:00Z", usage: 8},
+	    {timestamp: "2015-11-14T23:59:00Z", usage: 6},
 
-	    {timestamp: "2015-11-15T02:00:00Z", usage: 9},
-	    {timestamp: "2015-11-15T04:00:00Z", usage: 8},
-	    {timestamp: "2015-11-15T06:00:00Z", usage: 7},
-	    {timestamp: "2015-11-15T08:00:00Z", usage: 6},
-	    {timestamp: "2015-11-15T10:00:00Z", usage: 5},
-	    {timestamp: "2015-11-15T12:00:00Z", usage: 4},
-	    {timestamp: "2015-11-15T14:00:00Z", usage: 4},
-	    {timestamp: "2015-11-15T16:00:00Z", usage: 4},
-	    {timestamp: "2015-11-15T18:00:00Z", usage: 4},
-	    {timestamp: "2015-11-15T20:00:00Z", usage: 4},
-	    {timestamp: "2015-11-15T22:00:00Z", usage: 4},
+	    {timestamp: "2015-11-15T02:00:00Z", usage: 5},
+	    {timestamp: "2015-11-15T04:00:00Z", usage: 9},
+	    {timestamp: "2015-11-15T06:00:00Z", usage: 10},
+	    {timestamp: "2015-11-15T08:00:00Z", usage: 13},
+	    {timestamp: "2015-11-15T10:00:00Z", usage: 16},
+	    {timestamp: "2015-11-15T12:00:00Z", usage: 20},
+	    {timestamp: "2015-11-15T14:00:00Z", usage: 21},
+	    {timestamp: "2015-11-15T16:00:00Z", usage: 26},
+	    {timestamp: "2015-11-15T18:00:00Z", usage: 21},
+	    {timestamp: "2015-11-15T20:00:00Z", usage: 20},
+	    {timestamp: "2015-11-15T22:00:00Z", usage: 10},
 	    {timestamp: "2015-11-15T23:59:00Z", usage: 4},
 
-	    {timestamp: "2015-11-16T02:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T02:00:00Z", usage: 6},
 	    {timestamp: "2015-11-16T04:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T06:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T08:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T10:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T12:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T14:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T16:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T18:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T20:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T22:00:00Z", usage: 8},
+	    {timestamp: "2015-11-16T06:00:00Z", usage: 9},
+	    {timestamp: "2015-11-16T08:00:00Z", usage: 11},
+	    {timestamp: "2015-11-16T10:00:00Z", usage: 15},
+	    {timestamp: "2015-11-16T12:00:00Z", usage: 18},
+	    {timestamp: "2015-11-16T14:00:00Z", usage: 16},
+	    {timestamp: "2015-11-16T16:00:00Z", usage: 17},
+	    {timestamp: "2015-11-16T18:00:00Z", usage: 14},
+	    {timestamp: "2015-11-16T20:00:00Z", usage: 11},
+	    {timestamp: "2015-11-16T22:00:00Z", usage: 10},
 	    {timestamp: "2015-11-16T23:59:00Z", usage: 8}
 	    ];
 
@@ -456,7 +434,7 @@ function makeGraphs(error, apiData) {
 
 /******* Overlayed line chart *******/
 	updateUsage(recentData);
-
+	getPHColor(recentData.pH);
 	updateCond(recentData);
 
 	lineChart
@@ -626,20 +604,20 @@ function makeGraphs(error, apiData) {
 
 	
 
-	function getTurbColor(){
-    	if(cTurb <= 500){
-    		$('#indiv-turb').css("background-color", "#86b266");
-    		return "#86b266";
-    	}
-    	else{
-    		$('#indiv-turb').css("background-color", "#e32645");
-    		return "#e32645";
-    	}
-    };
+	// function getTurbColor(){
+ //    	if(cTurb <= 500){
+ //    		$('#indiv-turb').css("background-color", "#86b266");
+ //    		return "#86b266";
+ //    	}
+ //    	else{
+ //    		$('#indiv-turb').css("background-color", "#e32645");
+ //    		return "#e32645";
+ //    	}
+ //    };
 
 	var config1 = liquidFillGaugeDefaultSettings();
-	config1.waveColor = getTurbColor();
-	config1.circleColor = getTurbColor();
+	config1.waveColor = getTurbColor(cTurb);
+	config1.circleColor = getTurbColor(cTurb);
 	config1.waveTextColor = "#ffffff";
 	config1.maxValue = data[apiData.length-1].turbidity*1.3;
 	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[apiData.length-1].turbidity, config1);	
@@ -666,50 +644,18 @@ function makeGraphs(error, apiData) {
 
 
 
-		var gColors = d3.scale.ordinal().range(["#376515", "#6f9751", "#acbe9f"]);
-		//var yColors = d3.scale.ordinal().range(["#a67d2c", "#d1a858", "#ebd2a1"]);
-		var rColors = d3.scale.ordinal().range(["#e53552", "#f76f6f", "#f9afaf"]);
-			
-
-		// green - 376515, 6f9751, acbe9f
-		// yellow - a67d2c, d1a858, ebd2a1
-		// red - e53552, f76f6f, f9afaf
-		// main red - e32645
-		// main yellow -
-		// ecbd62
-		// main green - 86b266
-
-
-		function getColorScale(){
-			if(cNa < 200 && ((cMg + cNa + cCa) <= 150)){
-				$('#indiv-cond').css("background-color", "#86b266");
-				return gColors;
-			}
-			else{
-				$('#indiv-cond').css("background-color", "#e32645");
-				return rColors;
-			}
-		};
-
 		conductivityChart
 			.radius(100)
 			.innerRadius(75)
 			.dimension(condDim)
 			.group(condGroup)
 			.renderLabel(true)
-			.colors(getColorScale())
+			.colors(getCondColor(cNa, cMg, cCa))
 			.label(function (d) { return (d.key +": "+ d.value +" mg/L"); });
 
 		conductivityChart.render();
 
 	};
-	// var cTurb = data[apiData.length-1].turbidity;
-
-	//turbidity status is true if green/yellow and false if red
-	
-
-
-
 
 	$('#myChart').updatePH(recentData.pH);
 
@@ -735,214 +681,7 @@ var width = 80,
     currentTemp = cTemp;
 
 
-
-//[red, yellow, green, yellow, red]
-//[1, 10, 15, 25]
-//[33.8, 50, 59, 77]
-function getTempColor(){
-    	if(cTemp >= 50 && cTemp <= 59){
-    		$('#indiv-temp').css("background-color", "#86b266");
-    		return "#86b266";
-    	}
-    	else if ((cTemp >= 34 && cTemp <= 50) || (cTemp >= 59 && cTemp <= 77)){
-    		$('#indiv-temp').css("background-color", "#ecbd62");
-    		return "#ecbd62";
-    	}
-    	else{
-    		$('#indiv-temp').css("background-color", "#e32645");
-    		return "#e32645";
-    	}
-    };
-
-function getTempStat(){
-	return (cTemp >= 34 && cTemp <= 77);
-};
-
-
-var bottomY = height - 5,
-    topY = 5,
-    bulbRadius = 20,
-    tubeWidth = 21.5,
-    tubeBorderWidth = 1,
-    mercuryColor = getTempColor(),
-    innerBulbColor = "rgb(230, 200, 200)"
-    tubeBorderColor = "#999999";
-
-var bulb_cy = bottomY - bulbRadius,
-    bulb_cx = width/2,
-    top_cy = topY + tubeWidth/2;
-
-
-var svg = d3.select("#thermo")
-  .attr("width", width)
-  .attr("height", height);
-
-var defs = svg.append("defs");
-
-// Define the radial gradient for the bulb fill colour
-var bulbGradient = defs.append("radialGradient")
-  .attr("id", "bulbGradient")
-  .attr("cx", "50%")
-  .attr("cy", "50%")
-  .attr("r", "50%")
-  .attr("fx", "50%")
-  .attr("fy", "50%");
-
-bulbGradient.append("stop")
-  .attr("offset", "90%")
-  .style("stop-color", mercuryColor);
-
-
-// Circle element for rounded tube top
-svg.append("circle")
-  .attr("r", tubeWidth/2)
-  .attr("cx", width/2)
-  .attr("cy", top_cy)
-  .style("fill", "#FFFFFF")
-  .style("stroke", tubeBorderColor)
-  .style("stroke-width", tubeBorderWidth + "px");
-
-
-// Rect element for tube
-svg.append("rect")
-  .attr("x", width/2 - tubeWidth/2)
-  .attr("y", top_cy)
-  .attr("height", bulb_cy - top_cy)
-  .attr("width", tubeWidth)
-  .style("shape-rendering", "crispEdges")
-  .style("fill", "#FFFFFF")
-  .style("stroke", tubeBorderColor)
-  .style("stroke-width", tubeBorderWidth + "px");
-
-
-// White fill for rounded tube top circle element
-// to hide the border at the top of the tube rect element
-svg.append("circle")
-  .attr("r", tubeWidth/2 - tubeBorderWidth/2)
-  .attr("cx", width/2)
-  .attr("cy", top_cy)
-  .style("fill", "#FFFFFF")
-  .style("stroke", "none")
-
-// Main bulb of thermometer (empty), white fill
-svg.append("circle")
-  .attr("r", bulbRadius)
-  .attr("cx", bulb_cx)
-  .attr("cy", bulb_cy)
-  .style("fill", "#FFFFFF")
-  .style("stroke", tubeBorderColor)
-  .style("stroke-width", tubeBorderWidth + "px");
-
-
-// Rect element for tube fill colour
-svg.append("rect")
-  .attr("x", width/2 - (tubeWidth - tubeBorderWidth)/2)
-  .attr("y", top_cy)
-  .attr("height", bulb_cy - top_cy)
-  .attr("width", tubeWidth - tubeBorderWidth)
-  .style("shape-rendering", "crispEdges")
-  .style("fill", "#FFFFFF")
-  .style("stroke", "none");
-
-
-// Scale step size
-var step = 20;
-
-// Determine a suitable range of the temperature scale
-// Fahrenheit
-var domain = [
-  step * Math.floor(minTemp / step),
-  step * Math.ceil(maxTemp / step)
-  ];
-
-if (minTemp - domain[0] < 0.66 * step)
-  domain[0] -= step;
-
-if (domain[1] - maxTemp < 0.66 * step)
-  domain[1] += step;
-
-
-// D3 scale object
-var scale = d3.scale.linear()
-  .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
-  .domain(domain);
-
-
-var tubeFill_bottom = bulb_cy,
-    tubeFill_top = scale(currentTemp);
-
-// Rect element for the red mercury column
-var bar = svg.append("rect")
-	.attr("class", "tempRec")
-	.attr("x", width/2 - (tubeWidth - 10)/2)
-	.attr("y", tubeFill_top)
-	.attr("width", tubeWidth - 10)
-	.attr("height", 0)
-	.style("shape-rendering", "crispEdges")
-	.style("fill", mercuryColor)
-	bar
-	.transition(750)
-	.attr("class", "tempRec")
-	.attr("x", width/2 - (tubeWidth - 10)/2)
-	.attr("y", tubeFill_top)
-	.attr("width", tubeWidth - 10)
-	.attr("height", tubeFill_bottom - tubeFill_top)
-	.style("shape-rendering", "crispEdges")
-	.style("fill", mercuryColor)
-
-
-// Main thermometer bulb fill
-svg.append("circle")
-  .attr("r", bulbRadius - 6)
-  .attr("cx", bulb_cx)
-  .attr("cy", bulb_cy)
-  .style("fill", "url(#bulbGradient)")
-  .style("stroke", mercuryColor)
-  .style("stroke-width", "2px");
-
-
-// Values to use along the scale ticks up the thermometer
-//Fahrenheit
-var tickValues = d3.range((domain[1] - domain[0])/step + 1).map(function(v) { return domain[0] + v * step; });
-
-// D3 axis object for the temperature scale
-//Fahrenheit
-var axis = d3.svg.axis()
-  .scale(scale)
-  .innerTickSize(7)
-  .outerTickSize(0)
-  .tickValues(tickValues)
-  .orient("left");
-
-
-// Add the axis to the image
-var svgAxis = svg.append("g")
-  .attr("id", "tempScale")
-  .attr("transform", "translate(" + (width/2 - tubeWidth/2) + ",0)")
-  .call(axis);
-
-// Format text labels
-svgAxis.selectAll(".tick text")
-    .style("fill", "#E3E0E0")
-    .style("font-size", "10px");
-
-// Set main axis line to no stroke or fill
-svgAxis.select("path")
-  .style("stroke", "none")
-  .style("fill", "none")
-
-// Set the style of the ticks 
-svgAxis.selectAll(".tick line")
-  .style("stroke", tubeBorderColor)
-  .style("shape-rendering", "crispEdges")
-  .style("stroke-width", "1px");
-
-
-/********* End Thermometer *********/ 
-
-
-
-/********** Status ***************/
+updateTemp(recentData.temperature);
 
 
 
@@ -977,39 +716,11 @@ svgAxis.selectAll(".tick line")
 		cTemp = recentData.temperature;
 		cTurb = recentData.turbidity;
 		cpH = recentData.pH;
-		config1.waveColor = getTurbColor();
-		config1.circleColor = getTurbColor();
+		config1.waveColor = getTurbColor(cTurb);
+		config1.circleColor = getTurbColor(cTurb);
 
-		function getTurbStat(){
-    		return (cTurb <= 500);
-		};
-		function getpHStat(){
-			return (cpH >= 6.5 && cpH <= 8.5);
-		};
 
-		function getTempStat(){
-			return (cTemp >= 34 && cTemp <= 77);
-		};
-
-		function getCondStat(){
-			return (cNa < 200 && ((cMg + cNa + cCa) <= 150));
-		};
-
-		function getQualStat(){
-			return (getpHStat() && getTempStat() && getTurbStat() && getCondStat());
-		};
-
-		/***************CHANGE PH LABEL COLOR*****************/
-		if(recentData.pH >= 7.5 && recentData.pH <= 8.1){
-			$('#indiv-ph').css("background-color", "#86b266");
-		}
-		else if(recentData.pH >= 6.5 && recentData.pH <= 8.5){
-			$('#indiv-ph').css("background-color", "#ecbd62");
-		}
-		else{
-			$('#indiv-ph').css("background-color", "#e32645");
-		}
-		/***************END PH LABEL*****************/
+		getPHColor(recentData.pH);
 		updateUsage(recentData);
 	});
 
