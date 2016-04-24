@@ -261,3 +261,39 @@ button:active {
 .btn-group {
 	transform: translate(0, 100);
 }
+
+/**************************************************
+ * MAIN GRAPH RESET
+ **************************************************/
+a.reset {
+	background-color: transparent;
+	display: inline-block;
+	cursor: pointer;
+	color: rgba(255, 255, 255, 0.5);
+	font-size: 11px;
+	line-height: 25px;
+	text-align: center;
+	width: 50px;
+	height: 30px;
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	box-shadow: none;
+	border-radius: 32px;
+	font-weight: 400;
+	transform: translate(-50,0);
+
+}
+
+a.reset:hover {
+	text-decoration: none;
+	background: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	outline: none;
+	color: #716A62;
+	-webkit-transition: background .5s, color .5s; 
+    transition: background .5s, color .5s;
+}
+
+#resetMain {
+	padding: 10px;
+}
+

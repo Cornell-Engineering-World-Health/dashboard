@@ -18,7 +18,11 @@
 9 verbose stack     at maybeClose (internal/child_process.js:821:16)
 9 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 10 verbose pkgid starter-node-angular@1.0.1
+<<<<<<< HEAD
+11 verbose cwd /Users/Lillyan/Desktop/Dash/dashboard
+=======
 11 verbose cwd /Users/annietran/Documents/EWH/dashboard
+>>>>>>> 97b7d066399ed966aeb159fde1b40bd4dc6d3944
 12 error Darwin 14.5.0
 13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
 14 error node v4.2.6
