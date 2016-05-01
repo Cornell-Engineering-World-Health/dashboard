@@ -1,4 +1,8 @@
 var date;
+
+
+    	
+
 $(document).ready(function() {
 	// setTimeout(function() {
 	// 	$( "#temperature" ).trigger( "click" );
@@ -11,7 +15,8 @@ $(document).ready(function() {
 
 function update() {
 	queue()
-    .defer(d3.json, "/api/data")
+    .defer(d3.json, "/api/data/WaterQuality")
+    .defer(d3.json, "/api/data/Usage")
     .await(makeGraphs);
 }
 update();
@@ -230,6 +235,7 @@ function updateTemp(temp) {
 /********* End Thermometer *********/ 
 }
 
+
 /********* pH Initialize function *********/ 
 var phScale;
 function initpH(recentData) {
@@ -289,107 +295,31 @@ function updatepH(recentData) {
 		})
 }
 
-function updateUsage(recentData) {
+
+function updateUsage(recentData,usageData) {
+	//console.log(recentData.timestamp);
+
 	var SELECTED_DAY = recentData.timestamp;
 	var BAR_GRAPH_THICKNESS = 10;
 	//input d3 date object, returns boolean
 	var _isSelectedDay = function(d) {return (dayParser(SELECTED_DAY)==dayParser(d))};
 
-	var singleDayData = [
-	    {timestamp: "2015-11-11T02:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T04:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T06:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T08:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T10:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T12:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T14:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T16:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T18:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T20:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T22:00:00Z", usage: 0},
-	    {timestamp: "2015-11-11T23:59:00Z", usage: 0},
-	    {timestamp: "2015-11-12T02:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T04:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T06:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T08:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T10:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T12:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T14:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T16:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T18:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T20:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T22:00:00Z", usage: 4},
-	    {timestamp: "2015-11-12T23:59:00Z", usage: 4},
-
-	    {timestamp: "2015-11-13T02:00:00Z", usage: 4},
-	    {timestamp: "2015-11-13T04:00:00Z", usage: 6},
-	    {timestamp: "2015-11-13T06:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T08:00:00Z", usage: 10},
-	    {timestamp: "2015-11-13T10:00:00Z", usage: 12},
-	    {timestamp: "2015-11-13T12:00:00Z", usage: 18},
-	    {timestamp: "2015-11-13T14:00:00Z", usage: 25},
-	    {timestamp: "2015-11-13T16:00:00Z", usage: 16},
-	    {timestamp: "2015-11-13T18:00:00Z", usage: 10},
-	    {timestamp: "2015-11-13T20:00:00Z", usage: 9},
-	    {timestamp: "2015-11-13T22:00:00Z", usage: 8},
-	    {timestamp: "2015-11-13T23:59:00Z", usage: 5},
-
-	    {timestamp: "2015-11-14T02:00:00Z", usage: 5},
-	    {timestamp: "2015-11-14T04:00:00Z", usage: 8},
-	    {timestamp: "2015-11-14T06:00:00Z", usage: 9},
-	    {timestamp: "2015-11-14T08:00:00Z", usage: 10},
-	    {timestamp: "2015-11-14T10:00:00Z", usage: 17},
-	    {timestamp: "2015-11-14T12:00:00Z", usage: 25},
-	    {timestamp: "2015-11-14T14:00:00Z", usage: 30},
-	    {timestamp: "2015-11-14T16:00:00Z", usage: 18},
-	    {timestamp: "2015-11-14T18:00:00Z", usage: 16},
-	    {timestamp: "2015-11-14T20:00:00Z", usage: 10},
-	    {timestamp: "2015-11-14T22:00:00Z", usage: 8},
-	    {timestamp: "2015-11-14T23:59:00Z", usage: 6},
-
-	    {timestamp: "2015-11-15T02:00:00Z", usage: 5},
-	    {timestamp: "2015-11-15T04:00:00Z", usage: 9},
-	    {timestamp: "2015-11-15T06:00:00Z", usage: 10},
-	    {timestamp: "2015-11-15T08:00:00Z", usage: 13},
-	    {timestamp: "2015-11-15T10:00:00Z", usage: 16},
-	    {timestamp: "2015-11-15T12:00:00Z", usage: 20},
-	    {timestamp: "2015-11-15T14:00:00Z", usage: 21},
-	    {timestamp: "2015-11-15T16:00:00Z", usage: 26},
-	    {timestamp: "2015-11-15T18:00:00Z", usage: 21},
-	    {timestamp: "2015-11-15T20:00:00Z", usage: 20},
-	    {timestamp: "2015-11-15T22:00:00Z", usage: 10},
-	    {timestamp: "2015-11-15T23:59:00Z", usage: 4},
-
-	    {timestamp: "2015-11-16T02:00:00Z", usage: 6},
-	    {timestamp: "2015-11-16T04:00:00Z", usage: 8},
-	    {timestamp: "2015-11-16T06:00:00Z", usage: 9},
-	    {timestamp: "2015-11-16T08:00:00Z", usage: 11},
-	    {timestamp: "2015-11-16T10:00:00Z", usage: 15},
-	    {timestamp: "2015-11-16T12:00:00Z", usage: 18},
-	    {timestamp: "2015-11-16T14:00:00Z", usage: 16},
-	    {timestamp: "2015-11-16T16:00:00Z", usage: 17},
-	    {timestamp: "2015-11-16T18:00:00Z", usage: 14},
-	    {timestamp: "2015-11-16T20:00:00Z", usage: 11},
-	    {timestamp: "2015-11-16T22:00:00Z", usage: 10},
-	    {timestamp: "2015-11-16T23:59:00Z", usage: 8}
-	    ];
-
 	//time parsers
-	var timestampParser = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
+	//var timestampParser = d3.time.format("%Y-%m-%dT%H:%M:%S.000Z");
 	var dayParser = d3.time.format("%Y-%m-%d");
-
 	//Data formating and filtering
-	singleDayData.forEach(function(d) {
-	  d.timestamp = timestampParser.parse(d.timestamp);
-	  d.usage = d.usage;
-	});
 
 	var usageBarChart = dc.barChart("#usage-bar-chart");
 	
-	var ndx = crossfilter(singleDayData);
+	var ndx = crossfilter(usageData);
 	var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
-	var singleDayFilter = timestampDim.filterFunction(function(d) { 
+	var singleDayFilter = timestampDim.filterFunction(function(d) {
+		//console.log(d);
+		// console.log(SELECTED_DAY);
+		// console.log(dayParser(d));
+		// console.log(dayParser(SELECTED_DAY));
 		if (_isSelectedDay(d)) {
+			//console.log(d);
 		return d;} });
 
 	//get y-axis
@@ -418,35 +348,41 @@ function updateUsage(recentData) {
 }
 
 
-function makeGraphs(error, apiData) {
+function makeGraphs(error, waterQualityData,usageData) {
 
 /********* Start Transformations *********/ 
 
-	//Fill data array with 100 values from apiData; graphs only plot 100 values
+	//Fill data array with 100 values from waterQualityData; graphs only plot 100 values
 	// most recent data is at 0 index?
 	var data = [];
 	// var dateFormat = d3.time.format("%Y-%m-%dT%H:%M:%SZ"); //pos uneccessary
-	// apiData.forEach(function(d) {
+	// waterQualityData.forEach(function(d) {
 	// 	d.timestamp = dateFormat.parse(d.timestamp); //slow down
 	// });
-	for (var i = 0; i < apiData.length; i++) {
-		data.push(apiData[i]);
+	for (var i = 0; i < waterQualityData.length; i++) {
+		data.push(waterQualityData[i]);
 	}
 	//  Get most recent data
-	var recentData = apiData[apiData.length-1];
+	var recentData = waterQualityData[waterQualityData.length-1];
 
 	// converts to Date object (just take substring .000Z)
 	var parser = d3.time.format("%Y-%m-%dT%H:%M:%S.000Z");
 	data.forEach(function(d) {
 		d.timestamp = parser.parse(d.timestamp);
 	});
-
+	usageData.forEach(function(d) {
+	  d.timestamp = parser.parse(d.timestamp);
+	});
+	//console.log(recentData);
+	$('#status').css("color", getQualStat(recentData.temperature, recentData.turbidity, recentData.sodium, recentData.magnesium, recentData.sodium, recentData.pH));
+	document.getElementById("qualityCircle").setAttribute("fill", getQualStat(recentData.temperature, recentData.turbidity, recentData.sodium, recentData.magnesium, recentData.sodium, recentData.pH));
+	document.getElementById("qualityCircle").setAttribute("stroke", getQualStat(recentData.temperature, recentData.turbidity, recentData.sodium, recentData.magnesium, recentData.sodium, recentData.pH));
 
 /********* END *********/ 
 
 /********* Create a Crossfilter instance and All *********/ 
 
-	var trial = crossfilter(apiData);
+	var trial = crossfilter(waterQualityData);
 	var all = trial.groupAll();
 
 	var dataCross = crossfilter(data);
@@ -502,9 +438,11 @@ function makeGraphs(error, apiData) {
 /********* END *********/ 
 
 /******* Overlayed line chart *******/
-	updateUsage(recentData);
-	// getPHColor(recentData.pH);
+
 	initpH(recentData);
+
+	updateUsage(recentData,usageData);
+	getPHColor(recentData.pH);
 	updateCond(recentData);
 
 	lineChart
@@ -663,15 +601,16 @@ function makeGraphs(error, apiData) {
 
 	/*************** TURBIDITY GRAPH ***************/
 
-	var cTurb = data[apiData.length-1].turbidity;
+
+	var cTurb = recentData.turbidity;
 
 
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.waveColor = getTurbColor(cTurb);
 	config1.circleColor = getTurbColor(cTurb);
 	config1.waveTextColor = "#ffffff";
-	config1.maxValue = data[apiData.length-1].turbidity*1.3;
-	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[apiData.length-1].turbidity, config1);	
+	config1.maxValue = data[waterQualityData.length-1].turbidity*1.3;
+	var gauge1 = loadLiquidFillGauge("turbidity-graph", data[waterQualityData.length-1].turbidity, config1);	
 	
 	/*************** END TURBIDITY GRAPH ***************/
 
@@ -711,7 +650,7 @@ function makeGraphs(error, apiData) {
 	// $('#myChart').updatePH(recentData.pH);
 
 
-	var cpH = data[apiData.length-1].pH;
+	var cpH = data[waterQualityData.length-1].pH;
 
 
 	// Returns array of already parsed time
@@ -745,9 +684,16 @@ updateTemp(recentData.temperature);
 
 	$("#timeline").click( function () {
 		date = timeChart.brush().extent();
-		console.log(date);
+
+		// If selected dates are the same, then nothing is selected
+		// Default to most current date
+		// if (String(date[0]) == String(date[1])) {
+		// 	console.log("IN SAME");
+		// 	recentData = waterQualityData[waterQualityData.length-1];
+		// }
+		// else {
+
 		var dataSelcted = dateDim.top(Infinity);
-		console.log(dataSelcted);
 		recentData = dataSelcted[0];
 
 		config1.maxValue = recentData.turbidity*1.3;
@@ -765,8 +711,13 @@ updateTemp(recentData.temperature);
 		config1.circleColor = getTurbColor(cTurb);
 
 		updatepH(recentData);
-		getPHColor(recentData.pH);
-		updateUsage(recentData);
+
+		document.getElementById("qualityCircle").setAttribute("fill", getQualStat(cTemp, cTurb, cNa, cMg, cCa, cpH));
+		document.getElementById("qualityCircle").setAttribute("stroke", getQualStat(cTemp, cTurb, cNa, cMg, cCa,cpH));
+		$('#status').css("color", getQualStat(cTemp, cTurb, cNa, cMg, cCa,cpH));
+
+		getPHColor(cpH);
+		updateUsage(recentData,usageData);
 	});
 
 	// Reset if button is clicked
@@ -787,14 +738,15 @@ updateTemp(recentData.temperature);
 
 		updatepH(recentData);
 		getPHColor(recentData.pH);
-		updateUsage(recentData);
+		updateUsage(recentData,usageData);
 	});
 
-	/********* Tool Tips *********/ 
+
+	// /********* Tool Tips *********/ 
 	// var tip = d3.tip()
  //      .attr('class', 'd3-tip')
  //      .html(function(d) { 
- //      	console.log(d);
+ //      	//console.log(d);
  //      	return '<span>' + d.total + '</span>' + ' entries' 
  //      })
  //      .offset([-12, 0])

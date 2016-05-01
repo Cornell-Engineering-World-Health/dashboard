@@ -1,7 +1,7 @@
 //Color Declarations
 var greenMain = "#86b266";
 var yellowMain = "#ecbd62"
-var redMain = "#ecbd62"
+var redMain = "#e32645"
 var gColors = d3.scale.ordinal().range(["#376515", "#6f9751", "#acbe9f"]);
 //var yColors = d3.scale.ordinal().range(["#a67d2c", "#d1a858", "#ebd2a1"]);
 var rColors = d3.scale.ordinal().range(["#e53552", "#f76f6f", "#f9afaf"]);
@@ -62,13 +62,14 @@ function getPHColor(cPH){
 
 
 
-function getQualStat(cTemp, cTurb, cNa, cMg, cCa){
+function getQualStat(cTemp, cTurb, cNa, cMg, cCa, cpH){
     if(getTempColor(cTemp) ==  redMain || getTurbColor(cTurb) == redMain || getCondColor(cNa, cMg, cCa) == rColors 
-        || getPHColor(cPH) == redMain){
+        || getPHColor(cpH) == redMain){
         return redMain;
     }
     else if (getTempColor(cTemp) ==  yellowMain || getTurbColor(cTurb) == yellowMain || 
-        getPHColor(cPH) == yellowMain){
+        getPHColor(cpH) == yellowMain){
+
         return yellowMain;
     }
     else{
