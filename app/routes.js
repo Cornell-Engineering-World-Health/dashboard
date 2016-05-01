@@ -19,25 +19,37 @@ var new_load = new Array();
 app.use(bodyParser.json());
 app.use(bodyParser.urlEncoded({extended: true}));
 */
-app.post('/', function(req, res) {
+app.post('/load/WaterQuality', function(req, res) {
   var new_load = req.body.data;
-  console.log(new_load);
+  var return_string = "";
   for(i = 0; i < new_load.length; i++) {
-    Reading.create({
-      temperature: new_load[i].temperature,
-      turbidity: new_load[i].turbidity,
-      conductivity: new_load[i].conductivity,
-      sodium: new_load[i].sodium,
-      magnesium: new_load[i].magnesium,
-      calcium: new_load[i].calcium,
-      pH: new_load[i].pH,
-      timestamp: new Date(new_load[i].timestamp),
-      usage: new_load[i].usage
-    });
+    new_load[i].timestamp = new Date(new_load[i].timestamp);
   }
-  res.end();
+  Reading.create(new_load, function(err, added) {
+    if(err)
+      res.send(err);
+    for(i = 1; i < arguments.length; i++) {
+      return_string = return_string + "" + arguments[i] + "\n";
+    }
+  });
+  res.send(return_string);
 });
 
+app.post('/load/Usage', function(req, res) {
+  var new_load = req.body.data;
+  var return_string = "";
+  for(i = 0; i < new_load.length; i++) {
+    new_load[i].timestamp = new Date(new_load[i].timestamp);
+  }
+  Usage.create(new_load, function(err, added) {
+    if(err)
+      res.send(err);
+    for(i = 1; i < arguments.length; i++) {
+      return_string = return_string + "" + arguments[i] + "\n";
+    }
+  });
+  res.send(return_string);
+});
 /**
  * Handles the server request to retrieve n records from the database
  * Returns n records from the database... i hope these are most recent
