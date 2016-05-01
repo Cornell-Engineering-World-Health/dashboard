@@ -20,35 +20,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlEncoded({extended: true}));
 */
 app.post('/load/WaterQuality', function(req, res) {
-  var new_load = req.body.data;
-  var return_string = "";
+  var new_load = req.body;
+  var return_string = "success";
   for(i = 0; i < new_load.length; i++) {
     new_load[i].timestamp = new Date(new_load[i].timestamp);
   }
   Reading.create(new_load, function(err, added) {
     if(err)
       res.send(err);
-    for(i = 1; i < arguments.length; i++) {
-      return_string = return_string + "" + arguments[i] + "\n";
-    }
+    res.json(added);
   });
-  res.send(return_string);
 });
 
 app.post('/load/Usage', function(req, res) {
-  var new_load = req.body.data;
-  var return_string = "";
+  var new_load = req.body;
+  var return_string = "success\n";
   for(i = 0; i < new_load.length; i++) {
     new_load[i].timestamp = new Date(new_load[i].timestamp);
   }
   Usage.create(new_load, function(err, added) {
     if(err)
       res.send(err);
-    for(i = 1; i < arguments.length; i++) {
-      return_string = return_string + "" + arguments[i] + "\n";
-    }
+    res.json(added);
   });
-  res.send(return_string);
 });
 /**
  * Handles the server request to retrieve n records from the database
