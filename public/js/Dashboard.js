@@ -1,4 +1,8 @@
 var date;
+
+
+    	
+
 $(document).ready(function() {
 	// setTimeout(function() {
 	// 	$( "#temperature" ).trigger( "click" );
@@ -221,8 +225,9 @@ function updateTemp(temp) {
 /********* End Thermometer *********/ 
 }
 
+
 function updateUsage(recentData,usageData) {
-	console.log(recentData.timestamp);
+	//console.log(recentData.timestamp);
 
 	var SELECTED_DAY = recentData.timestamp;
 	var BAR_GRAPH_THICKNESS = 10;
@@ -238,11 +243,13 @@ function updateUsage(recentData,usageData) {
 	
 	var ndx = crossfilter(usageData);
 	var timestampDim = ndx.dimension( function(d) {return d.timestamp;});
-	var singleDayFilter = timestampDim.filterFunction(function(d) {console.log(d);
-		console.log(SELECTED_DAY);
-		console.log(dayParser(d));
-		console.log(dayParser(SELECTED_DAY));
-		if (_isSelectedDay(d)) {console.log(d);
+	var singleDayFilter = timestampDim.filterFunction(function(d) {
+		//console.log(d);
+		// console.log(SELECTED_DAY);
+		// console.log(dayParser(d));
+		// console.log(dayParser(SELECTED_DAY));
+		if (_isSelectedDay(d)) {
+			//console.log(d);
 		return d;} });
 
 	//get y-axis
@@ -295,7 +302,10 @@ function makeGraphs(error, waterQualityData,usageData) {
 	usageData.forEach(function(d) {
 	  d.timestamp = parser.parse(d.timestamp);
 	});
-
+	//console.log(recentData);
+	$('#status').css("color", getQualStat(recentData.temperature, recentData.turbidity, recentData.sodium, recentData.magnesium, recentData.sodium, recentData.pH));
+	document.getElementById("qualityCircle").setAttribute("fill", getQualStat(recentData.temperature, recentData.turbidity, recentData.sodium, recentData.magnesium, recentData.sodium, recentData.pH));
+	document.getElementById("qualityCircle").setAttribute("stroke", getQualStat(recentData.temperature, recentData.turbidity, recentData.sodium, recentData.magnesium, recentData.sodium, recentData.pH));
 
 /********* END *********/ 
 
@@ -525,20 +535,6 @@ function makeGraphs(error, waterQualityData,usageData) {
 
 	var cTurb = data[waterQualityData.length-1].turbidity;
 
-
-	
-
-	// function getTurbColor(){
- //    	if(cTurb <= 500){
- //    		$('#indiv-turb').css("background-color", "#86b266");
- //    		return "#86b266";
- //    	}
- //    	else{
- //    		$('#indiv-turb').css("background-color", "#e32645");
- //    		return "#e32645";
- //    	}
- //    };
-
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.waveColor = getTurbColor(cTurb);
 	config1.circleColor = getTurbColor(cTurb);
@@ -643,25 +639,29 @@ updateTemp(recentData.temperature);
 		config1.waveColor = getTurbColor(cTurb);
 		config1.circleColor = getTurbColor(cTurb);
 
+		document.getElementById("qualityCircle").setAttribute("fill", getQualStat(cTemp, cTurb, cNa, cMg, cCa, cpH));
+		document.getElementById("qualityCircle").setAttribute("stroke", getQualStat(cTemp, cTurb, cNa, cMg, cCa,cpH));
+		$('#status').css("color", getQualStat(cTemp, cTurb, cNa, cMg, cCa,cpH));
 
-		getPHColor(recentData.pH);
+		getPHColor(cpH);
 		updateUsage(recentData,usageData);
+		
 	});
 
-	/********* Tool Tips *********/ 
-	var tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .html(function(d) { 
-      	console.log(d);
-      	return '<span>' + d.total + '</span>' + ' entries' 
-      })
-      .offset([-12, 0])
+	// /********* Tool Tips *********/ 
+	// var tip = d3.tip()
+ //      .attr('class', 'd3-tip')
+ //      .html(function(d) { 
+ //      	//console.log(d);
+ //      	return '<span>' + d.total + '</span>' + ' entries' 
+ //      })
+ //      .offset([-12, 0])
 
-    vis = d3.select('#dc-line-chart')
-    	.append('svg')
-    	.attr('width', lineW)
-    	.attr('height', lineH)
-    vis.call(tip)
+ //    vis = d3.select('#dc-line-chart')
+ //    	.append('svg')
+ //    	.attr('width', lineW)
+ //    	.attr('height', lineH)
+ //    vis.call(tip)
 
 
 /********* Draw Graphs *********/ 
