@@ -3,7 +3,7 @@ $(document).ready(function() {
 	// setTimeout(function() {
 	// 	$( "#temperature" ).trigger( "click" );
 	// }, 0);
- 	$('#myChart').createPH(200, 40, 7);
+ 	// $('#myChart').createPH(200, 40, 7);
  	resetDB(function(res) {
 	});
   update();
@@ -21,6 +21,18 @@ setInterval(update, 100000000);
 
 function getCurrent() {
 	var current = document.getElementsByClassName("filter").value;
+}
+
+function updateTurb(recentData) {
+	d3.select("#turbidity-graph g").remove();
+	cTurb = recentData.turbidity;
+
+	config1 = liquidFillGaugeDefaultSettings();
+	config1.waveColor = getTurbColor(cTurb);
+	config1.circleColor = getTurbColor(cTurb);
+	config1.waveTextColor = "#ffffff";
+	config1.maxValue = recentData.turbidity*1.3;
+	gauge1 = loadLiquidFillGauge("turbidity-graph", recentData.turbidity, config1);
 }
 
 function updateTemp(temp) {
@@ -141,8 +153,6 @@ function updateTemp(temp) {
 	var scale = d3.scale.linear()
 	  .range([bulb_cy - bulbRadius/2 - 8.5, top_cy])
 	  .domain(domain);
-	 // console.log(domain);
-	 // console.log([bulb_cy - bulbRadius/2 - 8.5, top_cy]);
 
 
 	var tubeFill_bottom = bulb_cy,
@@ -220,8 +230,66 @@ function updateTemp(temp) {
 /********* End Thermometer *********/ 
 }
 
+/********* pH Initialize function *********/ 
+var phScale;
+function initpH(recentData) {
+	var padding = 10;
+	var width = 180,
+		height = 80;
+	var indWidth = 2,
+		indHeight = 50;
+
+	var svg = d3.select("#myChart").append("svg")
+		.attr("width", width)
+		.attr("height", height);
+
+	var bar = svg.append("rect")
+		.attr("x", padding)
+		.attr("y", 20)
+		.attr("rx", 5)
+		.attr("ry", 5)
+		.attr("width", width - 2 * padding)
+		.attr("height", 20)
+		.attr("fill", function() {
+			return getPHColor(recentData.pH);
+		})
+		.attr("class", "staticBar");
+
+	phScale = d3.scale.linear().domain([0,14]).range([padding, width - 2 * padding]);
+	
+	var indicator = svg.append("rect")
+		.attr("x", phScale(recentData.pH))
+		.attr("y", 5)
+		.attr("rx", 2)
+		.attr("ry", 2)
+		.attr("width", indWidth)
+		.attr("height", indHeight)
+		.attr("class", "movingBar");
+	var pHtext = svg.append("text")
+		.attr("x", phScale(recentData.pH) - 4 )
+		.attr("y", 70)
+		.attr("class", "phText")
+		.text(recentData.pH);
+}
+
+function updatepH(recentData) {
+	var indicator = d3.selectAll(".movingBar")
+		.transition(750)
+		.attr("x", phScale(recentData.pH));
+	pHtext = d3.selectAll(".phText")
+		.transition(750)
+		.attr("x", phScale(recentData.pH) - 4 )
+		.attr("y", 70)
+		.attr("class", "phText")
+		.text(recentData.pH);
+	d3.select(".staticBar")
+		.transition(750)
+		.attr("fill", function() {
+			return getPHColor(recentData.pH);
+		})
+}
+
 function updateUsage(recentData) {
-	console.log(recentData.timestamp);
 	var SELECTED_DAY = recentData.timestamp;
 	var BAR_GRAPH_THICKNESS = 10;
 	//input d3 date object, returns boolean
@@ -349,6 +417,7 @@ function updateUsage(recentData) {
 	usageBarChart.render();
 }
 
+
 function makeGraphs(error, apiData) {
 
 /********* Start Transformations *********/ 
@@ -434,7 +503,8 @@ function makeGraphs(error, apiData) {
 
 /******* Overlayed line chart *******/
 	updateUsage(recentData);
-	getPHColor(recentData.pH);
+	// getPHColor(recentData.pH);
+	initpH(recentData);
 	updateCond(recentData);
 
 	lineChart
@@ -568,7 +638,6 @@ function makeGraphs(error, apiData) {
 				return true;
 		}
 	});
-
 	timeChart
 		.height(40)
 		.width(868)
@@ -590,30 +659,12 @@ function makeGraphs(error, apiData) {
 	    .dimension(dateDim)
 	    .group(conductivity)
 	    .innerRadius(50);
-	// yearRingChart
-	//     .dimension(dateDim)
-	//     .group(conductivity)
-	//     .innerRadius(145);
-	// yearRingChart.render();
 
 
 	/*************** TURBIDITY GRAPH ***************/
 
 	var cTurb = data[apiData.length-1].turbidity;
 
-
-	
-
-	// function getTurbColor(){
- //    	if(cTurb <= 500){
- //    		$('#indiv-turb').css("background-color", "#86b266");
- //    		return "#86b266";
- //    	}
- //    	else{
- //    		$('#indiv-turb').css("background-color", "#e32645");
- //    		return "#e32645";
- //    	}
- //    };
 
 	var config1 = liquidFillGaugeDefaultSettings();
 	config1.waveColor = getTurbColor(cTurb);
@@ -657,7 +708,7 @@ function makeGraphs(error, apiData) {
 
 	};
 
-	$('#myChart').updatePH(recentData.pH);
+	// $('#myChart').updatePH(recentData.pH);
 
 
 	var cpH = data[apiData.length-1].pH;
@@ -694,20 +745,14 @@ updateTemp(recentData.temperature);
 
 	$("#timeline").click( function () {
 		date = timeChart.brush().extent();
-		// If selected dates are the same, then nothing is selected
-		// Default to most current date
-		// if (String(date[0]) == String(date[1])) {
-		// 	console.log("IN SAME");
-		// 	recentData = apiData[apiData.length-1];
-		// }
-		// else {
+		console.log(date);
 		var dataSelcted = dateDim.top(Infinity);
+		console.log(dataSelcted);
 		recentData = dataSelcted[0];
-		// }
 
-		$('#myChart').updatePH(recentData.pH);
 		config1.maxValue = recentData.turbidity*1.3;
-		gauge1.update(recentData.turbidity);
+		// gauge1.update(recentData.turbidity);
+		updateTurb(recentData);
 		updateTemp(recentData.temperature);
 		updateCond(recentData);
 		cMg = recentData.magnesium;
@@ -719,25 +764,46 @@ updateTemp(recentData.temperature);
 		config1.waveColor = getTurbColor(cTurb);
 		config1.circleColor = getTurbColor(cTurb);
 
+		updatepH(recentData);
+		getPHColor(recentData.pH);
+		updateUsage(recentData);
+	});
 
+	// Reset if button is clicked
+	$("a.reset").click( function() {
+		recentData = apiData[apiData.length-1];
+		config1.maxValue = recentData.turbidity*1.3;
+		updateTurb(recentData);
+		updateTemp(recentData.temperature);
+		updateCond(recentData);
+		cMg = recentData.magnesium;
+		cNa = recentData.sodium;
+		cCa = recentData.calcium;
+		cTemp = recentData.temperature;
+		cTurb = recentData.turbidity;
+		cpH = recentData.pH;
+		config1.waveColor = getTurbColor(cTurb);
+		config1.circleColor = getTurbColor(cTurb);
+
+		updatepH(recentData);
 		getPHColor(recentData.pH);
 		updateUsage(recentData);
 	});
 
 	/********* Tool Tips *********/ 
-	var tip = d3.tip()
-      .attr('class', 'd3-tip')
-      .html(function(d) { 
-      	console.log(d);
-      	return '<span>' + d.total + '</span>' + ' entries' 
-      })
-      .offset([-12, 0])
+	// var tip = d3.tip()
+ //      .attr('class', 'd3-tip')
+ //      .html(function(d) { 
+ //      	console.log(d);
+ //      	return '<span>' + d.total + '</span>' + ' entries' 
+ //      })
+ //      .offset([-12, 0])
 
-    vis = d3.select('#dc-line-chart')
-    	.append('svg')
-    	.attr('width', lineW)
-    	.attr('height', lineH)
-    vis.call(tip)
+ //    vis = d3.select('#dc-line-chart')
+ //    	.append('svg')
+ //    	.attr('width', lineW)
+ //    	.attr('height', lineH)
+ //    vis.call(tip)
 
 
 /********* Draw Graphs *********/ 

@@ -1849,6 +1849,7 @@ dc.colorMixin = function (_chart) {
 
     **/
     _chart.ordinalColors = function (r) {
+        // console.log(_chart.data.value);
         return _chart.colors(d3.scale.ordinal().range(r));
     };
 
