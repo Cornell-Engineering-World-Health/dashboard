@@ -49,16 +49,7 @@
           <div class="row" style="text-align: center;">
             <span>
               <div class='12u line-graph' id='dc-line-chart'>
-                <h4>WATER QUALITY</h4>
-                <div>
-                  <span class='reset' style='display: none;'>Current filter: <span class='filter'></span>
-                  </span>
-                  <br>
-                  <span id="resetMain">
-                  <a class='reset pull-right'
-                    href='javascript:dc.filterAll();dc.renderAll();updateTemp(recentData.temperature)'>reset</a>
-                  </span>
-                </div>
+  
               </div>
             </span>
           </div>
@@ -77,9 +68,15 @@
                 <button type="button" class="btn btn-default" id="turbidity">Turbidity</button>
                 <button type="button" class="btn btn-default" id="pH">pH</button>
                 <button type="button" class="btn btn-default" id="usage">Usage</button>
+                <span id="resetMain">
+                  <a class='reset pull-right'
+                    href='javascript:dc.filterAll();dc.renderAll();updateTemp(recentData.temperature)'>reset</a>
+                </span>
               </div>
             </div>
+
           </div>
+
           
           <br>
           <div class="row">
@@ -123,6 +120,7 @@
             </div>
           </div>
           <div id="usage-section" class="row" style="text-align: center;">
+            <h4>Daily Water Usage</h4>
             <span>
               <div id="usage-bar-chart"></div>
             </span>

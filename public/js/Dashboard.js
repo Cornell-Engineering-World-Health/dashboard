@@ -339,7 +339,7 @@ function updateUsage(recentData,usageData) {
 	  .group(usageGroup)
 	  .x(d3.time.scale().domain([singleDayMinDate,singleDayMaxDate]))
 	  .brushOn(false)
-	  .yAxisLabel("Well Usage")
+	  .yAxisLabel("Liters")
 	  .renderHorizontalGridLines(true)
 	  .renderVerticalGridLines(true)
 	  .xUnits(function(){return BAR_GRAPH_THICKNESS;});
