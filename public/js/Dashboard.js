@@ -1,7 +1,4 @@
-var date;
-
-
-    	
+var date; 	
 
 $(document).ready(function() {
 	// setTimeout(function() {
@@ -307,6 +304,7 @@ function updateUsage(recentData,usageData) {
 	//time parsers
 	//var timestampParser = d3.time.format("%Y-%m-%dT%H:%M:%S.000Z");
 	var dayParser = d3.time.format("%Y-%m-%d");
+	var hourFormat = d3.time.format("%H:%M:%S");
 	//Data formating and filtering
 
 	var usageBarChart = dc.barChart("#usage-bar-chart");
@@ -331,7 +329,6 @@ function updateUsage(recentData,usageData) {
 	var singleDayMaxDate = singleDayFilter.top(1)[0].timestamp;
 
 	//graph code
-	//var usageBarChart  = dc.barChart("#usage-bar-chart"); 
 	usageBarChart
 	  .width(700).height(400).gap(20)
 	  .centerBar(true)
@@ -339,11 +336,22 @@ function updateUsage(recentData,usageData) {
 	  .group(usageGroup)
 	  .x(d3.time.scale().domain([singleDayMinDate,singleDayMaxDate]))
 	  .brushOn(false)
-	  .yAxisLabel("Well Usage")
+	  .yAxisLabel("Liters")
 	  .renderHorizontalGridLines(true)
 	  .renderVerticalGridLines(true)
-	  .xUnits(function(){return BAR_GRAPH_THICKNESS;});
+	  .xUnits(function(){return BAR_GRAPH_THICKNESS;})
+	  .on("renderlet", function(chart) {
+	    	var bartip = d3.tip()
+		      .attr('class', 'd3-tip')
+		      .html(function(d) { 
+		      	return '<span> Time: ' + hourFormat(d.x) + '</span>' + "<br/>" + "Usage: " + d.y + " L";
+		      })
+		      .offset([-12, 0])
 
+		    usageBarChart.selectAll(".bar").call(bartip);
+			usageBarChart.selectAll(".bar").on('mouseover', bartip.show)
+			.on('mouseout', bartip.hide);
+	    });
 	usageBarChart.render();
 }
 
@@ -398,6 +406,8 @@ function makeGraphs(error, waterQualityData,usageData) {
 	var dateDim = trial.dimension(function (d) { return d.timestamp; });
 	var minDate = dateDim.bottom(1)[0].timestamp;
 	var maxDate = dateDim.top(1)[0].timestamp;
+	
+	var format = d3.time.format("%Y-%m-%d");
 
 	// var dataDateDim = dataCross.dimension(function (d) { return d.timestamp; });
 
@@ -439,11 +449,21 @@ function makeGraphs(error, waterQualityData,usageData) {
 
 /******* Overlayed line chart *******/
 
+	// /********* Tool Tips *********/
+	var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .html(function(d) { 
+      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "Temperature: " + d.y;
+      })
+      .offset([-12, 0])
+
 	initpH(recentData);
 
 	updateUsage(recentData,usageData);
 	getPHColor(recentData.pH);
 	updateCond(recentData);
+	$("#currentDay").html("");
+	$("#currentDay").html(format(recentData.timestamp));
 
 	lineChart
 		.width(lineW)
@@ -455,12 +475,25 @@ function makeGraphs(error, waterQualityData,usageData) {
 	    .yAxisLabel("Fahrenheit")
 	    .elasticY(true)
 	    .renderLabel(true)
+	    .renderTitle(false)
 	    .ordinalColors(["#E4572E"])
 	    .rangeChart(timeChart)
 	    .dimension(dateDim)
 	    .group(temp)
 	    .renderHorizontalGridLines(true)
 	    .renderVerticalGridLines(true)
+	    .on("renderlet", function(chart) {
+	    	tip = d3.tip()
+		      .attr('class', 'd3-tip')
+		      .html(function(d) { 
+		      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "Temperature: " + d.y + " F";
+		      })
+		      .offset([-12, 0])
+
+		    lineChart.selectAll(".dot").call(tip);
+			lineChart.selectAll(".dot").on('mouseover', tip.show)
+			.on('mouseout', tip.hide);
+	    });
   lineChart.render();
 
 	$("button").click( function () {
@@ -484,7 +517,19 @@ function makeGraphs(error, waterQualityData,usageData) {
 				    .dimension(dateDim)
 				    .renderHorizontalGridLines(true)
 	    			.renderVerticalGridLines(true)
-				    .group(temp);
+				    .group(temp)
+				    .on("renderlet", function(chart) {
+				    	tip = d3.tip()
+					      .attr('class', 'd3-tip')
+					      .html(function(d) { 
+					      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "Temperature: " + d.y + " F";
+					      })
+					      .offset([-12, 0])
+
+					    lineChart.selectAll(".dot").call(tip);
+						lineChart.selectAll(".dot").on('mouseover', tip.show)
+						.on('mouseout', tip.hide);
+				    });
 				lineChart.render();
 				break;
 			case "conductivity":
@@ -505,7 +550,19 @@ function makeGraphs(error, waterQualityData,usageData) {
 				    .dimension(dateDim)
 				    .renderHorizontalGridLines(true)
 	    			.renderVerticalGridLines(true)
-				    .group(conductivity);
+				    .group(conductivity)
+				    .on("renderlet", function(chart) {
+				    	tip = d3.tip()
+					      .attr('class', 'd3-tip')
+					      .html(function(d) { 
+					      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "Conductivity: " + d.y + " mg/L";
+					      })
+					      .offset([-12, 0])
+
+					    lineChart.selectAll(".dot").call(tip);
+						lineChart.selectAll(".dot").on('mouseover', tip.show)
+						.on('mouseout', tip.hide);
+				    });
 				lineChart.render();
 				break;
 			case "turbidity":
@@ -526,7 +583,19 @@ function makeGraphs(error, waterQualityData,usageData) {
 				    .dimension(dateDim)
 				    .renderHorizontalGridLines(true)
 	    			.renderVerticalGridLines(true)
-				    .group(turbidity);
+				    .group(turbidity)
+				    .on("renderlet", function(chart) {
+				    	tip = d3.tip()
+					      .attr('class', 'd3-tip')
+					      .html(function(d) { 
+					      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "Turbidity: " + d.y + " uS/cm";
+					      })
+					      .offset([-12, 0])
+
+					    lineChart.selectAll(".dot").call(tip);
+						lineChart.selectAll(".dot").on('mouseover', tip.show)
+						.on('mouseout', tip.hide);
+				    });
 				lineChart.render();
 				break;
 			case "pH":
@@ -547,7 +616,19 @@ function makeGraphs(error, waterQualityData,usageData) {
 				    .renderHorizontalGridLines(true)
 	    			.renderVerticalGridLines(true)
 	    			.yAxisLabel("")
-				    .group(pH);
+				    .group(pH)
+				    .on("renderlet", function(chart) {
+				    	tip = d3.tip()
+					      .attr('class', 'd3-tip')
+					      .html(function(d) { 
+					      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "pH: " + d.y;
+					      })
+					      .offset([-12, 0])
+
+					    lineChart.selectAll(".dot").call(tip);
+						lineChart.selectAll(".dot").on('mouseover', tip.show)
+						.on('mouseout', tip.hide);
+				    });
 				lineChart.render();
 				break;
 			// TODO: No fake data
@@ -569,7 +650,19 @@ function makeGraphs(error, waterQualityData,usageData) {
 				    .ordinalColors(["#9975b9"])
 					.renderHorizontalGridLines(true)
 	    			.renderVerticalGridLines(true)
-				    .group(usageMain);
+				    .group(usageMain)
+				    .on("renderlet", function(chart) {
+				    	tip = d3.tip()
+					      .attr('class', 'd3-tip')
+					      .html(function(d) { 
+					      	return '<span>' + format(d.x) + '</span>' + "<br/>" + "Usage: " + d.y + " L";
+					      })
+					      .offset([-12, 0])
+
+					    lineChart.selectAll(".dot").call(tip);
+						lineChart.selectAll(".dot").on('mouseover', tip.show)
+						.on('mouseout', tip.hide);
+				    });
 				lineChart.render();
 				break;
 			default:
@@ -596,7 +689,8 @@ function makeGraphs(error, waterQualityData,usageData) {
 	    .height(480)
 	    .dimension(dateDim)
 	    .group(conductivity)
-	    .innerRadius(50);
+	    .innerRadius(50)
+	    .renderTitle(true);
 
 
 	/*************** TURBIDITY GRAPH ***************/
@@ -718,11 +812,13 @@ updateTemp(recentData.temperature);
 
 		getPHColor(cpH);
 		updateUsage(recentData,usageData);
+		$("#currentDay").html("");
+		$("#currentDay").html(format(recentData.timestamp));
 	});
 
 	// Reset if button is clicked
 	$("a.reset").click( function() {
-		recentData = apiData[apiData.length-1];
+		recentData = waterQualityData[waterQualityData.length-1];
 		config1.maxValue = recentData.turbidity*1.3;
 		updateTurb(recentData);
 		updateTemp(recentData.temperature);
@@ -742,21 +838,6 @@ updateTemp(recentData.temperature);
 	});
 
 
-	// /********* Tool Tips *********/ 
-	// var tip = d3.tip()
- //      .attr('class', 'd3-tip')
- //      .html(function(d) { 
- //      	//console.log(d);
- //      	return '<span>' + d.total + '</span>' + ' entries' 
- //      })
- //      .offset([-12, 0])
-
- //    vis = d3.select('#dc-line-chart')
- //    	.append('svg')
- //    	.attr('width', lineW)
- //    	.attr('height', lineH)
- //    vis.call(tip)
-
 
 /********* Draw Graphs *********/ 
 
@@ -764,6 +845,9 @@ updateTemp(recentData.temperature);
    // dc.redrawAll();
 
 /********* END *********/ 
+    lineChart.selectAll(".dot").call(tip);
+    lineChart.selectAll(".dot").on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
 	
 };
 /************************** Single Day Usage Bar Chart ***************************/

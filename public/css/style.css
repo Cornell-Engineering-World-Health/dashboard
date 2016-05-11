@@ -27,6 +27,7 @@ body {
 	background: white;
 	text-align: center;
 	background: rgba(255, 255, 255, 0.05);
+	padding-top: 20px;
 }
 
 #header-inner {
@@ -266,6 +267,8 @@ button:active {
  * MAIN GRAPH RESET
  **************************************************/
 a.reset {
+	/*position: absolute;*/
+	text-decoration: none;
 	background-color: transparent;
 	display: inline-block;
 	cursor: pointer;
@@ -279,7 +282,7 @@ a.reset {
 	box-shadow: none;
 	border-radius: 32px;
 	font-weight: 400;
-	transform: translate(-50,0);
+	margin-top: 5px;
 
 }
 
@@ -293,8 +296,12 @@ a.reset:hover {
     transition: background .5s, color .5s;
 }
 
-#resetMain {
-	padding: 10px;
+#resetMain.text {
+	/*padding: 10px;*/
+}
+
+.d3-tip {
+	line-height: 120%;
 }
 
 /**************************************************
@@ -302,4 +309,45 @@ a.reset:hover {
  **************************************************/
 .movingBar {
 	opacity: 0.5;
+}
+
+/**************************************************
+ * Dot Nav Bar
+ **************************************************/
+.navDot {
+    position: fixed;
+    top: 50%;
+    left: 93%;
+    width: 50px;
+    z-index: 100;
+    list-style-type: none;
+}
+.navDot ul li {
+    position: relative;
+    padding-bottom: 20px;
+    padding-left: 35%;
+    color: rgb(113,135,133);
+    list-style-type: none;
+}
+.navDot a {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid;
+    border-color: rgb(113,135,133);
+    text-decoration: none;
+}
+.navDot a.active {
+    border-radius: 50%;
+    background-color: rgb(207,219,218);
+    text-decoration: none;
+}
+.navDot a:hover {
+    border-radius: 50%;
+    background-color: rgb(113,135,133);
+    text-decoration: none;
+}
+section {
+	position: relative;
 }

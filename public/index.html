@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="css/pH.css" type="text/css">
     <link rel="stylesheet" href="css/dc.css" />
-    <link rel="stylesheet" href="css/style.css" />
     <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+    <link rel="stylesheet" href="css/style.css" />
 
     <!-- scripts -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -24,12 +25,29 @@
     <script src="js/bundle.js"></script>
     <script src="js/pH.js"></script>
     <script type="text/javascript" src="js/pH.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src='js/Dashboard.js' type='text/javascript'></script>
+    <script src='js/crossfilter.js' type='text/javascript'></script>
+    <script src='js/d3.js' type='text/javascript'></script>
+    <script src='js/dc.js' type='text/javascript'></script>
+    <script src='js/queue.js' type='text/javascript'></script>
+    <script src="js/d3tip.js"></script>
+    <script src="js/main1.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
   </head>
   <body>
+  <div class="navDot">
+    <ul>
+      <li><a href="#statusPage"></a></li>
+      <li><a href="#overall"></a></li>
+      <li><a href="#indiv"></a></li>
+      <li><a href="#usage-email"></a></li>
+    </ul>
+  </div>
     <div id="wrapper">
       <div id="header">
+      <section id="statusPage">
         <div class="col-sm-4 header-col">
         </div>
         <div class="col-sm-4 header-col">
@@ -40,37 +58,35 @@
             </svg>
           </span>
         </div>
-        <div class="col-sm-4 header-col" style="text-align: right">
-          
-        </div>
+        <div class="col-sm-4 header-col" style="text-align: right"></div>
+      </section>
       </div>
       <div id="content">
         <div class="container-fluid">
-          <div class="row" style="text-align: center;">
-            <span>
-              <div class='12u line-graph' id='dc-line-chart'>
-                <h4>WATER QUALITY</h4>
-                <div>
-                  <span class='reset' style='display: none;'>Current filter: <span class='filter'></span>
-                  </span>
-                  <br>
-                  <span id="resetMain">
-                  <a class='reset pull-right'
-                    href='javascript:dc.filterAll();dc.renderAll();updateTemp(recentData.temperature)'>reset</a>
-                  </span>
+          <section id="overall">
+            <div class="row" style="text-align: center;">
+              <span>
+                <div class='12u line-graph' id='dc-line-chart'>
+                  <h4>WATER QUALITY</h4>
+                  <div>
+                    <span class='reset' style='display: none;'>Current filter: <span class='filter'></span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </span>
-          </div>
+              </span>
+            </div>
+          </section>
+          <section id="indiv">
           <div class="container-fluid">
             <div class="row" style="text-align: center;">
                 <div id='timeline'>
-
                 </div>
             </div>
           </div>
           <div class="container-fluid">
-            <div class="row" style="text-align: center;">
+            <!-- <div class="row" style="text-align: center;"> -->
+            <div class="row col-md-9" style="text-align: right;">
+              <!-- <span id="resetMain" class="col-md-4 col-md-offset-8"> -->
               <div id="select-filter" class="btn-group" role="group" aria-label="..."> <!--aria-label?-->
                 <button type="button" class="btn btn-default active" id="temperature">Temperature</button>
                 <button type="button" class="btn btn-default" id="conductivity">Conductivity</button>
@@ -79,6 +95,10 @@
                 <button type="button" class="btn btn-default" id="usage">Usage</button>
               </div>
             </div>
+            <span id="resetMain" class="col-md-2" style="text-align: center;">
+              <a class='reset'
+                href='javascript:dc.filterAll();dc.renderAll();updateTemp(recentData.temperature)'>reset</a>
+            </span>
           </div>
           
           <br>
@@ -122,11 +142,16 @@
               </div>
             </div>
           </div>
+          </section>
+          <section id="usage-email">
           <div id="usage-section" class="row" style="text-align: center;">
+            <h4>Daily Water Usage</h4>
+            <div> Current Day: <div id="currentDay"></div> </div>
             <span>
               <div id="usage-bar-chart"></div>
             </span>
           </div>
+          </section>
         </div>
         <br><br><br>
         <div id="subscribe">
@@ -152,14 +177,9 @@
       <div id="footer">
       </div>
     </div>
-
-    <script src='js/crossfilter.js' type='text/javascript'></script>
-    <script src='js/d3.js' type='text/javascript'></script>
-    <script src='js/dc.js' type='text/javascript'></script>
     <script src="js/StatusColors.js"></script>
 
     <script src="js/liquidFillGauge.js" type='text/javascript'></script>
-    <script src='js/queue.js' type='text/javascript'></script>
     <script src='js/register.js' type='text/javascript'></script>
   </body>
 </html>
