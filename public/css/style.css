@@ -62,20 +62,23 @@ body {
 	margin-bottom: 20px;
 }
 
-#export-button {
+.button-style {
 	background-color: transparent;
-	display: inline-block;
 	cursor: pointer;
 	color: rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	box-shadow: none;
+	font-weight: 400;
+}
+
+#export-button {
+	display: inline-block;
 	font-size: 16px;
 	line-height: 80px;
 	text-align: center;
 	width: 450px;
 	height: 80px;
-	border: 1px solid rgba(255, 255, 255, 0.5);
-	box-shadow: none;
 	border-radius: 32px;
-	font-weight: 400;
 }
 
 #export-button:hover {
@@ -186,11 +189,15 @@ span, div, p {
 	height: 100%;
 }
 
-#subscribe-text {
+#subscriber_email {
 	background: transparent;
 	border: none;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 	color: white;
+}
+
+#subscribe_button {
+	border: none;
 }
 
 line {
