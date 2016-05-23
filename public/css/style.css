@@ -66,9 +66,19 @@ body {
 	background-color: transparent;
 	cursor: pointer;
 	color: rgba(255, 255, 255, 0.5);
-	border: 1px solid rgba(255, 255, 255, 0.5);
+	border: none;
 	box-shadow: none;
 	font-weight: 400;
+}
+
+.back-button a {
+	font-size: 18px;
+	color: rgba(255, 255, 255, 0.5);
+	text-decoration: none;
+}
+
+.back-button a:hover {
+	color: rgba(255, 255, 255, 1);
 }
 
 #export-button {
@@ -338,8 +348,8 @@ a.reset:hover {
 }
 .navDot a {
     display: block;
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     border: 2px solid;
     border-color: rgb(113,135,133);
